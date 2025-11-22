@@ -1,23 +1,30 @@
 name: Deploy to Firebase Hosting
 
 on:
+  # Workflow ini akan berjalan secara otomatis setiap kali ada commit ke branch 'main'
   push:
     branches:
-      - main  # Otomatis jalan saat ada push ke branch main
+      - main  # Ganti jika nama branch utama Anda berbeda (misalnya 'master')
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    
     steps:
+      # Langkah 1: Checkout kode dari GitHub
       - uses: actions/checkout@v4
 
+      # Langkah 2: Deploy ke Firebase Hosting
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          # Pastikan channelID adalah 'live'
+          # Pastikan channelID adalah 'live' untuk update website utama
           channelId: live
           # Menggunakan Project ID Anda: lontong-mm
           projectId: lontong-mm 
-        env:
-          # Menggunakan Secret Token yang telah kita simpan
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_TOKEN }}
+          
+          # PERBAIKAN KRUSIAL: 
+          # Menggunakan parameter 'firebaseServiceAccount' untuk token otentikasi
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_TOKEN }} 
+          
+          # Hapus 'env' block yang sebelumnya gagal digunakan
