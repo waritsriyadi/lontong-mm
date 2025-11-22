@@ -12,11 +12,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- PERBAIKAN SPASI FOOTER DI SINI --- */
+        /* --- GLOBAL FIXES (HILANGKAN SISAAN PUTIH KANAN) --- */
+        html, body {
+            overflow-x: hidden; /* KUNCI: Mencegah scroll horizontal */
+            max-width: 100%;
+        }
+
         body {
             background-color: #f4f7f6;
             font-family: 'Poppins', sans-serif;
-            padding-bottom: 0; /* Diubah jadi 0 agar footer mentok */
+            padding-bottom: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -329,14 +334,14 @@
             border-color: rgba(25, 135, 84, 0.1);
         }
 
-        /* --- FOOTER STYLES (FIXED SPACING) --- */
+        /* --- FOOTER STYLES (RESPONSIVE FIX) --- */
         .footer-section {
-            background: #064e3b; /* Fallback */
+            background: #064e3b;
             background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
             color: white;
             position: relative;
             margin-top: 150px;
-            padding-bottom: 120px; /* Padding dipindah ke sini */
+            padding-bottom: 120px;
         }
 
         .footer-wave {
@@ -410,6 +415,32 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
         }
 
+        /* FIX KHUSUS MOBILE FOOTER */
+        @media (max-width: 991px) {
+            .footer-section {
+                text-align: center; /* Rata tengah di mobile */
+            }
+            
+            .footer-content .d-flex {
+                justify-content: center; /* Center social media icons */
+            }
+
+            .developer-badge {
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .developer-badge .d-flex.justify-content-between {
+                justify-content: center !important; /* Center title in badge */
+                gap: 10px;
+            }
+            
+            /* Biar icon code tidak nabrak text */
+            .developer-badge .bi-code-slash {
+                display: none; /* Sembunyikan icon code di mobile biar rapi */
+            }
+        }
+
         @media (max-width: 768px) {
             .hero-section {
                 padding-bottom: 4rem;
@@ -418,7 +449,6 @@
             }
             .overlap-container { margin-top: -50px; }
             .cart-bar { width: 95%; bottom: 15px; }
-            .developer-badge { margin-top: 20px; }
         }
     </style>
 </head>
@@ -539,16 +569,16 @@
         </div>
 
         <div class="container footer-content">
-            <div class="row g-5">
+            <div class="row g-5 align-items-start">
                 
-                <div class="col-lg-5 col-md-6">
+                <div class="col-lg-5 col-md-6 text-center text-lg-start">
                     <div class="pe-lg-4">
-                        <h3 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                        <h3 class="fw-bold mb-3 justify-content-center justify-content-lg-start d-flex align-items-center gap-2">
                             🍛 Lontong MM
                         </h3>
                         <p class="text-white-50 small lh-lg mb-4">
                             Menyajikan sarapan pagi dengan cita rasa khas Minang yang otentik. 
-                            Kami berkomitmen menghadirkan kelezatan tradisional dengan bahan berkualitas untuk memulai hari Anda.
+                            Kami berkomitmen menghadirkan kelezatan tradisional dengan bahan berkualitas.
                         </p>
                         <a href="https://wa.me/6287787661787" target="_blank" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
                             <i class="bi bi-whatsapp me-2"></i> Hubungi Kami
@@ -556,7 +586,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-2 col-md-6 text-center text-lg-start">
                     <h6 class="fw-bold text-uppercase text-success ls-1 mb-3 small">Menu</h6>
                     <ul class="list-unstyled">
                         <li><a href="#" class="footer-link">Beranda</a></li>
@@ -568,25 +598,25 @@
 
                 <div class="col-lg-5 col-md-12">
                     <div class="developer-badge">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h6 class="fw-bold text-success text-uppercase small ls-1">Developed & Managed By</h6>
-                            <i class="bi bi-code-slash text-white-50"></i>
+                        <div class="d-flex justify-content-center justify-content-lg-between align-items-center mb-2">
+                            <h6 class="fw-bold text-success text-uppercase small ls-1 mb-0">Developed & Managed By</h6>
+                            <i class="bi bi-code-slash text-white-50 d-none d-lg-block"></i>
                         </div>
                         
-                        <div class="d-flex align-items-center gap-3 mb-3 mt-3">
+                        <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-start gap-3 mb-3 mt-3">
                             <img src="wr.jpg" alt="Warits Riyadi" class="rounded-circle shadow-sm" style="width: 60px; height: 60px; object-fit: cover; border: 2px solid rgba(255,255,255,0.2);">
                             
-                            <div>
+                            <div class="text-center text-sm-start">
                                 <h5 class="fw-bold m-0">Warits Riyadi</h5>
                                 <small class="text-white-50">Fullstack Developer</small>
                             </div>
                         </div>
                         
-                        <p class="text-white-50 small mb-4 fst-italic">
+                        <p class="text-white-50 small mb-4 fst-italic text-center text-lg-start">
                             "Membangun solusi digital yang bermanfaat dan estetik."
                         </p>
                         
-                        <div class="d-flex">
+                        <div class="d-flex justify-content-center justify-content-lg-start">
                             <a href="https://instagram.com/ryd.warits/" target="_blank" class="social-btn" title="Instagram"><i class="bi bi-instagram"></i></a>
                             <a href="https://linkedin.com/in/waritsriyadi" target="_blank" class="social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                             <a href="https://github.com/waritsriyadi" target="_blank" class="social-btn" title="GitHub"><i class="bi bi-github"></i></a>
