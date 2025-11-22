@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Lontong MM</title>
+    <title>Menu Lontong MM - Order</title>
 
     <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f35b.png">
-    <link rel="apple-touch-icon" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f35b.png">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -18,14 +16,11 @@
             background-color: #f4f7f6;
             font-family: 'Poppins', sans-serif;
             padding-bottom: 100px;
-            /* Space untuk cart bar */
         }
 
-        /* --- HERO SECTION (HEADER) --- */
+        /* --- HERO SECTION --- */
         .hero-section {
-            /* Gradasi Hijau Daun ke Hijau Kekuningan */
             background: linear-gradient(135deg, #064e3b, #10b981);
-            /* ... properti lainnya tetap sama ... */
             color: white;
             padding: 3rem 1rem 6rem;
             border-bottom-left-radius: 40px;
@@ -52,17 +47,6 @@
             z-index: 10;
         }
 
-        /* Efek Hover Link WA */
-        .hover-effect {
-            background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-        }
-
-        .hover-effect:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
-        }
-
         /* --- MENU CARD --- */
         .menu-card {
             border: none;
@@ -83,45 +67,67 @@
             object-fit: cover;
         }
 
-        /* DESKRIPSI MENU YANG BARU */
         .menu-desc-box {
             background-color: #f8f9fa;
-            /* Abu sangat muda */
             border-left: 4px solid #198754;
-            /* Aksen garis hijau di kiri */
             padding: 12px 15px;
             border-radius: 8px;
             font-size: 0.9rem;
-            /* Ukuran font pas (tidak terlalu kecil) */
             color: #495057;
-            /* Abu gelap (lebih jelas) */
             line-height: 1.6;
-            /* Jarak antar baris lebih lega */
             margin-bottom: 15px;
         }
 
-        /* --- FORM ELEMENTS --- */
-        .form-check {
-            position: relative;
-            background-color: #fff;
-            padding: 12px 15px 12px 45px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            border: 1px solid #eef0f2;
-            cursor: pointer;
-            transition: all 0.2s;
+        /* --- TOPPING CONTROLS --- */
+        .topping-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .topping-row:last-child {
+            border-bottom: none;
         }
 
-        .form-check:has(.form-check-input:checked) {
-            border-color: #198754;
-            background-color: #f0fff4;
+        .topping-qty-control {
+            display: flex;
+            align-items: center;
+            background: #f1f3f5;
+            border-radius: 20px;
+            padding: 2px;
         }
 
-        .form-check-input:checked+label {
+        .btn-topping-qty {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            background: white;
             color: #198754;
-            font-weight: 600;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        .btn-topping-qty:active {
+            transform: scale(0.9);
+        }
+
+        .display-topping-qty {
+            font-size: 0.85rem;
+            font-weight: 600;
+            width: 24px;
+            text-align: center;
+            color: #333;
+        }
+
+        /* --- BUTTONS --- */
         .btn-add {
             background: white;
             color: #198754;
@@ -139,7 +145,7 @@
             color: white;
         }
 
-        /* --- KERANJANG & MODAL --- */
+        /* --- KERANJANG --- */
         .cart-bar {
             position: fixed;
             bottom: 20px;
@@ -160,20 +166,7 @@
             transition: transform 0.3s;
         }
 
-        .cart-bar:active {
-            transform: translateX(-50%) scale(0.98);
-        }
-
-        .cart-item {
-            border-bottom: 1px solid #eee;
-            padding: 10px 0;
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        /* Kontrol Qty (+/-) */
+        /* Qty Control di Cart Modal */
         .qty-control {
             display: flex;
             align-items: center;
@@ -190,12 +183,9 @@
             font-weight: bold;
             color: #198754;
             cursor: pointer;
-            transition: background 0.2s;
         }
-
-        .qty-btn:hover {
-            background: #f0fff4;
-        }
+        
+        .qty-btn:hover { background: #f0fff4; }
 
         .qty-display {
             padding: 0 8px;
@@ -205,30 +195,21 @@
             text-align: center;
         }
 
-        /* --- RESPONSIVE HP --- */
+        /* Style Tambahan untuk Tombol GPS */
+        .dashed-border {
+            border: 2px dashed #0d6efd;
+            background-color: #f8f9fa;
+            transition: all 0.3s;
+        }
+        .dashed-border:hover {
+            background-color: #e7f1ff;
+            border-color: #0b5ed7;
+        }
+
         @media (max-width: 768px) {
-            .hero-section {
-                padding-bottom: 4rem;
-                border-bottom-left-radius: 25px;
-                border-bottom-right-radius: 25px;
-            }
-
-            .overlap-container {
-                margin-top: -50px;
-            }
-
-            .display-2 {
-                font-size: 3rem;
-            }
-
-            h1.fw-bold {
-                font-size: 1.8rem;
-            }
-
-            .cart-bar {
-                width: 95%;
-                bottom: 15px;
-            }
+            .hero-section { padding-bottom: 4rem; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
+            .overlap-container { margin-top: -50px; }
+            .cart-bar { width: 95%; bottom: 15px; }
         }
     </style>
 </head>
@@ -242,17 +223,15 @@
 
         <div class="mb-4">
             <a href="https://wa.me/6287787661787" target="_blank"
-                class="text-white text-decoration-none bg-white bg-opacity-25 border border-white border-opacity-50 rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 hover-effect shadow-sm">
+                class="text-white text-decoration-none bg-white bg-opacity-25 border border-white border-opacity-50 rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm">
                 <i class="bi bi-whatsapp fs-5"></i>
                 <span class="fw-bold">0877-8766-1787</span>
             </a>
         </div>
 
         <div class="d-inline-flex gap-2 bg-white bg-opacity-10 p-2 rounded-pill backdrop-blur">
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 -
-                Habis</span>
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil /
-                COD</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 - Habis</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil / COD</span>
         </div>
     </div>
 
@@ -260,12 +239,12 @@
         <div class="row justify-content-center">
             <div class="col-xl-9 col-lg-10">
                 <div class="row g-4 justify-content-center" id="menuContainer">
-                </div>
+                    </div>
             </div>
         </div>
     </div>
 
-    <div class="text-center mt-5 text-muted small opacity-75">
+    <div class="text-center mt-5 mb-5 text-muted small opacity-75">
         <p>Menerima pesanan untuk acara.<br>Hubungi kami via WhatsApp.</p>
     </div>
 
@@ -273,27 +252,65 @@
         <div class="d-flex align-items-center gap-2">
             <div class="bg-white text-success rounded-circle d-flex justify-content-center align-items-center"
                 style="width: 30px; height: 30px; font-weight: bold;" id="cartCount">0</div>
-            <span class="fw-bold">Pesanan Anda</span>
+            <span class="fw-bold">Lihat Pesanan</span>
         </div>
         <div class="fw-bold" id="cartTotal">Rp 0</div>
     </div>
 
     <div class="modal fade" id="cartModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-light">
                     <h5 class="modal-title fw-bold">Rincian Pesanan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" id="cartItemsContainer">
-                    <p class="text-center text-muted my-3">Keranjang masih kosong.</p>
+                
+                <div class="modal-body p-4">
+                    <div id="cartItemsContainer" class="mb-4"></div>
+
+                    <div id="checkoutForm" style="display: none;" class="border-top pt-4">
+                        <h6 class="fw-bold mb-3 small text-uppercase text-secondary d-flex align-items-center gap-2">
+                            <i class="bi bi-truck fs-5"></i> Informasi Pengiriman
+                        </h6>
+                        
+                        <div class="btn-group w-100 mb-4" role="group">
+                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup" checked onchange="toggleAddress(false)">
+                            <label class="btn btn-outline-success py-2" for="optPickup">Ambil Sendiri</label>
+
+                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery" onchange="toggleAddress(true)">
+                            <label class="btn btn-outline-success py-2" for="optDelivery">Diantar (Delivery)</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Nama Pemesan</label>
+                            <input type="text" id="custName" class="form-control" placeholder="Contoh: Budi">
+                        </div>
+
+                        <div id="addressSection" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span class="text-danger">*</span></label>
+                                <textarea id="custAddress" class="form-control bg-light" rows="3" placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
+                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail agar kurir mudah mencari.</div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()" class="btn btn-outline-primary dashed-border py-2">
+                                    <i class="bi bi-geo-alt-fill me-1"></i> Otomatis Cari Lokasi Saya
+                                </button>
+                                
+                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small" style="display:none;"></div>
+                                <input type="hidden" id="mapsLink">
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="modal-footer bg-light d-flex justify-content-between">
                     <div>
                         <small class="text-muted d-block">Total Bayar</small>
                         <h4 class="fw-bold text-success m-0" id="modalGrandTotal">Rp 0</h4>
                     </div>
-                    <button onclick="checkoutWA()" class="btn btn-success fw-bold px-4 rounded-pill">
+                    <button onclick="processCheckout()" class="btn btn-success fw-bold px-4 rounded-pill">
                         <i class="bi bi-whatsapp me-1"></i> Pesan via WA
                     </button>
                 </div>
@@ -302,12 +319,9 @@
     </div>
 
     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050;">
-        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert"
-            aria-live="assertive" aria-atomic="true">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
-                <div class="toast-body" id="toastMessage">
-                    Item berhasil ditambahkan!
-                </div>
+                <div class="toast-body" id="toastMessage">Item ditambahkan!</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
@@ -316,20 +330,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // --- KONFIGURASI ---
-        const NOMOR_WA = "6287787661787"; // Ganti jika nomor berubah
-
-        // State Keranjang
+        const NOMOR_WA = "6287787661787";
         let cart = [];
 
-        // DATA MENU
+        // Data Menu
         const menuList = [
             {
                 id: 1,
                 nama: "Lontong Sayur",
-                desc: "Sarapan ala 'Urang Awak'! Lontong lembut disiram kuah gulai nangka yang kental dan kaya rempah. Rasanya gurih, sedikit pedas, dan 'Lamak Bana'. Wajib coba!",
+                desc: "Sarapan ala 'Urang Awak'! Lontong lembut disiram kuah gulai nangka yang kental.",
                 hargaDasar: 11000,
-                img: "ltsyr.jpeg",
+                img: "ltsyr.jpeg", 
                 opsi: [
                     { nama: "Telur Rebus", harga: 3000 },
                     { nama: "Bakwan Goreng", harga: 1000 },
@@ -339,9 +350,9 @@
             {
                 id: 2,
                 nama: "Lontong Pical",
-                desc: "Khas Minang! Perpaduan lontong, mie kuning, dan sayuran segar yang disiram bumbu kacang pedas gurih, bukan manis. Lengkap dengan kerupuk merah!",
+                desc: "Khas Minang! Lontong, mie kuning, sayuran disiram bumbu kacang pedas gurih.",
                 hargaDasar: 11000,
-                img: "ltpcl.jpeg",
+                img: "ltpcl.jpeg", 
                 opsi: [
                     { nama: "Telur Rebus", harga: 3000 },
                     { nama: "Bakwan Goreng", harga: 1000 },
@@ -350,59 +361,61 @@
             }
         ];
 
+        let toppingState = {}; 
+
         // 1. RENDER MENU
         const container = document.getElementById('menuContainer');
 
         menuList.forEach(item => {
             let opsiHTML = '';
             if (item.opsi && item.opsi.length > 0) {
-                opsiHTML += '<div class="mt-3">';
-                opsiHTML += '<p class="small fw-bold text-secondary mb-2"><i class="bi bi-plus-circle-dotted"></i> Tambah Topping:</p>';
-                item.opsi.forEach((opt, index) => {
-                    const uniqueID = `opt-${item.id}-${index}`;
+                opsiHTML += '<div class="mt-3 mb-3 bg-white border rounded p-2">';
+                opsiHTML += '<p class="small fw-bold text-success mb-2"><i class="bi bi-basket2"></i> Mau tambah topping?</p>';
+                
+                item.opsi.forEach((opt, idx) => {
                     const hargaStr = opt.harga > 0 ? `+Rp${opt.harga.toLocaleString('id-ID')}` : 'Gratis';
+                    toppingState[`${item.id}-${idx}`] = 0;
+
                     opsiHTML += `
-                    <div class="form-check d-flex justify-content-between align-items-center">
-                        <div>
-                            <input class="form-check-input" type="checkbox" value="${opt.harga}" id="${uniqueID}" 
-                                   data-nama="${opt.nama}" onchange="updatePriceDisplay(${item.id})">
-                            <label class="form-check-label stretched-link ms-1 small" for="${uniqueID}">
-                                ${opt.nama}
-                            </label>
+                    <div class="topping-row">
+                        <div class="d-flex flex-column lh-1">
+                            <span class="small fw-semibold text-dark">${opt.nama}</span>
+                            <span class="text-muted" style="font-size:0.75rem">${hargaStr}</span>
                         </div>
-                        <span class="small fw-bold text-muted">${hargaStr}</span>
+                        <div class="topping-qty-control">
+                            <button class="btn-topping-qty" onclick="changeToppingQty(${item.id}, ${idx}, -1)">-</button>
+                            <span class="display-topping-qty" id="tqty-${item.id}-${idx}">0</span>
+                            <button class="btn-topping-qty" onclick="changeToppingQty(${item.id}, ${idx}, 1)">+</button>
+                        </div>
                     </div>`;
                 });
                 opsiHTML += '</div>';
             }
 
-            // 2. Card HTML
             const cardHTML = `
             <div class="col-md-6">
                 <div class="menu-card d-flex flex-column">
                     <div class="position-relative">
-                        <img src="${item.img}" class="menu-img w-100" alt="${item.nama}">
+                        <img src="${item.img}" onerror="this.src='https://via.placeholder.com/600x400?text=Lontong+MM'" class="menu-img w-100" alt="${item.nama}">
                         <div class="position-absolute bottom-0 start-0 w-100 p-3" 
                              style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                             <h4 class="text-white fw-bold m-0 text-shadow">${item.nama}</h4>
                         </div>
                     </div>
                     <div class="p-4 flex-grow-1 d-flex flex-column">
-                        
-                        <div class="menu-desc-box">
-                           ${item.desc}
-                        </div>
+                        <div class="menu-desc-box">${item.desc}</div>
                         ${opsiHTML}
-                        
-                        <div class="mt-auto pt-4 border-top">
+                        <div class="mt-auto pt-3 border-top">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-muted small">Estimasi per porsi</span>
-                                <span class="fs-4 fw-bold text-success" id="price-display-${item.id}">
-                                    Rp ${item.hargaDasar.toLocaleString('id-ID')}
-                                </span>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size:0.7rem">Estimasi Total</small>
+                                    <span class="fs-5 fw-bold text-success" id="price-display-${item.id}">
+                                        Rp ${item.hargaDasar.toLocaleString('id-ID')}
+                                    </span>
+                                </div>
                             </div>
-                            <button onclick="addToCart(${item.id})" class="btn-add" id="btn-add-${item.id}">
-                                <i class="bi bi-plus-lg me-1"></i> Tambah Pesanan
+                            <button onclick="addToCart(${item.id})" class="btn-add">
+                                <i class="bi bi-plus-lg me-1"></i> Masukkan Keranjang
                             </button>
                         </div>
                     </div>
@@ -411,199 +424,272 @@
             container.innerHTML += cardHTML;
         });
 
-        // 2. UPDATE HARGA TAMPILAN (Saat checkbox diklik)
-        function updatePriceDisplay(idMenu) {
-            const menu = menuList.find(m => m.id === idMenu);
-            let total = menu.hargaDasar;
-            const checkboxes = document.querySelectorAll(`input[id^="opt-${idMenu}-"]:checked`);
-            checkboxes.forEach(box => total += parseInt(box.value));
-            document.getElementById(`price-display-${idMenu}`).innerText = 'Rp ' + total.toLocaleString('id-ID');
+        // 2. FUNGSI UBAH QTY TOPPING
+        function changeToppingQty(menuId, optIdx, change) {
+            const key = `${menuId}-${optIdx}`;
+            let current = toppingState[key] || 0;
+            let newVal = current + change;
+            if (newVal < 0) newVal = 0;
+            if (newVal > 20) newVal = 20;
+
+            toppingState[key] = newVal;
+            document.getElementById(`tqty-${menuId}-${optIdx}`).innerText = newVal;
+            updatePriceDisplay(menuId);
         }
 
-        // 3. LOGIKA TAMBAH KE KERANJANG
-        function addToCart(idMenu) {
-            const menu = menuList.find(m => m.id === idMenu);
-            let itemTotal = menu.hargaDasar;
-            let selectedToppings = [];
+        // 3. UPDATE TAMPILAN HARGA
+        function updatePriceDisplay(menuId) {
+            const menu = menuList.find(m => m.id === menuId);
+            let total = menu.hargaDasar;
+            menu.opsi.forEach((opt, idx) => {
+                const qty = toppingState[`${menuId}-${idx}`];
+                total += (opt.harga * qty);
+            });
+            document.getElementById(`price-display-${menuId}`).innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
 
-            // Ambil topping
-            const checkboxes = document.querySelectorAll(`input[id^="opt-${idMenu}-"]:checked`);
-            checkboxes.forEach(box => {
-                itemTotal += parseInt(box.value);
-                selectedToppings.push(box.getAttribute('data-nama'));
+        // 4. TAMBAH KE KERANJANG
+        function addToCart(menuId) {
+            const menu = menuList.find(m => m.id === menuId);
+            let selectedToppings = [];
+            let totalToppingPrice = 0;
+
+            menu.opsi.forEach((opt, idx) => {
+                const qty = toppingState[`${menuId}-${idx}`];
+                if (qty > 0) {
+                    selectedToppings.push({
+                        nama: opt.nama,
+                        qty: qty,
+                        hargaSatuan: opt.harga,
+                        total: qty * opt.harga
+                    });
+                    totalToppingPrice += (qty * opt.harga);
+                }
             });
 
-            // Buat ID unik (Menu + Topping)
-            const uniqueKey = `${menu.id}-${selectedToppings.sort().join('-')}`;
+            let toppingKey = selectedToppings.map(t => `${t.nama}:${t.qty}`).sort().join('-');
+            const uniqueKey = `${menu.id}-${toppingKey}`;
+            const hargaPerItem = menu.hargaDasar + totalToppingPrice;
 
-            // Cek item duplikat
             const existingItem = cart.find(item => item.uniqueKey === uniqueKey);
-
             if (existingItem) {
                 existingItem.qty += 1;
             } else {
-                const cartItem = {
+                cart.push({
                     uniqueKey: uniqueKey,
+                    menuId: menu.id,
                     nama: menu.nama,
-                    hargaSatuan: itemTotal,
+                    hargaDasar: menu.hargaDasar,
                     toppings: selectedToppings,
+                    hargaPerItem: hargaPerItem,
                     qty: 1
-                };
-                cart.push(cartItem);
+                });
             }
 
             updateCartUI();
-
-            // Munculkan Toast (Notifikasi)
+            resetToppingInputs(menuId);
+            
             const toastEl = document.getElementById('liveToast');
-            const toastMsg = document.getElementById('toastMessage');
-            toastMsg.innerText = `${menu.nama} berhasil masuk keranjang!`;
-            const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+            document.getElementById('toastMessage').innerText = `${menu.nama} berhasil ditambahkan!`;
+            const toast = new bootstrap.Toast(toastEl);
             toast.show();
-
-            // Reset Checkbox Visual
-            setTimeout(() => {
-                checkboxes.forEach(box => box.checked = false);
-                updatePriceDisplay(idMenu);
-            }, 500);
         }
 
-        // 4. UPDATE TAMPILAN TOMBOL KERANJANG
+        function resetToppingInputs(menuId) {
+            const menu = menuList.find(m => m.id === menuId);
+            menu.opsi.forEach((opt, idx) => {
+                toppingState[`${menuId}-${idx}`] = 0;
+                document.getElementById(`tqty-${menuId}-${idx}`).innerText = "0";
+            });
+            updatePriceDisplay(menuId);
+        }
+
+        // 5. UPDATE UI CART
         function updateCartUI() {
             const cartBar = document.getElementById('floatingCart');
-            const cartCount = document.getElementById('cartCount');
-            const cartTotal = document.getElementById('cartTotal');
-
             let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-            let grandTotal = cart.reduce((sum, item) => sum + (item.hargaSatuan * item.qty), 0);
+            let grandTotal = cart.reduce((sum, item) => sum + (item.hargaPerItem * item.qty), 0);
 
             if (cart.length > 0) {
                 cartBar.style.display = 'flex';
-                cartCount.innerText = totalQty;
-                cartTotal.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+                document.getElementById('cartCount').innerText = totalQty;
+                document.getElementById('cartTotal').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
                 document.getElementById('modalGrandTotal').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
             } else {
                 cartBar.style.display = 'none';
-                // Tutup modal jika kosong
                 const modalEl = document.getElementById('cartModal');
                 const modal = bootstrap.Modal.getInstance(modalEl);
                 if (modal) modal.hide();
             }
-
-            // Disable Tombol jika kosong
-            const btnCheckout = document.querySelector('button[onclick="checkoutWA()"]');
-            if (cart.length === 0) {
-                btnCheckout.disabled = true;
-                btnCheckout.classList.add('opacity-50');
-                btnCheckout.innerText = "Keranjang Kosong";
-            } else {
-                btnCheckout.disabled = false;
-                btnCheckout.classList.remove('opacity-50');
-                btnCheckout.innerHTML = '<i class="bi bi-whatsapp me-1"></i> Pesan via WA';
-            }
         }
 
-        // 5. RENDER ISI MODAL
+        // 6. SHOW MODAL (RENDER ULANG DENGAN FORM)
         function showCartModal() {
-            const modalBody = document.getElementById('cartItemsContainer');
-            modalBody.innerHTML = '';
+            const listContainer = document.getElementById('cartItemsContainer');
+            const formContainer = document.getElementById('checkoutForm');
+            listContainer.innerHTML = '';
 
             if (cart.length === 0) return;
 
-            let html = '';
-            cart.forEach((item, index) => {
-                let toppingText = item.toppings.length > 0 ?
-                    `<small class="text-muted d-block" style="font-size: 0.8rem">+ ${item.toppings.join(', ')}</small>` :
-                    `<small class="text-muted d-block" style="font-size: 0.8rem">Original</small>`;
-                let subtotal = item.hargaSatuan * item.qty;
+            // Tampilkan Form
+            formContainer.style.display = 'block';
 
-                html += `
-                <div class="cart-item d-flex justify-content-between align-items-center py-3 border-bottom">
-                    <div class="flex-grow-1 pe-2">
-                        <h6 class="fw-bold mb-0">${item.nama}</h6>
-                        ${toppingText}
-                        <div class="fw-bold text-success small mt-1">@ Rp ${item.hargaSatuan.toLocaleString('id-ID')}</div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <div class="qty-control me-3">
-                            <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                            <div class="qty-display">${item.qty}</div>
-                            <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+            cart.forEach((item, idx) => {
+                let toppingHTML = '';
+                if (item.toppings.length > 0) {
+                    const tText = item.toppings.map(t => `${t.nama} x${t.qty}`).join(', ');
+                    toppingHTML = `<small class="text-muted d-block fst-italic" style="font-size: 0.75rem">+ ${tText}</small>`;
+                } else {
+                    toppingHTML = `<small class="text-muted d-block" style="font-size: 0.75rem">Tanpa Topping</small>`;
+                }
+
+                const subtotal = item.hargaPerItem * item.qty;
+
+                listContainer.innerHTML += `
+                <div class="py-3 border-bottom">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div>
+                            <h6 class="fw-bold m-0">${item.nama}</h6>
+                            ${toppingHTML}
                         </div>
-                        <div class="text-end text-nowrap">
-                           <span class="fw-bold">Rp ${subtotal.toLocaleString('id-ID')}</span>
+                        <div class="fw-bold">Rp ${subtotal.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-secondary">@ Rp ${item.hargaPerItem.toLocaleString('id-ID')}</small>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCartQty(${idx}, -1)">-</button>
+                            <div class="qty-display">${item.qty}</div>
+                            <button class="qty-btn" onclick="changeCartQty(${idx}, 1)">+</button>
                         </div>
                     </div>
                 </div>`;
             });
-            modalBody.innerHTML = html;
-
+            
             const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
             myModal.show();
         }
 
-        // 6. UBAH QTY (+/-)
-        function changeQty(index, change) {
-            if (cart[index].qty + change > 0) {
-                cart[index].qty += change;
+        // 7. UBAH QTY DI CART
+        function changeCartQty(idx, change) {
+            if (cart[idx].qty + change > 0) {
+                cart[idx].qty += change;
             } else {
-                if (confirm("Hapus item ini dari keranjang?")) {
-                    cart.splice(index, 1);
+                if (confirm("Hapus menu ini dari keranjang?")) {
+                    cart.splice(idx, 1);
                 }
             }
             updateCartUI();
-
-            // Render ulang modal langsung (tanpa tutup buka)
+            
             if (cart.length > 0) {
-                // Logic render ulang manual di sini agar tidak perlu panggil showCartModal (yg bikin kedip)
-                // Tapi untuk simpel, kita update text saja atau re-render body
-                const modalBody = document.getElementById('cartItemsContainer');
-                // Kita gunakan logic yang sama dengan showCartModal untuk re-render innerHTML
-                // (Copy paste logic render loop di sini agar realtime)
-                let html = '';
-                cart.forEach((item, i) => {
-                    let toppingText = item.toppings.length > 0 ?
-                        `<small class="text-muted d-block" style="font-size: 0.8rem">+ ${item.toppings.join(', ')}</small>` :
-                        `<small class="text-muted d-block" style="font-size: 0.8rem">Original</small>`;
-                    let subtotal = item.hargaSatuan * item.qty;
-                    html += `
-                    <div class="cart-item d-flex justify-content-between align-items-center py-3 border-bottom">
-                        <div class="flex-grow-1 pe-2">
-                            <h6 class="fw-bold mb-0">${item.nama}</h6>
-                            ${toppingText}
-                            <div class="fw-bold text-success small mt-1">@ Rp ${item.hargaSatuan.toLocaleString('id-ID')}</div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="qty-control me-3">
-                                <button class="qty-btn" onclick="changeQty(${i}, -1)">-</button>
-                                <div class="qty-display">${item.qty}</div>
-                                <button class="qty-btn" onclick="changeQty(${i}, 1)">+</button>
-                            </div>
-                            <div class="text-end text-nowrap">
-                               <span class="fw-bold">Rp ${subtotal.toLocaleString('id-ID')}</span>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-                modalBody.innerHTML = html;
+                // Trik render ulang modal tanpa kedip parah: tutup instance, buka ulang via fungsi show
+                const el = document.getElementById('cartModal');
+                const modal = bootstrap.Modal.getInstance(el);
+                modal.hide();
+                setTimeout(() => showCartModal(), 300);
+            } else {
+                document.getElementById('checkoutForm').style.display = 'none';
             }
         }
 
-        // 7. CHECKOUT WHATSAPP
-        function checkoutWA() {
-            let message = `Halo Kak, saya mau pesan:\n\n`;
+        // 8. LOGIKA ALAMAT & GPS
+        function toggleAddress(isDelivery) {
+            const section = document.getElementById('addressSection');
+            section.style.display = isDelivery ? 'block' : 'none';
+        }
+
+        function getGeoLocation() {
+            const btn = document.getElementById('btnGetLoc');
+            const status = document.getElementById('locStatus');
+            const hiddenInput = document.getElementById('mapsLink');
+
+            if(!navigator.geolocation) {
+                status.style.display = 'block';
+                status.innerHTML = "<span class='text-danger'>Browser tidak support GPS.</span>";
+                return;
+            }
+
+            // UI Loading
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mencari Koordinat...';
+            status.style.display = 'none';
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const long = pos.coords.longitude;
+                    const link = `https://www.google.com/maps?q=${lat},${long}`;
+                    hiddenInput.value = link;
+                    
+                    status.style.display = 'block';
+                    status.className = "alert alert-success p-2 text-center small mt-2 mb-0";
+                    status.innerHTML = `<div class="d-flex align-items-center justify-content-center gap-2"><i class="bi bi-check-circle-fill"></i> <strong>Lokasi Berhasil Dilampirkan!</strong></div>`;
+                    
+                    btn.disabled = false;
+                    btn.classList.remove('btn-outline-primary');
+                    btn.classList.add('btn-success'); 
+                    btn.innerHTML = '<i class="bi bi-geo-alt"></i> Update Lokasi Saya';
+                },
+                (err) => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-geo-alt-fill me-1"></i> Coba Lagi';
+                    status.style.display = 'block';
+                    status.className = "alert alert-danger p-2 text-center small mt-2 mb-0";
+                    status.innerHTML = "❌ Gagal mendeteksi lokasi. Pastikan GPS aktif.";
+                }
+            );
+        }
+
+        // 9. PROSES CHECKOUT WHATSAPP
+        function processCheckout() {
+            if (cart.length === 0) return;
+
+            const name = document.getElementById('custName').value.trim();
+            if(!name) { 
+                alert("Mohon isi 'Nama Pemesan' terlebih dahulu."); 
+                document.getElementById('custName').focus();
+                return; 
+            }
+
+            const type = document.querySelector('input[name="deliveryType"]:checked').value;
+            const address = document.getElementById('custAddress').value.trim();
+            const maps = document.getElementById('mapsLink').value;
+
+            // VALIDASI: Alamat Wajib jika Delivery
+            if(type === 'delivery') {
+                if(!address) {
+                    alert("Mohon isi 'Alamat Lengkap' agar pesanan bisa diantar.");
+                    document.getElementById('custAddress').focus(); 
+                    return; 
+                }
+            }
+
+            let message = `Halo Admin Lontong MM, saya *${name}* mau pesan:\n\n`;
             let grandTotal = 0;
 
             cart.forEach((item, index) => {
-                let subtotal = item.hargaSatuan * item.qty;
+                let subtotal = item.hargaPerItem * item.qty;
                 grandTotal += subtotal;
-                let toppingStr = item.toppings.length > 0 ? `(+ ${item.toppings.join(', ')})` : '';
+                
+                let toppingStr = "";
+                if (item.toppings.length > 0) {
+                    toppingStr = "\n   Topping: " + item.toppings.map(t => `${t.nama} (${t.qty}x)`).join(', ');
+                }
 
-                message += `${index + 1}. *(${item.qty}x) ${item.nama}*\n   ${toppingStr}\n   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
+                message += `${index + 1}. *${item.nama} (${item.qty} porsi)*${toppingStr}\n   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
             });
 
-            message += `*TOTAL BAYAR: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
-            message += `\nMohon diproses ya kak.`;
+            message += `*TOTAL BELANJA: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
+            message += `--------------------------------\n`;
+
+            if(type === 'pickup') {
+                message += `Metode: *AMBIL SENDIRI (PICKUP)*\n`;
+            } else {
+                message += `Metode: *DELIVERY (ANTAR)*\n`;
+                if(address) message += `Alamat: ${address}\n`;
+                if(maps) message += `Maps: ${maps}\n`;
+            }
+
+            message += `--------------------------------\nMohon diproses ya kak. Terima kasih!`;
 
             const url = `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
@@ -611,5 +697,4 @@
     </script>
 
 </body>
-
 </html>
