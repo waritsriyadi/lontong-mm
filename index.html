@@ -304,6 +304,12 @@
                             <input type="text" id="custName" class="form-control" placeholder="Contoh: Budi">
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Catatan (Opsional)</label>
+                            <textarea id="custNote" class="form-control" rows="2"
+                                placeholder="Contoh: Kuah dipisah, jangan pedas, dll..."></textarea>
+                        </div>
+
                         <div id="addressSection" style="display: none;">
                             <div class="mb-3">
                                 <label class="form-label small fw-bold text-muted">Alamat Lengkap <span
@@ -542,10 +548,6 @@
             }
         }
 
-        // ==========================================
-        // PERBAIKAN UTAMA DI SINI (LOGIKA MODAL)
-        // ==========================================
-
         // 6. FUNGSI UNTUK MERENDER LIST CART (HTML GENERATOR)
         function renderCartListHTML() {
             const listContainer = document.getElementById('cartItemsContainer');
@@ -606,9 +608,7 @@
         // 7. MEMBUKA MODAL
         function showCartModal() {
             if (cart.length === 0) return;
-
             renderCartListHTML(); // Render dulu isinya
-
             const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
             myModal.show();
         }
@@ -622,15 +622,11 @@
                     cart.splice(idx, 1);
                 }
             }
-
-            // Update data di UI luar (Floating Button)
             updateFloatingCartButton();
-
-            // Update isi Modal secara langsung tanpa refresh modal
             renderCartListHTML();
         }
 
-        // --- SISANYA LOGIKA ALAMAT & CHECKOUT (TIDAK BERUBAH) ---
+        // --- SISANYA LOGIKA ALAMAT & CHECKOUT (DIPERBARUI) ---
 
         function toggleAddress(isDelivery) {
             const section = document.getElementById('addressSection');
@@ -688,6 +684,9 @@
                 return;
             }
 
+            // AMBIL NILAI CATATAN
+            const note = document.getElementById('custNote').value.trim();
+
             const type = document.querySelector('input[name="deliveryType"]:checked').value;
             const address = document.getElementById('custAddress').value.trim();
             const maps = document.getElementById('mapsLink').value;
@@ -715,8 +714,14 @@
                 message += `${index + 1}. *${item.nama} (${item.qty} porsi)*${toppingStr}\n   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
             });
 
-            message += `*TOTAL BELANJA: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
+            // --- PERBAIKAN DI SINI (Hapus Emoji, ganti format teks biasa) ---
+            if (note) {
+                message += `--------------------------------\n`;
+                message += `*CATATAN KHUSUS:*\n${note}\n`;
+            }
+
             message += `--------------------------------\n`;
+            message += `*TOTAL BELANJA: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
 
             if (type === 'pickup') {
                 message += `Metode: *AMBIL SENDIRI (PICKUP)*\n`;
