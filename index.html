@@ -4,526 +4,612 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lontong MM</title>
+    <title>Menu Lontong MM</title>
+
     <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f35b.png">
     <link rel="apple-touch-icon" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f35b.png">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
         body {
-            background-color: #f0f2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            font-family: 'Poppins', sans-serif;
+            padding-bottom: 100px;
+            /* Space untuk cart bar */
         }
 
-        .card {
+        /* --- HERO SECTION (HEADER) --- */
+        .hero-section {
+            /* Gradasi Hijau Daun ke Hijau Kekuningan */
+            background: linear-gradient(135deg, #064e3b, #10b981);
+            /* ... properti lainnya tetap sama ... */
+            color: white;
+            padding: 3rem 1rem 6rem;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .overlap-container {
+            margin-top: -80px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Efek Hover Link WA */
+        .hover-effect {
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .hover-effect:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        /* --- MENU CARD --- */
+        .menu-card {
             border: none;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* DESKRIPSI MENU YANG BARU */
+        .menu-desc-box {
+            background-color: #f8f9fa;
+            /* Abu sangat muda */
+            border-left: 4px solid #198754;
+            /* Aksen garis hijau di kiri */
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            /* Ukuran font pas (tidak terlalu kecil) */
+            color: #495057;
+            /* Abu gelap (lebih jelas) */
+            line-height: 1.6;
+            /* Jarak antar baris lebih lega */
+            margin-bottom: 15px;
+        }
+
+        /* --- FORM ELEMENTS --- */
+        .form-check {
+            position: relative;
+            background-color: #fff;
+            padding: 12px 15px 12px 45px;
             border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #eef0f2;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .stat-card {
-            transition: transform 0.2s;
+        .form-check:has(.form-check-input:checked) {
+            border-color: #198754;
+            background-color: #f0fff4;
         }
 
-        .stat-card:hover {
-            transform: translateY(-3px);
+        .form-check-input:checked+label {
+            color: #198754;
+            font-weight: 600;
         }
 
-        .bg-gradient-primary {
-            background: linear-gradient(45deg, #4e73df, #224abe);
+        .btn-add {
+            background: white;
+            color: #198754;
+            border: 2px solid #198754;
+            border-radius: 15px;
+            font-weight: 600;
+            padding: 10px;
+            width: 100%;
+            transition: all 0.2s;
         }
 
-        .bg-gradient-success {
-            background: linear-gradient(45deg, #1cc88a, #13855c);
+        .btn-add:hover,
+        .btn-add:active {
+            background: #198754;
+            color: white;
         }
 
-        .bg-gradient-warning {
-            background: linear-gradient(45deg, #f6c23e, #dda20a);
+        /* --- KERANJANG & MODAL --- */
+        .cart-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: #198754;
+            color: white;
+            border-radius: 50px;
+            padding: 15px 25px;
+            box-shadow: 0 10px 30px rgba(25, 135, 84, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s;
         }
 
-        .text-xs {
-            font-size: 0.7rem;
+        .cart-bar:active {
+            transform: translateX(-50%) scale(0.98);
         }
 
-        .input-group-text {
-            min-width: 120px;
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Kontrol Qty (+/-) */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            border: 1px solid #dee2e6;
+            border-radius: 50px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .qty-btn {
+            background: white;
+            border: none;
+            padding: 5px 12px;
+            font-weight: bold;
+            color: #198754;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: #f0fff4;
+        }
+
+        .qty-display {
+            padding: 0 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        /* --- RESPONSIVE HP --- */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding-bottom: 4rem;
+                border-bottom-left-radius: 25px;
+                border-bottom-right-radius: 25px;
+            }
+
+            .overlap-container {
+                margin-top: -50px;
+            }
+
+            .display-2 {
+                font-size: 3rem;
+            }
+
+            h1.fw-bold {
+                font-size: 1.8rem;
+            }
+
+            .cart-bar {
+                width: 95%;
+                bottom: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="#"><i class="bi bi-shop"></i> Lontong MM</a>
-        </div>
-    </nav>
+    <div class="hero-section text-center">
+        <div class="display-2 mb-2">🍛</div>
+        <h1 class="fw-bold mb-1">Lontong MM</h1>
+        <p class="opacity-75 mb-2 fw-light">Sarapan Nikmat, Harga Sahabat.<br>Perumahan PJB III BC/04, Sagulung.</p>
 
-    <div class="container pb-5">
-
-        <div class="row g-3 mb-4">
-            <div class="col-lg-5">
-                <div class="card h-100 border-primary border-2" id="formCard">
-                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="m-0 font-weight-bold text-primary" id="formTitle"><i class="bi bi-pencil-square"></i>
-                            Input Penjualan</h5>
-                        <button id="btnCancelEdit" class="btn btn-sm btn-secondary d-none"
-                            onclick="resetFormMode()">Batal Edit</button>
-                    </div>
-                    <div class="card-body">
-                        <form id="salesForm">
-                            <input type="hidden" id="editId">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Tanggal</label>
-                                <input type="date" class="form-control" id="dateInput" required>
-                            </div>
-
-                            <div class="p-3 bg-light rounded border mb-3">
-                                <h6 class="text-muted mb-3 text-center border-bottom pb-2">Hitung Stok Terjual</h6>
-
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text"><i class="bi bi-box-seam me-2"></i> Lontong</span>
-                                    <input type="number" class="form-control" id="qtyLontong" placeholder="0" min="0">
-                                    <span class="input-group-text bg-white">Porsi</span>
-                                </div>
-                                <div class="text-end text-xs text-muted mb-2">Jual: 11rb | Setor: 10rb</div>
-
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text"><i class="bi bi-egg-fill me-2"></i> Telur</span>
-                                    <input type="number" class="form-control" id="qtyTelur" placeholder="0" min="0">
-                                    <span class="input-group-text bg-white">Butir</span>
-                                </div>
-                                <div class="text-end text-xs text-muted mb-2">Jual: 3rb | Modal: 1.9rb</div>
-
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text"><i class="bi bi-circle-fill me-2"></i> Bakwan</span>
-                                    <input type="number" class="form-control" id="qtyBakwan" placeholder="0" min="0">
-                                    <span class="input-group-text bg-white">Biji</span>
-                                </div>
-                                <div class="text-end text-xs text-muted">Jual: 1rb | Setor: 1rb</div>
-                            </div>
-
-                            <div class="alert alert-info mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Total Uang Diterima:</span>
-                                    <strong id="previewOmset">Rp 0</strong>
-                                </div>
-                                <hr class="my-1">
-                                <div class="d-flex justify-content-between text-danger">
-                                    <span>Wajib Setor Saudara:</span>
-                                    <strong id="previewSetor">Rp 0</strong>
-                                </div>
-                                <div class="d-flex justify-content-between text-success fw-bold fs-5 mt-2">
-                                    <span>Keuntungan Bersih:</span>
-                                    <strong id="previewUntung">Rp 0</strong>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" id="btnSave">
-                                <i class="bi bi-save"></i> SIMPAN DATA
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="card mb-3 border-0 shadow-sm">
-                    <div class="card-body p-2">
-                        <div class="row g-2 align-items-end">
-                            <div class="col-5">
-                                <label class="text-xs text-muted fw-bold ms-1">Dari Tanggal</label>
-                                <input type="date" id="filterStartDate" class="form-control form-control-sm">
-                            </div>
-                            <div class="col-5">
-                                <label class="text-xs text-muted fw-bold ms-1">Sampai Tanggal</label>
-                                <input type="date" id="filterEndDate" class="form-control form-control-sm">
-                            </div>
-                            <div class="col-2">
-                                <button class="btn btn-secondary btn-sm w-100" onclick="resetFilter()"
-                                    title="Reset Filter">
-                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold">
-                            <i class="bi bi-exclamation-triangle-fill"></i> Tanggal terbalik! Mohon perbaiki.
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <div class="card stat-card bg-gradient-success text-white h-100">
-                            <div class="card-body">
-                                <h6 class="text-uppercase opacity-75">Total Keuntungan Saya</h6>
-                                <h2 class="fw-bold mb-0" id="grandProfit">Rp 0</h2>
-                                <small class="opacity-75">Akumulasi profit bersih</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card stat-card bg-gradient-warning text-white h-100">
-                            <div class="card-body">
-                                <h6 class="text-uppercase opacity-75">Total Setoran Saudara</h6>
-                                <h2 class="fw-bold mb-0" id="grandSetor">Rp 0</h2>
-                                <small class="opacity-75">Uang yang harus diserahkan</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card p-3">
-                    <h6 class="fw-bold text-secondary">Grafik Performa</h6>
-                    <div style="height: 300px;">
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                </div>
-            </div>
+        <div class="mb-4">
+            <a href="https://wa.me/6287787661787" target="_blank"
+                class="text-white text-decoration-none bg-white bg-opacity-25 border border-white border-opacity-50 rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 hover-effect shadow-sm">
+                <i class="bi bi-whatsapp fs-5"></i>
+                <span class="fw-bold">0877-8766-1787</span>
+            </a>
         </div>
 
-        <div class="card">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="m-0 font-weight-bold text-primary">Riwayat Penjualan Detail</h5>
-            </div>
-            <div class="card-body p-0">
+        <div class="d-inline-flex gap-2 bg-white bg-opacity-10 p-2 rounded-pill backdrop-blur">
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 -
+                Habis</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil /
+                COD</span>
+        </div>
+    </div>
 
-                <div class="table-responsive d-none d-md-block">
-                    <table class="table table-striped table-hover align-middle mb-0" id="dataTable">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Rincian (Porsi)</th>
-                                <th class="text-end">Uang Laci</th>
-                                <th class="text-end text-danger">Setor Saudara</th>
-                                <th class="text-end text-success">Untung Saya</th>
-                                <th class="text-center" style="width: 120px;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBodyDesktop">
-                        </tbody>
-                    </table>
+    <div class="container overlap-container">
+        <div class="row justify-content-center">
+            <div class="col-xl-9 col-lg-10">
+                <div class="row g-4 justify-content-center" id="menuContainer">
                 </div>
-
-                <div id="dataListMobile" class="d-md-none p-3">
-                </div>
-
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, deleteDoc, doc }
-            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <div class="text-center mt-5 text-muted small opacity-75">
+        <p>Menerima pesanan untuk acara.<br>Hubungi kami via WhatsApp.</p>
+    </div>
 
-        // --- KONFIGURASI FIREBASE ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyCamv42dxGHJEqXMqVIPcOeWGNdM5p7X2E",
-            authDomain: "lontong-mm.firebaseapp.com",
-            projectId: "lontong-mm",
-            storageBucket: "lontong-mm.firebasestorage.app",
-            messagingSenderId: "628261457290",
-            appId: "1:628261457290:web:8cbd5262f3cc3deb30cc73",
-            measurementId: "G-GBN3GE3QKN"
-        };
+    <div class="cart-bar" id="floatingCart" onclick="showCartModal()">
+        <div class="d-flex align-items-center gap-2">
+            <div class="bg-white text-success rounded-circle d-flex justify-content-center align-items-center"
+                style="width: 30px; height: 30px; font-weight: bold;" id="cartCount">0</div>
+            <span class="fw-bold">Pesanan Anda</span>
+        </div>
+        <div class="fw-bold" id="cartTotal">Rp 0</div>
+    </div>
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
+    <div class="modal fade" id="cartModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold">Rincian Pesanan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="cartItemsContainer">
+                    <p class="text-center text-muted my-3">Keranjang masih kosong.</p>
+                </div>
+                <div class="modal-footer bg-light d-flex justify-content-between">
+                    <div>
+                        <small class="text-muted d-block">Total Bayar</small>
+                        <h4 class="fw-bold text-success m-0" id="modalGrandTotal">Rp 0</h4>
+                    </div>
+                    <button onclick="checkoutWA()" class="btn btn-success fw-bold px-4 rounded-pill">
+                        <i class="bi bi-whatsapp me-1"></i> Pesan via WA
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // HARGA & MARGIN
-        const HARGA = {
-            lontong_jual: 11000, lontong_setor: 10000,
-            telur_jual: 3000, telur_modal: 1900,
-            bakwan_jual: 1000, bakwan_setor: 1000
-        };
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050;">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+            aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">
+                    Item berhasil ditambahkan!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
 
-        // UI References Form
-        const qtyLontong = document.getElementById('qtyLontong');
-        const qtyTelur = document.getElementById('qtyTelur');
-        const qtyBakwan = document.getElementById('qtyBakwan');
-        const editIdField = document.getElementById('editId');
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-        // UI References Dashboard
-        const tableBodyDesktop = document.getElementById('tableBodyDesktop');
-        const dataListMobile = document.getElementById('dataListMobile');
-        const filterStart = document.getElementById('filterStartDate');
-        const filterEnd = document.getElementById('filterEndDate');
+    <script>
+        // --- KONFIGURASI ---
+        const NOMOR_WA = "6287787661787"; // Ganti jika nomor berubah
 
-        // VARIABEL GLOBAL DATA
-        let globalData = []; // Menyimpan semua data mentah dari Firebase
-        let chartInstance;
-        const ctx = document.getElementById('salesChart').getContext('2d');
+        // State Keranjang
+        let cart = [];
 
-        // 1. LOGIKA KALKULATOR LIVE
-        function hitungEstimasi() {
-            const qL = parseInt(qtyLontong.value) || 0;
-            const qT = parseInt(qtyTelur.value) || 0;
-            const qB = parseInt(qtyBakwan.value) || 0;
-
-            const totalOmset = (qL * HARGA.lontong_jual) + (qT * HARGA.telur_jual) + (qB * HARGA.bakwan_jual);
-            const totalSetor = (qL * HARGA.lontong_setor) + (qB * HARGA.bakwan_setor);
-            const totalUntung = (totalOmset - totalSetor) - (qT * HARGA.telur_modal);
-
-            document.getElementById('previewOmset').innerText = 'Rp ' + totalOmset.toLocaleString('id-ID');
-            document.getElementById('previewSetor').innerText = 'Rp ' + totalSetor.toLocaleString('id-ID');
-            document.getElementById('previewUntung').innerText = 'Rp ' + totalUntung.toLocaleString('id-ID');
-
-            return { qL, qT, qB, totalOmset, totalSetor, totalUntung };
-        }
-
-        [qtyLontong, qtyTelur, qtyBakwan].forEach(el => el.addEventListener('input', hitungEstimasi));
-
-        // 2. SIMPAN / UPDATE DATA
-        document.getElementById('salesForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSave');
-            const currentId = editIdField.value;
-
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner-border spinner-border-sm"></div> Menyimpan...';
-
-            const calc = hitungEstimasi();
-            const tanggal = document.getElementById('dateInput').value;
-
-            try {
-                const payload = {
-                    date: tanggal,
-                    lontong: calc.qL,
-                    telur: calc.qT,
-                    bakwan: calc.qB,
-                    omset: calc.totalOmset,
-                    setor: calc.totalSetor,
-                    untung: calc.totalUntung,
-                    timestamp: new Date()
-                };
-
-                if (currentId) {
-                    await updateDoc(doc(db, "penjualan_detail", currentId), payload);
-                    alert("Data berhasil diperbarui!");
-                    resetFormMode();
-                } else {
-                    await addDoc(collection(db, "penjualan_detail"), payload);
-                    alert("Data tersimpan!");
-                    document.getElementById('salesForm').reset();
-                    hitungEstimasi();
-                    document.getElementById('dateInput').valueAsDate = new Date();
-                }
-            } catch (error) {
-                alert("Error: " + error.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = currentId ? '<i class="bi bi-pencil-square"></i> UPDATE DATA' : '<i class="bi bi-save"></i> SIMPAN DATA';
+        // DATA MENU
+        const menuList = [
+            {
+                id: 1,
+                nama: "Lontong Sayur",
+                desc: "Sarapan ala 'Urang Awak'! Lontong lembut disiram kuah gulai nangka yang kental dan kaya rempah. Rasanya gurih, sedikit pedas, dan 'medok'. Wajib coba!",
+                hargaDasar: 11000,
+                img: "ltsyr.jpeg",
+                opsi: [
+                    { nama: "Telur Rebus", harga: 3000 },
+                    { nama: "Bakwan Goreng", harga: 1000 },
+                    { nama: "Kerupuk Tambahan", harga: 1000 }
+                ]
+            },
+            {
+                id: 2,
+                nama: "Lontong Pical",
+                desc: "Khas Minang! Perpaduan lontong, mie kuning, dan sayuran segar yang disiram bumbu kacang pedas gurih, bukan manis. Lengkap dengan kerupuk merah!",
+                hargaDasar: 11000,
+                img: "ltpcl.jpeg",
+                opsi: [
+                    { nama: "Telur Rebus", harga: 3000 },
+                    { nama: "Bakwan Goreng", harga: 1000 },
+                    { nama: "Kerupuk Tambahan", harga: 1000 }
+                ]
             }
-        });
+        ];
 
-        // 3. LOGIKA FILTER & RENDER
-        // Event Listener untuk input tanggal filter
-        filterStart.addEventListener('change', applyFilter);
-        filterEnd.addEventListener('change', applyFilter);
+        // 1. RENDER MENU
+        const container = document.getElementById('menuContainer');
 
-        // Fungsi Reset Filter (Global Window)
-        window.resetFilter = () => {
-            filterStart.value = '';
-            filterEnd.value = '';
-            applyFilter(); // Render ulang semua data
-        }
-
-        function applyFilter() {
-            const start = filterStart.value;
-            const end = filterEnd.value;
-            const msgBox = document.getElementById('filterMsg');
-
-            // VALIDASI: Cek apakah Tanggal Awal > Tanggal Akhir
-            if (start && end && start > end) {
-                // Tampilkan Error
-                msgBox.classList.remove('d-none');
-                filterStart.classList.add('is-invalid'); // Garis merah bootstrap
-                filterEnd.classList.add('is-invalid');   // Garis merah bootstrap
-                return; // Hentikan proses (Jangan render data kosong)
-            } else {
-                // Hapus Error jika sudah benar
-                msgBox.classList.add('d-none');
-                filterStart.classList.remove('is-invalid');
-                filterEnd.classList.remove('is-invalid');
-            }
-
-            // LOGIKA FILTER DATA
-            const filteredData = globalData.filter(item => {
-                if (!start && !end) return true;
-                if (start && item.date < start) return false;
-                if (end && item.date > end) return false;
-                return true;
-            });
-
-            renderDashboard(filteredData);
-        }
-
-        function renderDashboard(dataSet) {
-            let labels = [];
-            let dataUntung = [];
-            let dataSetor = [];
-            let grandProfit = 0;
-            let grandSetor = 0;
-
-            tableBodyDesktop.innerHTML = '';
-            dataListMobile.innerHTML = '';
-
-            // Urutkan dataSet berdasarkan tanggal untuk Chart (Ascending)
-            // Tapi nanti tabel kita reverse (Descending)
-            // Karena data di globalData sudah terurut dari Firebase, kita aman.
-
-            dataSet.forEach(data => {
-                grandProfit += data.untung;
-                grandSetor += data.setor;
-                labels.push(formatDate(data.date));
-                dataUntung.push(data.untung);
-                dataSetor.push(data.setor);
-            });
-
-            // Update Kartu Statistik
-            document.getElementById('grandProfit').innerText = 'Rp ' + grandProfit.toLocaleString('id-ID');
-            document.getElementById('grandSetor').innerText = 'Rp ' + grandSetor.toLocaleString('id-ID');
-
-            // Render Tabel & List (Reverse agar data terbaru di atas)
-            let desktopHtml = '';
-            let mobileHtml = '';
-
-            [...dataSet].reverse().forEach(data => {
-                const jsonData = JSON.stringify(data).replace(/"/g, '&quot;');
-
-                // Desktop HTML
-                desktopHtml += `
-                <tr>
-                    <td>${formatDate(data.date)}</td>
-                    <td>
-                        <span class="badge bg-primary">L: ${data.lontong}</span>
-                        <span class="badge bg-warning text-dark">T: ${data.telur}</span>
-                        <span class="badge bg-secondary">B: ${data.bakwan}</span>
-                    </td>
-                    <td class="text-end fw-bold">Rp ${data.omset.toLocaleString('id-ID')}</td>
-                    <td class="text-end text-danger">Rp ${data.setor.toLocaleString('id-ID')}</td>
-                    <td class="text-end text-success fw-bold">Rp ${data.untung.toLocaleString('id-ID')}</td>
-                    <td class="text-center">
-                        <button class="btn btn-warning btn-sm me-1" onclick='window.editData(${jsonData})'><i class="bi bi-pencil-square"></i></button>
-                        <button class="btn btn-outline-danger btn-sm btn-hapus" data-id="${data.id}"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>`;
-
-                // Mobile HTML
-                mobileHtml += `
-                <div class="card mb-3 p-3">
-                    <div class="d-flex justify-content-between align-items-start">
+        menuList.forEach(item => {
+            let opsiHTML = '';
+            if (item.opsi && item.opsi.length > 0) {
+                opsiHTML += '<div class="mt-3">';
+                opsiHTML += '<p class="small fw-bold text-secondary mb-2"><i class="bi bi-plus-circle-dotted"></i> Tambah Topping:</p>';
+                item.opsi.forEach((opt, index) => {
+                    const uniqueID = `opt-${item.id}-${index}`;
+                    const hargaStr = opt.harga > 0 ? `+Rp${opt.harga.toLocaleString('id-ID')}` : 'Gratis';
+                    opsiHTML += `
+                    <div class="form-check d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="mb-0 fw-bold text-primary">${formatDate(data.date)}</h6>
-                            <small class="text-muted">L: ${data.lontong} | T: ${data.telur} | B: ${data.bakwan}</small>
+                            <input class="form-check-input" type="checkbox" value="${opt.harga}" id="${uniqueID}" 
+                                   data-nama="${opt.nama}" onchange="updatePriceDisplay(${item.id})">
+                            <label class="form-check-label stretched-link ms-1 small" for="${uniqueID}">
+                                ${opt.nama}
+                            </label>
                         </div>
-                        <div>
-                            <button class="btn btn-warning btn-sm me-1" onclick='window.editData(${jsonData})'><i class="bi bi-pencil-square"></i></button>
-                            <button class="btn btn-outline-danger btn-sm btn-hapus" data-id="${data.id}"><i class="bi bi-trash"></i></button>
+                        <span class="small fw-bold text-muted">${hargaStr}</span>
+                    </div>`;
+                });
+                opsiHTML += '</div>';
+            }
+
+            // 2. Card HTML
+            const cardHTML = `
+            <div class="col-md-6">
+                <div class="menu-card d-flex flex-column">
+                    <div class="position-relative">
+                        <img src="${item.img}" class="menu-img w-100" alt="${item.nama}">
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3" 
+                             style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                            <h4 class="text-white fw-bold m-0 text-shadow">${item.nama}</h4>
                         </div>
                     </div>
-                    <hr class="my-2">
-                    <div class="d-flex justify-content-between">
-                        <span class="text-danger">Setor: <strong>Rp ${data.setor.toLocaleString('id-ID')}</strong></span>
-                        <span class="text-success">Untung: <strong>Rp ${data.untung.toLocaleString('id-ID')}</strong></span>
+                    <div class="p-4 flex-grow-1 d-flex flex-column">
+                        
+                        <div class="menu-desc-box">
+                           ${item.desc}
+                        </div>
+                        ${opsiHTML}
+                        
+                        <div class="mt-auto pt-4 border-top">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted small">Estimasi per porsi</span>
+                                <span class="fs-4 fw-bold text-success" id="price-display-${item.id}">
+                                    Rp ${item.hargaDasar.toLocaleString('id-ID')}
+                                </span>
+                            </div>
+                            <button onclick="addToCart(${item.id})" class="btn-add" id="btn-add-${item.id}">
+                                <i class="bi bi-plus-lg me-1"></i> Tambah Pesanan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+            container.innerHTML += cardHTML;
+        });
+
+        // 2. UPDATE HARGA TAMPILAN (Saat checkbox diklik)
+        function updatePriceDisplay(idMenu) {
+            const menu = menuList.find(m => m.id === idMenu);
+            let total = menu.hargaDasar;
+            const checkboxes = document.querySelectorAll(`input[id^="opt-${idMenu}-"]:checked`);
+            checkboxes.forEach(box => total += parseInt(box.value));
+            document.getElementById(`price-display-${idMenu}`).innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        // 3. LOGIKA TAMBAH KE KERANJANG
+        function addToCart(idMenu) {
+            const menu = menuList.find(m => m.id === idMenu);
+            let itemTotal = menu.hargaDasar;
+            let selectedToppings = [];
+
+            // Ambil topping
+            const checkboxes = document.querySelectorAll(`input[id^="opt-${idMenu}-"]:checked`);
+            checkboxes.forEach(box => {
+                itemTotal += parseInt(box.value);
+                selectedToppings.push(box.getAttribute('data-nama'));
+            });
+
+            // Buat ID unik (Menu + Topping)
+            const uniqueKey = `${menu.id}-${selectedToppings.sort().join('-')}`;
+
+            // Cek item duplikat
+            const existingItem = cart.find(item => item.uniqueKey === uniqueKey);
+
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                const cartItem = {
+                    uniqueKey: uniqueKey,
+                    nama: menu.nama,
+                    hargaSatuan: itemTotal,
+                    toppings: selectedToppings,
+                    qty: 1
+                };
+                cart.push(cartItem);
+            }
+
+            updateCartUI();
+
+            // Munculkan Toast (Notifikasi)
+            const toastEl = document.getElementById('liveToast');
+            const toastMsg = document.getElementById('toastMessage');
+            toastMsg.innerText = `${menu.nama} berhasil masuk keranjang!`;
+            const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+            toast.show();
+
+            // Reset Checkbox Visual
+            setTimeout(() => {
+                checkboxes.forEach(box => box.checked = false);
+                updatePriceDisplay(idMenu);
+            }, 500);
+        }
+
+        // 4. UPDATE TAMPILAN TOMBOL KERANJANG
+        function updateCartUI() {
+            const cartBar = document.getElementById('floatingCart');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotal = document.getElementById('cartTotal');
+
+            let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            let grandTotal = cart.reduce((sum, item) => sum + (item.hargaSatuan * item.qty), 0);
+
+            if (cart.length > 0) {
+                cartBar.style.display = 'flex';
+                cartCount.innerText = totalQty;
+                cartTotal.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+                document.getElementById('modalGrandTotal').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+            } else {
+                cartBar.style.display = 'none';
+                // Tutup modal jika kosong
+                const modalEl = document.getElementById('cartModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+            }
+
+            // Disable Tombol jika kosong
+            const btnCheckout = document.querySelector('button[onclick="checkoutWA()"]');
+            if (cart.length === 0) {
+                btnCheckout.disabled = true;
+                btnCheckout.classList.add('opacity-50');
+                btnCheckout.innerText = "Keranjang Kosong";
+            } else {
+                btnCheckout.disabled = false;
+                btnCheckout.classList.remove('opacity-50');
+                btnCheckout.innerHTML = '<i class="bi bi-whatsapp me-1"></i> Pesan via WA';
+            }
+        }
+
+        // 5. RENDER ISI MODAL
+        function showCartModal() {
+            const modalBody = document.getElementById('cartItemsContainer');
+            modalBody.innerHTML = '';
+
+            if (cart.length === 0) return;
+
+            let html = '';
+            cart.forEach((item, index) => {
+                let toppingText = item.toppings.length > 0 ?
+                    `<small class="text-muted d-block" style="font-size: 0.8rem">+ ${item.toppings.join(', ')}</small>` :
+                    `<small class="text-muted d-block" style="font-size: 0.8rem">Original</small>`;
+                let subtotal = item.hargaSatuan * item.qty;
+
+                html += `
+                <div class="cart-item d-flex justify-content-between align-items-center py-3 border-bottom">
+                    <div class="flex-grow-1 pe-2">
+                        <h6 class="fw-bold mb-0">${item.nama}</h6>
+                        ${toppingText}
+                        <div class="fw-bold text-success small mt-1">@ Rp ${item.hargaSatuan.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="qty-control me-3">
+                            <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                            <div class="qty-display">${item.qty}</div>
+                            <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                        </div>
+                        <div class="text-end text-nowrap">
+                           <span class="fw-bold">Rp ${subtotal.toLocaleString('id-ID')}</span>
+                        </div>
                     </div>
                 </div>`;
             });
+            modalBody.innerHTML = html;
 
-            tableBodyDesktop.innerHTML = desktopHtml;
-            dataListMobile.innerHTML = mobileHtml;
-
-            if (dataSet.length === 0) {
-                tableBodyDesktop.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">Tidak ada data pada tanggal ini.</td></tr>`;
-                dataListMobile.innerHTML = `<p class="text-muted text-center py-4">Tidak ada data.</p>`;
-            }
-
-            // Update Chart
-            updateChart(labels, dataUntung, dataSetor);
-
-            // Pasang Listener Hapus Baru
-            document.querySelectorAll('.btn-hapus').forEach(btn => {
-                btn.addEventListener('click', (e) => hapusData(e.target.closest('button').dataset.id));
-            });
+            const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
+            myModal.show();
         }
 
-        // 4. REALTIME LISTENER
-        const q = query(collection(db, "penjualan_detail"), orderBy("date", "asc"));
-
-        onSnapshot(q, (snapshot) => {
-            globalData = []; // Reset global data
-            snapshot.forEach(doc => globalData.push({ id: doc.id, ...doc.data() }));
-
-            // Setelah dapat data baru, jalankan filter (agar tampilan update)
-            applyFilter();
-        });
-
-        // HELPER FUNCTIONS
-        function formatDate(dateStr) {
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-        }
-
-        function updateChart(labels, untung, setor) {
-            if (chartInstance) chartInstance.destroy();
-            chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        { label: 'Untung Bersih', data: untung, backgroundColor: 'rgba(25, 135, 84, 0.7)' },
-                        { label: 'Setor Saudara', data: setor, backgroundColor: 'rgba(255, 193, 7, 0.7)' }
-                    ]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { x: { stacked: true }, y: { stacked: true } }
+        // 6. UBAH QTY (+/-)
+        function changeQty(index, change) {
+            if (cart[index].qty + change > 0) {
+                cart[index].qty += change;
+            } else {
+                if (confirm("Hapus item ini dari keranjang?")) {
+                    cart.splice(index, 1);
                 }
-            });
-        }
+            }
+            updateCartUI();
 
-        // GLOBAL FUNCTIONS (Window Scope)
-        window.hapusData = async (id) => {
-            if (confirm("Yakin hapus data ini?")) {
-                await deleteDoc(doc(db, "penjualan_detail", id));
+            // Render ulang modal langsung (tanpa tutup buka)
+            if (cart.length > 0) {
+                // Logic render ulang manual di sini agar tidak perlu panggil showCartModal (yg bikin kedip)
+                // Tapi untuk simpel, kita update text saja atau re-render body
+                const modalBody = document.getElementById('cartItemsContainer');
+                // Kita gunakan logic yang sama dengan showCartModal untuk re-render innerHTML
+                // (Copy paste logic render loop di sini agar realtime)
+                let html = '';
+                cart.forEach((item, i) => {
+                    let toppingText = item.toppings.length > 0 ?
+                        `<small class="text-muted d-block" style="font-size: 0.8rem">+ ${item.toppings.join(', ')}</small>` :
+                        `<small class="text-muted d-block" style="font-size: 0.8rem">Original</small>`;
+                    let subtotal = item.hargaSatuan * item.qty;
+                    html += `
+                    <div class="cart-item d-flex justify-content-between align-items-center py-3 border-bottom">
+                        <div class="flex-grow-1 pe-2">
+                            <h6 class="fw-bold mb-0">${item.nama}</h6>
+                            ${toppingText}
+                            <div class="fw-bold text-success small mt-1">@ Rp ${item.hargaSatuan.toLocaleString('id-ID')}</div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="qty-control me-3">
+                                <button class="qty-btn" onclick="changeQty(${i}, -1)">-</button>
+                                <div class="qty-display">${item.qty}</div>
+                                <button class="qty-btn" onclick="changeQty(${i}, 1)">+</button>
+                            </div>
+                            <div class="text-end text-nowrap">
+                               <span class="fw-bold">Rp ${subtotal.toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                modalBody.innerHTML = html;
             }
         }
 
-        window.editData = (data) => {
-            editIdField.value = data.id;
-            document.getElementById('dateInput').value = data.date;
-            qtyLontong.value = data.lontong;
-            qtyTelur.value = data.telur;
-            qtyBakwan.value = data.bakwan;
+        // 7. CHECKOUT WHATSAPP
+        function checkoutWA() {
+            let message = `Halo Kak, saya mau pesan:\n\n`;
+            let grandTotal = 0;
 
-            document.getElementById('formTitle').innerHTML = '<i class="bi bi-pencil-square"></i> Edit Data';
-            document.getElementById('btnSave').innerHTML = '<i class="bi bi-pencil-square"></i> UPDATE DATA';
-            document.getElementById('btnSave').classList.replace('btn-primary', 'btn-warning');
-            document.getElementById('btnCancelEdit').classList.remove('d-none');
+            cart.forEach((item, index) => {
+                let subtotal = item.hargaSatuan * item.qty;
+                grandTotal += subtotal;
+                let toppingStr = item.toppings.length > 0 ? `(+ ${item.toppings.join(', ')})` : '';
 
-            hitungEstimasi();
-            document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
+                message += `${index + 1}. *(${item.qty}x) ${item.nama}*\n   ${toppingStr}\n   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
+            });
+
+            message += `*TOTAL BAYAR: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
+            message += `\nMohon diproses ya kak.`;
+
+            const url = `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
         }
-
-        window.resetFormMode = () => {
-            editIdField.value = '';
-            document.getElementById('salesForm').reset();
-            document.getElementById('dateInput').valueAsDate = new Date();
-
-            document.getElementById('formTitle').innerHTML = '<i class="bi bi-pencil-square"></i> Input Penjualan';
-            document.getElementById('btnSave').innerHTML = '<i class="bi bi-save"></i> SIMPAN DATA';
-            document.getElementById('btnSave').classList.replace('btn-warning', 'btn-primary');
-            document.getElementById('btnCancelEdit').classList.add('d-none');
-
-            hitungEstimasi();
-        }
-
-        // Init
-        document.getElementById('dateInput').valueAsDate = new Date();
     </script>
+
 </body>
 
 </html>
