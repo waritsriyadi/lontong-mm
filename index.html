@@ -12,10 +12,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* --- PERBAIKAN SPASI FOOTER DI SINI --- */
         body {
             background-color: #f4f7f6;
             font-family: 'Poppins', sans-serif;
-            padding-bottom: 100px;
+            padding-bottom: 0; /* Diubah jadi 0 agar footer mentok */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* --- HERO SECTION --- */
@@ -45,6 +49,7 @@
             margin-top: -80px;
             position: relative;
             z-index: 10;
+            flex: 1; /* Mendorong footer ke bawah */
         }
 
         /* --- MENU CARD --- */
@@ -127,16 +132,14 @@
             color: #333;
         }
 
-        /* --- UPDATE: INFINITE SLIDER TESTIMONI --- */
+        /* --- SLIDER TESTIMONI --- */
         .slider-area {
             position: relative;
             overflow: hidden;
             padding: 20px 0;
             background: linear-gradient(to bottom, #ffffff, #f4f7f6);
-            /* Gradasi halus */
         }
 
-        /* Efek gradasi putih di kiri & kanan agar slider terlihat memudar saat keluar */
         .slider-area::before,
         .slider-area::after {
             content: "";
@@ -158,15 +161,12 @@
             background: linear-gradient(to left, #f4f7f6, transparent);
         }
 
-        /* --- UPDATE CSS UNTUK DINAMIS --- */
         :root {
             --total-items: 10;
-            /* Default, nanti diubah JS */
         }
 
         .slider-track {
             display: flex;
-            /* Lebar total = lebar kartu (350px) * total item * 2 (duplikat) */
             width: calc(350px * var(--total-items) * 2);
             animation: scroll 40s linear infinite;
         }
@@ -176,24 +176,16 @@
         }
 
         @keyframes scroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                /* Geser sejauh panjang item asli */
-                transform: translateX(calc(-350px * var(--total-items)));
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-350px * var(--total-items))); }
         }
 
         .slide-item {
             width: 350px;
             padding: 0 15px;
             flex-shrink: 0;
-            /* Mencegah kartu mengecil */
         }
 
-        /* --- TESTIMONI SECTION (BARU) --- */
         .testi-card {
             background: white;
             border-radius: 20px;
@@ -201,7 +193,6 @@
             height: 100%;
             border: 1px solid rgba(0, 0, 0, 0.05);
             box-shadow: 0 10px 25px rgba(25, 135, 84, 0.08);
-            /* Bayangan halus hijau */
             position: relative;
             transition: transform 0.3s ease;
         }
@@ -211,7 +202,6 @@
             border-color: #198754;
         }
 
-        /* Ikon kutipan dekoratif */
         .quote-icon {
             position: absolute;
             top: 20px;
@@ -237,13 +227,22 @@
             box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
         }
 
+        .avatar-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #198754;
+            box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
+        }
+
         .star-rating {
             color: #ffc107;
             font-size: 0.9rem;
             margin-bottom: 10px;
         }
 
-        /* --- BUTTONS --- */
+        /* --- BUTTONS & CART --- */
         .btn-add {
             background: white;
             color: #198754;
@@ -261,7 +260,6 @@
             color: white;
         }
 
-        /* --- KERANJANG --- */
         .cart-bar {
             position: fixed;
             bottom: 20px;
@@ -282,7 +280,6 @@
             transition: transform 0.3s;
         }
 
-        /* Qty Control di Cart Modal */
         .qty-control {
             display: flex;
             align-items: center;
@@ -301,10 +298,6 @@
             cursor: pointer;
         }
 
-        .qty-btn:hover {
-            background: #f0fff4;
-        }
-
         .qty-display {
             padding: 0 8px;
             font-size: 0.9rem;
@@ -313,7 +306,6 @@
             text-align: center;
         }
 
-        /* Style Tambahan untuk Tombol GPS */
         .dashed-border {
             border: 2px dashed #0d6efd;
             background-color: #f8f9fa;
@@ -325,12 +317,10 @@
             border-color: #0b5ed7;
         }
 
-        /* --- FAQ ACCORDION STYLE --- */
+        /* --- FAQ --- */
         .accordion-button:not(.collapsed) {
             background-color: #e9f7ef;
-            /* Hijau sangat muda */
             color: #198754;
-            /* Hijau Utama */
             box-shadow: none;
         }
 
@@ -339,8 +329,85 @@
             border-color: rgba(25, 135, 84, 0.1);
         }
 
-        .accordion-button {
-            font-size: 0.95rem;
+        /* --- FOOTER STYLES (FIXED SPACING) --- */
+        .footer-section {
+            background: #064e3b; /* Fallback */
+            background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
+            color: white;
+            position: relative;
+            margin-top: 150px;
+            padding-bottom: 120px; /* Padding dipindah ke sini */
+        }
+
+        .footer-wave {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            z-index: 1;
+        }
+
+        .footer-wave svg {
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 101px;
+        }
+
+        .footer-wave .shape-fill {
+            fill: #064e3b;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            padding-top: 2rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .footer-link:hover {
+            color: #10b981;
+            transform: translateX(5px);
+        }
+
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .social-btn:hover {
+            background: #10b981;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .developer-badge {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
@@ -349,26 +416,9 @@
                 border-bottom-left-radius: 25px;
                 border-bottom-right-radius: 25px;
             }
-
-            .overlap-container {
-                margin-top: -50px;
-            }
-
-            .cart-bar {
-                width: 95%;
-                bottom: 15px;
-            }
-        }
-
-        .avatar-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            /* Kunci agar foto tidak gepeng */
-            border: 2px solid #198754;
-            /* Border hijau tipis */
-            box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
+            .overlap-container { margin-top: -50px; }
+            .cart-bar { width: 95%; bottom: 15px; }
+            .developer-badge { margin-top: 20px; }
         }
     </style>
 </head>
@@ -389,18 +439,15 @@
         </div>
 
         <div class="d-inline-flex gap-2 bg-white bg-opacity-10 p-2 rounded-pill backdrop-blur">
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 -
-                Habis</span>
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil /
-                COD</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 - Habis</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil / COD</span>
         </div>
     </div>
 
     <div class="container overlap-container">
         <div class="row justify-content-center">
             <div class="col-xl-9 col-lg-10">
-                <div class="row g-4 justify-content-center" id="menuContainer">
-                </div>
+                <div class="row g-4 justify-content-center" id="menuContainer"></div>
             </div>
         </div>
     </div>
@@ -413,7 +460,6 @@
                 <p class="text-muted small">Geser atau arahkan kursor untuk menahan.</p>
             </div>
         </div>
-
         <div class="slider-track" id="sliderTrack">
             <div class="text-center w-100 pt-4 text-muted">Memuat testimoni...</div>
         </div>
@@ -428,67 +474,54 @@
                 </div>
 
                 <div class="accordion shadow-sm rounded-4 overflow-hidden" id="faqAccordion">
-
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#faq1">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
                                 🕒 Buka jam berapa?
                             </button>
                         </h2>
                         <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body text-muted small">
-                                Kami buka setiap hari mulai pukul <strong>06:00 pagi</strong> sampai habis. Biasanya jam
-                                10:00 sudah sold out, jadi disarankan pesan lebih awal ya!
+                                Kami buka setiap hari mulai pukul <strong>06:00 pagi</strong> sampai habis. Biasanya jam 10:00 sudah sold out.
                             </div>
                         </div>
                     </div>
-
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#faq2">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
                                 📦 Apakah kuahnya dipisah?
                             </button>
                         </h2>
                         <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body text-muted small">
-                                Tentu! Untuk pesanan bungkus (take away) atau delivery, <strong>kuah dan kerupuk kami
-                                    pisah</strong> agar tidak lembek dan tetap nikmat saat disantap.
+                                Tentu! Untuk pesanan bungkus, <strong>kuah dan kerupuk kami pisah</strong> agar tidak lembek.
                             </div>
                         </div>
                     </div>
-
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#faq3">
-                                🎉 Bisa pesan untuk acara/jumat berkah?
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                🎉 Bisa pesan untuk acara?
                             </button>
                         </h2>
                         <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body text-muted small">
-                                Sangat bisa! Kami menerima pesanan dalam jumlah besar untuk arisan, syukuran, atau Jumat
-                                Berkah. Mohon hubungi kami H-1 melalui WhatsApp untuk booking slot.
+                                Sangat bisa! Mohon hubungi kami H-1 melalui WhatsApp untuk booking slot.
                             </div>
                         </div>
                     </div>
-
                     <div class="accordion-item border-0">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#faq4">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
                                 🌶️ Apakah rasanya sangat pedas?
                             </button>
                         </h2>
                         <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body text-muted small">
-                                Tingkat kepedasan kami <strong>sedang (mild)</strong> agar bisa dinikmati semua orang.
-                                Jika ingin lebih pedas, kami sediakan sambal terpisah (request di catatan).
+                                Tingkat kepedasan <strong>sedang (mild)</strong>. Sambal tambahan tersedia terpisah.
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -497,6 +530,83 @@
     <div class="text-center mt-5 mb-5 text-muted small opacity-75">
         <p>Menerima pesanan untuk acara.<br>Hubungi kami via WhatsApp.</p>
     </div>
+
+    <footer class="footer-section">
+        <div class="footer-wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+
+        <div class="container footer-content">
+            <div class="row g-5">
+                
+                <div class="col-lg-5 col-md-6">
+                    <div class="pe-lg-4">
+                        <h3 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            🍛 Lontong MM
+                        </h3>
+                        <p class="text-white-50 small lh-lg mb-4">
+                            Menyajikan sarapan pagi dengan cita rasa khas Minang yang otentik. 
+                            Kami berkomitmen menghadirkan kelezatan tradisional dengan bahan berkualitas untuk memulai hari Anda.
+                        </p>
+                        <a href="https://wa.me/6287787661787" target="_blank" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                            <i class="bi bi-whatsapp me-2"></i> Hubungi Kami
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold text-uppercase text-success ls-1 mb-3 small">Menu</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Beranda</a></li>
+                        <li><a href="#menuContainer" class="footer-link">Pesan Sekarang</a></li>
+                        <li><a href="testimoni.html" class="footer-link">Tulis Testimoni</a></li>
+                        <li><a href="#faqAccordion" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-5 col-md-12">
+                    <div class="developer-badge">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="fw-bold text-success text-uppercase small ls-1">Developed & Managed By</h6>
+                            <i class="bi bi-code-slash text-white-50"></i>
+                        </div>
+                        
+                        <div class="d-flex align-items-center gap-3 mb-3 mt-3">
+                            <img src="wr.jpg" alt="Warits Riyadi" class="rounded-circle shadow-sm" style="width: 60px; height: 60px; object-fit: cover; border: 2px solid rgba(255,255,255,0.2);">
+                            
+                            <div>
+                                <h5 class="fw-bold m-0">Warits Riyadi</h5>
+                                <small class="text-white-50">Fullstack Developer</small>
+                            </div>
+                        </div>
+                        
+                        <p class="text-white-50 small mb-4 fst-italic">
+                            "Membangun solusi digital yang bermanfaat dan estetik."
+                        </p>
+                        
+                        <div class="d-flex">
+                            <a href="https://instagram.com/ryd.warits/" target="_blank" class="social-btn" title="Instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="https://linkedin.com/in/waritsriyadi" target="_blank" class="social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            <a href="https://github.com/waritsriyadi" target="_blank" class="social-btn" title="GitHub"><i class="bi bi-github"></i></a>
+                            <a href="https://waritsriyadi.com" target="_blank" class="social-btn" title="Website"><i class="bi bi-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="border-secondary my-5 opacity-25">
+
+            <div class="text-center text-white-50 small">
+                <p class="mb-0">
+                    © 2025 <strong>Lontong MM</strong>. All Rights Reserved. <br class="d-md-none">
+                    Created with <i class="bi bi-heart-fill text-danger mx-1"></i> by <a href="https://waritsriyadi.com" target="_blank" class="text-white text-decoration-none fw-bold">Warits Riyadi</a>.
+                </p>
+            </div>
+        </div>
+    </footer>
 
     <div class="cart-bar" id="floatingCart" onclick="showCartModal()">
         <div class="d-flex align-items-center gap-2">
@@ -514,60 +624,42 @@
                     <h5 class="modal-title fw-bold">Rincian Pesanan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body p-4">
                     <div id="cartItemsContainer" class="mb-4"></div>
-
                     <div id="checkoutForm" style="display: none;" class="border-top pt-4">
                         <h6 class="fw-bold mb-3 small text-uppercase text-secondary d-flex align-items-center gap-2">
                             <i class="bi bi-truck fs-5"></i> Informasi Pengiriman
                         </h6>
-
                         <div class="btn-group w-100 mb-4" role="group">
-                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup"
-                                checked onchange="toggleAddress(false)">
+                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup" checked onchange="toggleAddress(false)">
                             <label class="btn btn-outline-success py-2" for="optPickup">Ambil Sendiri</label>
-
-                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery"
-                                onchange="toggleAddress(true)">
+                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery" onchange="toggleAddress(true)">
                             <label class="btn btn-outline-success py-2" for="optDelivery">Diantar (Delivery)</label>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Nama Pemesan</label>
                             <input type="text" id="custName" class="form-control" placeholder="Contoh: Budi">
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Catatan (Opsional)</label>
-                            <textarea id="custNote" class="form-control" rows="2"
-                                placeholder="Contoh: Kuah dipisah, jangan pedas, dll..."></textarea>
+                            <textarea id="custNote" class="form-control" rows="2" placeholder="Contoh: Kuah dipisah, jangan pedas, dll..."></textarea>
                         </div>
-
                         <div id="addressSection" style="display: none;">
                             <div class="mb-3">
-                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span
-                                        class="text-danger">*</span></label>
-                                <textarea id="custAddress" class="form-control bg-light" rows="3"
-                                    placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
-                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail
-                                    agar kurir mudah mencari.</div>
+                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span class="text-danger">*</span></label>
+                                <textarea id="custAddress" class="form-control bg-light" rows="3" placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
+                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail agar kurir mudah mencari.</div>
                             </div>
-
                             <div class="d-grid gap-2">
-                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()"
-                                    class="btn btn-outline-primary dashed-border py-2">
+                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()" class="btn btn-outline-primary dashed-border py-2">
                                     <i class="bi bi-geo-alt-fill me-1"></i> Otomatis Cari Lokasi Saya
                                 </button>
-
-                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small"
-                                    style="display:none;"></div>
+                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small" style="display:none;"></div>
                                 <input type="hidden" id="mapsLink">
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer bg-light d-flex justify-content-between">
                     <div>
                         <small class="text-muted d-block">Total Bayar</small>
@@ -582,8 +674,7 @@
     </div>
 
     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050;">
-        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert"
-            aria-live="assertive" aria-atomic="true">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body" id="toastMessage">Item ditambahkan!</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
@@ -749,7 +840,7 @@
                 });
             }
 
-            updateFloatingCartButton(); // Update tombol bawah saja
+            updateFloatingCartButton();
             resetToppingInputs(menuId);
 
             const toastEl = document.getElementById('liveToast');
@@ -767,7 +858,7 @@
             updatePriceDisplay(menuId);
         }
 
-        // 5. UPDATE TOMBOL FLOATING (KERANJANG BAWAH)
+        // 5. UPDATE TOMBOL FLOATING
         function updateFloatingCartButton() {
             const cartBar = document.getElementById('floatingCart');
             let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -782,7 +873,7 @@
             }
         }
 
-        // 6. FUNGSI UNTUK MERENDER LIST CART (HTML GENERATOR)
+        // 6. RENDER LIST CART
         function renderCartListHTML() {
             const listContainer = document.getElementById('cartItemsContainer');
             const formContainer = document.getElementById('checkoutForm');
@@ -792,15 +883,13 @@
             let grandTotal = 0;
 
             if (cart.length === 0) {
-                formContainer.style.display = 'none'; // Sembunyikan form jika kosong
-                // Tutup modal jika kosong
+                formContainer.style.display = 'none';
                 const el = document.getElementById('cartModal');
                 const modal = bootstrap.Modal.getInstance(el);
                 if (modal) modal.hide();
                 return;
             }
 
-            // Tampilkan Form
             formContainer.style.display = 'block';
 
             cart.forEach((item, idx) => {
@@ -835,19 +924,16 @@
                 </div>`;
             });
 
-            // Update Total di Footer Modal
             grandTotalEl.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
         }
 
-        // 7. MEMBUKA MODAL
         function showCartModal() {
             if (cart.length === 0) return;
-            renderCartListHTML(); // Render dulu isinya
+            renderCartListHTML();
             const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
             myModal.show();
         }
 
-        // 8. UBAH QTY (TANPA TUTUP MODAL)
         function changeCartQty(idx, change) {
             if (cart[idx].qty + change > 0) {
                 cart[idx].qty += change;
@@ -859,8 +945,6 @@
             updateFloatingCartButton();
             renderCartListHTML();
         }
-
-        // --- SISANYA LOGIKA ALAMAT & CHECKOUT (DIPERBARUI) ---
 
         function toggleAddress(isDelivery) {
             const section = document.getElementById('addressSection');
@@ -918,9 +1002,7 @@
                 return;
             }
 
-            // AMBIL NILAI CATATAN
             const note = document.getElementById('custNote').value.trim();
-
             const type = document.querySelector('input[name="deliveryType"]:checked').value;
             const address = document.getElementById('custAddress').value.trim();
             const maps = document.getElementById('mapsLink').value;
@@ -948,7 +1030,6 @@
                 message += `${index + 1}. *${item.nama} (${item.qty} porsi)*${toppingStr}\n   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
             });
 
-            // --- PERBAIKAN DI SINI (Hapus Emoji, ganti format teks biasa) ---
             if (note) {
                 message += `--------------------------------\n`;
                 message += `*CATATAN KHUSUS:*\n${note}\n`;
@@ -971,6 +1052,7 @@
             window.open(url, '_blank');
         }
     </script>
+
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -995,7 +1077,7 @@
         // Ambil data dari collection 'testimonies'
         db.collection("testimonies").orderBy("tanggal", "desc").limit(15).get().then((querySnapshot) => {
             let rawData = [];
-
+            
             // 1. Kumpulkan data mentah dulu ke dalam Array
             querySnapshot.forEach((doc) => {
                 rawData.push(doc.data());
@@ -1012,7 +1094,7 @@
             // Agar slider mulus, minimal kita butuh sekitar 6-8 kartu berjejer.
             // Jika data asli cuma 3, kita gandakan array-nya sampai jumlahnya cukup.
             let finalData = [...rawData];
-
+            
             // Terus duplikat data sampai minimal ada 8 item
             while (finalData.length < 8) {
                 finalData = finalData.concat(rawData);
@@ -1030,18 +1112,18 @@
 
             // Hitung total item yang dirender (setelah data digandakan agar cukup panjang)
             const totalRenderedItems = finalData.length;
-
+            
             // Update CSS Variable
             document.documentElement.style.setProperty('--total-items', totalRenderedItems);
 
             // Atur kecepatan: Semakin banyak item, waktu semakin lama agar kecepatan konstan
             // Rumus: 4 detik per item
-            const duration = totalRenderedItems * 4;
+            const duration = totalRenderedItems * 4; 
             track.style.animationDuration = `${duration}s`;
 
             // Pastikan style CSS inline aman
             track.style.display = 'flex';
-            track.style.width = `calc(350px * ${totalRenderedItems} * 2)`;
+            track.style.width = `calc(350px * ${totalRenderedItems} * 2)`; 
 
         }).catch((error) => {
             console.error("Gagal memuat testimoni:", error);
@@ -1084,6 +1166,7 @@
             `;
         }
     </script>
+
 </body>
 
 </html>
