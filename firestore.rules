@@ -1,0 +1,13 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Ini mencocokkan semua dokumen di database
+    match /{document=**} {
+      // MENGIZINKAN SEMUA ORANG (Public) untuk membaca dan menulis
+      // PENTING: Ini hanya untuk tahap pengembangan/awal.
+      allow read, write: if true;
+    }
+  }
+}
