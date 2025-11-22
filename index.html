@@ -127,6 +127,118 @@
             color: #333;
         }
 
+        /* --- UPDATE: INFINITE SLIDER TESTIMONI --- */
+        .slider-area {
+            position: relative;
+            overflow: hidden;
+            padding: 20px 0;
+            background: linear-gradient(to bottom, #ffffff, #f4f7f6);
+            /* Gradasi halus */
+        }
+
+        /* Efek gradasi putih di kiri & kanan agar slider terlihat memudar saat keluar */
+        .slider-area::before,
+        .slider-area::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .slider-area::before {
+            left: 0;
+            background: linear-gradient(to right, #f4f7f6, transparent);
+        }
+
+        .slider-area::after {
+            right: 0;
+            background: linear-gradient(to left, #f4f7f6, transparent);
+        }
+
+        .slider-track {
+            display: flex;
+            width: calc(350px * 20);
+            /* 350px (lebar kartu) * 20 (10 item x 2 duplikasi) */
+            animation: scroll 40s linear infinite;
+        }
+
+        /* Pause animasi saat mouse diarahkan agar bisa dibaca */
+        .slider-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(calc(-350px * 10));
+            }
+
+            /* Bergerak setengah total panjang */
+        }
+
+        .slide-item {
+            width: 350px;
+            padding: 0 15px;
+            flex-shrink: 0;
+            /* Mencegah kartu mengecil */
+        }
+
+        /* --- TESTIMONI SECTION (BARU) --- */
+        .testi-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            height: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 25px rgba(25, 135, 84, 0.08);
+            /* Bayangan halus hijau */
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .testi-card:hover {
+            transform: translateY(-5px);
+            border-color: #198754;
+        }
+
+        /* Ikon kutipan dekoratif */
+        .quote-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            color: #198754;
+            opacity: 0.1;
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .avatar-circle {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #198754, #4ade80);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
+        }
+
+        .star-rating {
+            color: #ffc107;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
         /* --- BUTTONS --- */
         .btn-add {
             background: white;
@@ -209,6 +321,24 @@
             border-color: #0b5ed7;
         }
 
+        /* --- FAQ ACCORDION STYLE --- */
+        .accordion-button:not(.collapsed) {
+            background-color: #e9f7ef;
+            /* Hijau sangat muda */
+            color: #198754;
+            /* Hijau Utama */
+            box-shadow: none;
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(25, 135, 84, 0.1);
+        }
+
+        .accordion-button {
+            font-size: 0.95rem;
+        }
+
         @media (max-width: 768px) {
             .hero-section {
                 padding-bottom: 4rem;
@@ -255,6 +385,464 @@
         <div class="row justify-content-center">
             <div class="col-xl-9 col-lg-10">
                 <div class="row g-4 justify-content-center" id="menuContainer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 pt-5 pb-5 slider-area">
+        <div class="container mb-4">
+            <div class="text-center">
+                <h5 class="fw-bold text-success text-uppercase small ls-1">Apa Kata Mereka?</h5>
+                <h3 class="fw-bold">Testimoni Pelanggan</h3>
+                <p class="text-muted small">Geser atau arahkan kursor untuk menahan.</p>
+            </div>
+        </div>
+
+        <div class="slider-track">
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">BS</div>
+                        <div>
+                            <div class="fw-bold">Bu Sari</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Ibu Rumah Tangga</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Kuah gulainya kental banget, rasanya pas di lidah. Langganan
+                        sarapan tiap pagi sebelum ngantor."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">PA</div>
+                        <div>
+                            <div class="fw-bold">Pak Adi</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Warga Blok C</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Lontong picalnya juara! Bumbu kacangnya gurih pedas, bukan
+                        yang manis doang. Porsinya juga ngenyangin."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">KD</div>
+                        <div>
+                            <div class="fw-bold">Kak Dinda</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Mahasiswi</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Enak dan bersih. Suka banget sama bakwannya, garing!
+                        Pengiriman juga cepet buat area perumahan."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">MB</div>
+                        <div>
+                            <div class="fw-bold">Mas Budi</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Karyawan Swasta</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Harganya sangat bersahabat tapi rasanya restoran. Lontongnya
+                        lembut nggak keras. Mantap!"</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">TR</div>
+                        <div>
+                            <div class="fw-bold">Teh Rini</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Warga Blok A</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Anak-anak saya susah makan, tapi kalau dibeliin lontong di
+                        sini pasti habis. Bumbunya pas."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">OH</div>
+                        <div>
+                            <div class="fw-bold">Om Hendra</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Driver Online</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Paling pas buat isi tenaga pagi-pagi. Penjualnya ramah,
+                        pelayanan cepat. Recommended!"</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">MY</div>
+                        <div>
+                            <div class="fw-bold">Mbak Yuli</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Pegawai Bank</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Suka banget karena kalau dibungkus kuahnya dipisah rapi. Jadi
+                        pas dimakan di kantor masih enak."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">KA</div>
+                        <div>
+                            <div class="fw-bold">Kang Asep</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Security Komplek</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Sambalnya itu lho, nendang! Kerupuknya juga nggak pelit.
+                        Sarapan wajib warga sini."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">BR</div>
+                        <div>
+                            <div class="fw-bold">Bu RT</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Ibu RT 04</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Kemarin pesan buat acara arisan, alhamdulillah semua tamu
+                        bilang enak. Tepat waktu juga antarnya."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">DP</div>
+                        <div>
+                            <div class="fw-bold">Dek Putri</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Pelajar SMA</small>
+                        </div>
+                    </div>
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Simpel, murah, enak. Telur rebusnya matang pas. Sering beli
+                        sebelum berangkat sekolah."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">BS</div>
+                        <div>
+                            <div class="fw-bold">Bu Sari</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Ibu Rumah Tangga</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Kuah gulainya kental banget, rasanya pas di lidah. Langganan
+                        sarapan tiap pagi sebelum ngantor."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">PA</div>
+                        <div>
+                            <div class="fw-bold">Pak Adi</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Warga Blok C</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Lontong picalnya juara! Bumbu kacangnya gurih pedas, bukan
+                        yang manis doang. Porsinya juga ngenyangin."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">KD</div>
+                        <div>
+                            <div class="fw-bold">Kak Dinda</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Mahasiswi</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Enak dan bersih. Suka banget sama bakwannya, garing!
+                        Pengiriman juga cepet buat area perumahan."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">MB</div>
+                        <div>
+                            <div class="fw-bold">Mas Budi</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Karyawan Swasta</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Harganya sangat bersahabat tapi rasanya restoran. Lontongnya
+                        lembut nggak keras. Mantap!"</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">TR</div>
+                        <div>
+                            <div class="fw-bold">Teh Rini</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Warga Blok A</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Anak-anak saya susah makan, tapi kalau dibeliin lontong di
+                        sini pasti habis. Bumbunya pas."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">OH</div>
+                        <div>
+                            <div class="fw-bold">Om Hendra</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Driver Online</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Paling pas buat isi tenaga pagi-pagi. Penjualnya ramah,
+                        pelayanan cepat. Recommended!"</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">MY</div>
+                        <div>
+                            <div class="fw-bold">Mbak Yuli</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Pegawai Bank</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Suka banget karena kalau dibungkus kuahnya dipisah rapi. Jadi
+                        pas dimakan di kantor masih enak."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">KA</div>
+                        <div>
+                            <div class="fw-bold">Kang Asep</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Security Komplek</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Sambalnya itu lho, nendang! Kerupuknya juga nggak pelit.
+                        Sarapan wajib warga sini."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">BR</div>
+                        <div>
+                            <div class="fw-bold">Bu RT</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Ibu RT 04</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Kemarin pesan buat acara arisan, alhamdulillah semua tamu
+                        bilang enak. Tepat waktu juga antarnya."</p>
+                </div>
+            </div>
+
+            <div class="slide-item">
+                <div class="testi-card">
+                    <div class="quote-icon">”</div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="avatar-circle">DP</div>
+                        <div>
+                            <div class="fw-bold">Dek Putri</div>
+                            <small class="text-muted" style="font-size: 0.75rem">Pelajar SMA</small>
+                        </div>
+                    </div>
+                    <div class="star-rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                            class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="text-secondary small mb-0">"Simpel, murah, enak. Telur rebusnya matang pas. Sering beli
+                        sebelum berangkat sekolah."</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 col-lg-9">
+                <div class="text-center mb-4">
+                    <h5 class="fw-bold text-success text-uppercase small ls-1">Informasi</h5>
+                    <h3 class="fw-bold">Sering Ditanyakan (FAQ)</h3>
+                </div>
+
+                <div class="accordion shadow-sm rounded-4 overflow-hidden" id="faqAccordion">
+
+                    <div class="accordion-item border-0 border-bottom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq1">
+                                🕒 Buka jam berapa?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted small">
+                                Kami buka setiap hari mulai pukul <strong>06:00 pagi</strong> sampai habis. Biasanya jam
+                                10:00 sudah sold out, jadi disarankan pesan lebih awal ya!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 border-bottom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
+                                📦 Apakah kuahnya dipisah?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted small">
+                                Tentu! Untuk pesanan bungkus (take away) atau delivery, <strong>kuah dan kerupuk kami
+                                    pisah</strong> agar tidak lembek dan tetap nikmat saat disantap.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0 border-bottom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
+                                🎉 Bisa pesan untuk acara/jumat berkah?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted small">
+                                Sangat bisa! Kami menerima pesanan dalam jumlah besar untuk arisan, syukuran, atau Jumat
+                                Berkah. Mohon hubungi kami H-1 melalui WhatsApp untuk booking slot.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq4">
+                                🌶️ Apakah rasanya sangat pedas?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted small">
+                                Tingkat kepedasan kami <strong>sedang (mild)</strong> agar bisa dinikmati semua orang.
+                                Jika ingin lebih pedas, kami sediakan sambal terpisah (request di catatan).
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -364,7 +952,7 @@
         let cart = [];
         let toppingState = {};
 
-        // --- DATA MENU (Sama seperti sebelumnya) ---
+        // --- DATA MENU ---
         const menuList = [
             {
                 id: 1,
@@ -708,10 +1296,10 @@
 
                 let toppingStr = "";
                 if (item.toppings.length > 0) {
-                    toppingStr = "\n   Topping: " + item.toppings.map(t => `${t.nama} (${t.qty}x)`).join(', ');
+                    toppingStr = "\n   Topping: " + item.toppings.map(t => `${t.nama} (${t.qty}x)`).join(', ');
                 }
 
-                message += `${index + 1}. *${item.nama} (${item.qty} porsi)*${toppingStr}\n   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
+                message += `${index + 1}. *${item.nama} (${item.qty} porsi)*${toppingStr}\n   Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
             });
 
             // --- PERBAIKAN DI SINI (Hapus Emoji, ganti format teks biasa) ---
