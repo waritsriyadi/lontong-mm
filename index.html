@@ -86,7 +86,7 @@
             padding: 8px 0;
             border-bottom: 1px dashed #eee;
         }
-        
+
         .topping-row:last-child {
             border-bottom: none;
         }
@@ -112,7 +112,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .btn-topping-qty:active {
@@ -184,8 +184,10 @@
             color: #198754;
             cursor: pointer;
         }
-        
-        .qty-btn:hover { background: #f0fff4; }
+
+        .qty-btn:hover {
+            background: #f0fff4;
+        }
 
         .qty-display {
             padding: 0 8px;
@@ -201,15 +203,27 @@
             background-color: #f8f9fa;
             transition: all 0.3s;
         }
+
         .dashed-border:hover {
             background-color: #e7f1ff;
             border-color: #0b5ed7;
         }
 
         @media (max-width: 768px) {
-            .hero-section { padding-bottom: 4rem; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
-            .overlap-container { margin-top: -50px; }
-            .cart-bar { width: 95%; bottom: 15px; }
+            .hero-section {
+                padding-bottom: 4rem;
+                border-bottom-left-radius: 25px;
+                border-bottom-right-radius: 25px;
+            }
+
+            .overlap-container {
+                margin-top: -50px;
+            }
+
+            .cart-bar {
+                width: 95%;
+                bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -230,8 +244,10 @@
         </div>
 
         <div class="d-inline-flex gap-2 bg-white bg-opacity-10 p-2 rounded-pill backdrop-blur">
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 - Habis</span>
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil / COD</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 -
+                Habis</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil /
+                COD</span>
         </div>
     </div>
 
@@ -239,7 +255,7 @@
         <div class="row justify-content-center">
             <div class="col-xl-9 col-lg-10">
                 <div class="row g-4 justify-content-center" id="menuContainer">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -264,7 +280,7 @@
                     <h5 class="modal-title fw-bold">Rincian Pesanan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                
+
                 <div class="modal-body p-4">
                     <div id="cartItemsContainer" class="mb-4"></div>
 
@@ -272,12 +288,14 @@
                         <h6 class="fw-bold mb-3 small text-uppercase text-secondary d-flex align-items-center gap-2">
                             <i class="bi bi-truck fs-5"></i> Informasi Pengiriman
                         </h6>
-                        
+
                         <div class="btn-group w-100 mb-4" role="group">
-                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup" checked onchange="toggleAddress(false)">
+                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup"
+                                checked onchange="toggleAddress(false)">
                             <label class="btn btn-outline-success py-2" for="optPickup">Ambil Sendiri</label>
 
-                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery" onchange="toggleAddress(true)">
+                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery"
+                                onchange="toggleAddress(true)">
                             <label class="btn btn-outline-success py-2" for="optDelivery">Diantar (Delivery)</label>
                         </div>
 
@@ -288,17 +306,22 @@
 
                         <div id="addressSection" style="display: none;">
                             <div class="mb-3">
-                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span class="text-danger">*</span></label>
-                                <textarea id="custAddress" class="form-control bg-light" rows="3" placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
-                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail agar kurir mudah mencari.</div>
+                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span
+                                        class="text-danger">*</span></label>
+                                <textarea id="custAddress" class="form-control bg-light" rows="3"
+                                    placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
+                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail
+                                    agar kurir mudah mencari.</div>
                             </div>
 
                             <div class="d-grid gap-2">
-                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()" class="btn btn-outline-primary dashed-border py-2">
+                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()"
+                                    class="btn btn-outline-primary dashed-border py-2">
                                     <i class="bi bi-geo-alt-fill me-1"></i> Otomatis Cari Lokasi Saya
                                 </button>
-                                
-                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small" style="display:none;"></div>
+
+                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small"
+                                    style="display:none;"></div>
                                 <input type="hidden" id="mapsLink">
                             </div>
                         </div>
@@ -319,7 +342,8 @@
     </div>
 
     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050;">
-        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+            aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body" id="toastMessage">Item ditambahkan!</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
@@ -332,15 +356,16 @@
     <script>
         const NOMOR_WA = "6287787661787";
         let cart = [];
+        let toppingState = {};
 
-        // Data Menu
+        // --- DATA MENU (Sama seperti sebelumnya) ---
         const menuList = [
             {
                 id: 1,
                 nama: "Lontong Sayur",
                 desc: "Sarapan ala 'Urang Awak'! Lontong lembut disiram kuah gulai nangka yang kental.",
                 hargaDasar: 11000,
-                img: "ltsyr.jpeg", 
+                img: "ltsyr.jpeg",
                 opsi: [
                     { nama: "Telur Rebus", harga: 3000 },
                     { nama: "Bakwan Goreng", harga: 1000 },
@@ -352,7 +377,7 @@
                 nama: "Lontong Pical",
                 desc: "Khas Minang! Lontong, mie kuning, sayuran disiram bumbu kacang pedas gurih.",
                 hargaDasar: 11000,
-                img: "ltpcl.jpeg", 
+                img: "ltpcl.jpeg",
                 opsi: [
                     { nama: "Telur Rebus", harga: 3000 },
                     { nama: "Bakwan Goreng", harga: 1000 },
@@ -361,9 +386,7 @@
             }
         ];
 
-        let toppingState = {}; 
-
-        // 1. RENDER MENU
+        // 1. RENDER MENU UTAMA
         const container = document.getElementById('menuContainer');
 
         menuList.forEach(item => {
@@ -371,7 +394,7 @@
             if (item.opsi && item.opsi.length > 0) {
                 opsiHTML += '<div class="mt-3 mb-3 bg-white border rounded p-2">';
                 opsiHTML += '<p class="small fw-bold text-success mb-2"><i class="bi bi-basket2"></i> Mau tambah topping?</p>';
-                
+
                 item.opsi.forEach((opt, idx) => {
                     const hargaStr = opt.harga > 0 ? `+Rp${opt.harga.toLocaleString('id-ID')}` : 'Gratis';
                     toppingState[`${item.id}-${idx}`] = 0;
@@ -437,7 +460,7 @@
             updatePriceDisplay(menuId);
         }
 
-        // 3. UPDATE TAMPILAN HARGA
+        // 3. UPDATE TAMPILAN HARGA MENU
         function updatePriceDisplay(menuId) {
             const menu = menuList.find(m => m.id === menuId);
             let total = menu.hargaDasar;
@@ -486,9 +509,9 @@
                 });
             }
 
-            updateCartUI();
+            updateFloatingCartButton(); // Update tombol bawah saja
             resetToppingInputs(menuId);
-            
+
             const toastEl = document.getElementById('liveToast');
             document.getElementById('toastMessage').innerText = `${menu.nama} berhasil ditambahkan!`;
             const toast = new bootstrap.Toast(toastEl);
@@ -504,8 +527,8 @@
             updatePriceDisplay(menuId);
         }
 
-        // 5. UPDATE UI CART
-        function updateCartUI() {
+        // 5. UPDATE TOMBOL FLOATING (KERANJANG BAWAH)
+        function updateFloatingCartButton() {
             const cartBar = document.getElementById('floatingCart');
             let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             let grandTotal = cart.reduce((sum, item) => sum + (item.hargaPerItem * item.qty), 0);
@@ -514,22 +537,32 @@
                 cartBar.style.display = 'flex';
                 document.getElementById('cartCount').innerText = totalQty;
                 document.getElementById('cartTotal').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
-                document.getElementById('modalGrandTotal').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
             } else {
                 cartBar.style.display = 'none';
-                const modalEl = document.getElementById('cartModal');
-                const modal = bootstrap.Modal.getInstance(modalEl);
-                if (modal) modal.hide();
             }
         }
 
-        // 6. SHOW MODAL (RENDER ULANG DENGAN FORM)
-        function showCartModal() {
+        // ==========================================
+        // PERBAIKAN UTAMA DI SINI (LOGIKA MODAL)
+        // ==========================================
+
+        // 6. FUNGSI UNTUK MERENDER LIST CART (HTML GENERATOR)
+        function renderCartListHTML() {
             const listContainer = document.getElementById('cartItemsContainer');
             const formContainer = document.getElementById('checkoutForm');
-            listContainer.innerHTML = '';
+            const grandTotalEl = document.getElementById('modalGrandTotal');
 
-            if (cart.length === 0) return;
+            listContainer.innerHTML = '';
+            let grandTotal = 0;
+
+            if (cart.length === 0) {
+                formContainer.style.display = 'none'; // Sembunyikan form jika kosong
+                // Tutup modal jika kosong
+                const el = document.getElementById('cartModal');
+                const modal = bootstrap.Modal.getInstance(el);
+                if (modal) modal.hide();
+                return;
+            }
 
             // Tampilkan Form
             formContainer.style.display = 'block';
@@ -544,6 +577,7 @@
                 }
 
                 const subtotal = item.hargaPerItem * item.qty;
+                grandTotal += subtotal;
 
                 listContainer.innerHTML += `
                 <div class="py-3 border-bottom">
@@ -564,12 +598,22 @@
                     </div>
                 </div>`;
             });
-            
+
+            // Update Total di Footer Modal
+            grandTotalEl.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+        }
+
+        // 7. MEMBUKA MODAL
+        function showCartModal() {
+            if (cart.length === 0) return;
+
+            renderCartListHTML(); // Render dulu isinya
+
             const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
             myModal.show();
         }
 
-        // 7. UBAH QTY DI CART
+        // 8. UBAH QTY (TANPA TUTUP MODAL)
         function changeCartQty(idx, change) {
             if (cart[idx].qty + change > 0) {
                 cart[idx].qty += change;
@@ -578,20 +622,16 @@
                     cart.splice(idx, 1);
                 }
             }
-            updateCartUI();
-            
-            if (cart.length > 0) {
-                // Trik render ulang modal tanpa kedip parah: tutup instance, buka ulang via fungsi show
-                const el = document.getElementById('cartModal');
-                const modal = bootstrap.Modal.getInstance(el);
-                modal.hide();
-                setTimeout(() => showCartModal(), 300);
-            } else {
-                document.getElementById('checkoutForm').style.display = 'none';
-            }
+
+            // Update data di UI luar (Floating Button)
+            updateFloatingCartButton();
+
+            // Update isi Modal secara langsung tanpa refresh modal
+            renderCartListHTML();
         }
 
-        // 8. LOGIKA ALAMAT & GPS
+        // --- SISANYA LOGIKA ALAMAT & CHECKOUT (TIDAK BERUBAH) ---
+
         function toggleAddress(isDelivery) {
             const section = document.getElementById('addressSection');
             section.style.display = isDelivery ? 'block' : 'none';
@@ -602,13 +642,12 @@
             const status = document.getElementById('locStatus');
             const hiddenInput = document.getElementById('mapsLink');
 
-            if(!navigator.geolocation) {
+            if (!navigator.geolocation) {
                 status.style.display = 'block';
                 status.innerHTML = "<span class='text-danger'>Browser tidak support GPS.</span>";
                 return;
             }
 
-            // UI Loading
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mencari Koordinat...';
             status.style.display = 'none';
@@ -619,14 +658,14 @@
                     const long = pos.coords.longitude;
                     const link = `https://www.google.com/maps?q=${lat},${long}`;
                     hiddenInput.value = link;
-                    
+
                     status.style.display = 'block';
                     status.className = "alert alert-success p-2 text-center small mt-2 mb-0";
                     status.innerHTML = `<div class="d-flex align-items-center justify-content-center gap-2"><i class="bi bi-check-circle-fill"></i> <strong>Lokasi Berhasil Dilampirkan!</strong></div>`;
-                    
+
                     btn.disabled = false;
                     btn.classList.remove('btn-outline-primary');
-                    btn.classList.add('btn-success'); 
+                    btn.classList.add('btn-success');
                     btn.innerHTML = '<i class="bi bi-geo-alt"></i> Update Lokasi Saya';
                 },
                 (err) => {
@@ -639,27 +678,25 @@
             );
         }
 
-        // 9. PROSES CHECKOUT WHATSAPP
         function processCheckout() {
             if (cart.length === 0) return;
 
             const name = document.getElementById('custName').value.trim();
-            if(!name) { 
-                alert("Mohon isi 'Nama Pemesan' terlebih dahulu."); 
+            if (!name) {
+                alert("Mohon isi 'Nama Pemesan' terlebih dahulu.");
                 document.getElementById('custName').focus();
-                return; 
+                return;
             }
 
             const type = document.querySelector('input[name="deliveryType"]:checked').value;
             const address = document.getElementById('custAddress').value.trim();
             const maps = document.getElementById('mapsLink').value;
 
-            // VALIDASI: Alamat Wajib jika Delivery
-            if(type === 'delivery') {
-                if(!address) {
+            if (type === 'delivery') {
+                if (!address) {
                     alert("Mohon isi 'Alamat Lengkap' agar pesanan bisa diantar.");
-                    document.getElementById('custAddress').focus(); 
-                    return; 
+                    document.getElementById('custAddress').focus();
+                    return;
                 }
             }
 
@@ -669,7 +706,7 @@
             cart.forEach((item, index) => {
                 let subtotal = item.hargaPerItem * item.qty;
                 grandTotal += subtotal;
-                
+
                 let toppingStr = "";
                 if (item.toppings.length > 0) {
                     toppingStr = "\n   Topping: " + item.toppings.map(t => `${t.nama} (${t.qty}x)`).join(', ');
@@ -681,12 +718,12 @@
             message += `*TOTAL BELANJA: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
             message += `--------------------------------\n`;
 
-            if(type === 'pickup') {
+            if (type === 'pickup') {
                 message += `Metode: *AMBIL SENDIRI (PICKUP)*\n`;
             } else {
                 message += `Metode: *DELIVERY (ANTAR)*\n`;
-                if(address) message += `Alamat: ${address}\n`;
-                if(maps) message += `Maps: ${maps}\n`;
+                if (address) message += `Alamat: ${address}\n`;
+                if (maps) message += `Maps: ${maps}\n`;
             }
 
             message += `--------------------------------\nMohon diproses ya kak. Terima kasih!`;
@@ -697,4 +734,5 @@
     </script>
 
 </body>
+
 </html>
