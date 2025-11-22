@@ -1,0 +1,23 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main  # Ganti jika nama branch utama Anda berbeda
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          # Pastikan channelID adalah 'live'
+          channelId: live
+          # Menentukan project ID yang benar
+          projectId: lontong-mm
+        env:
+          # Menggunakan Secret yang kita buat di langkah B
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_TOKEN }}
