@@ -248,16 +248,14 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // --- 2. LOGIC QR CODE (TARGET URL FIXED) ---
+        // --- 2. LOGIC QR CODE (TARGET URL UNTUK QR) ---
+        // Ini adalah URL yang akan dibuka saat user men-scan QR Code di meja/kasir
         let qrGenerated = false;
-        // URL KHUSUS YANG DIMINTA
         const targetUrl = "https://lontong-mm.web.app/testimoni.html";
 
         function showQRModal() {
-            // Tampilkan URL di text box
             document.getElementById('urlLabel').innerText = targetUrl;
 
-            // Generate QR jika belum
             if (!qrGenerated) {
                 // 1. QR untuk Modal (Layar)
                 new QRCode(document.getElementById("qrcodeScreen"), {
@@ -286,7 +284,7 @@
             modal.show();
         }
 
-        // --- 3. LOGIC LAINNYA (RATING, IMAGE, SUBMIT) ---
+        // --- 3. LOGIC UTAMA (RATING, FOTO, SUBMIT) ---
         let compressedImageString = ""; 
         let currentIntegerRating = 5;
 
@@ -359,7 +357,7 @@
             }
         });
 
-        // --- LOGIKA SUBMIT YANG DIPERBARUI (REDIRECT) ---
+        // --- 4. LOGIKA SUBMIT + SWEETALERT DENGAN LINK GOOGLE MAPS ---
         document.getElementById('testiForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
@@ -382,24 +380,43 @@
                     tanggal: new Date()
                 };
 
+                // Simpan ke Firebase
                 await db.collection("testimonies").add(data);
                 
-                // --- MENGGUNAKAN SWEETALERT2 UNTUK POPUP CANTIK ---
+                // --- TAMPILKAN POP UP SUKSES ---
                 Swal.fire({
                     title: 'Terima Kasih!',
-                    text: 'Ulasan Anda berhasil dikirim dan akan tampil di halaman utama.',
+                    text: 'Ulasan Anda berhasil disimpan. Mau bantu kami agar lebih dikenal dengan memberi bintang di Google Maps?',
                     icon: 'success',
+                    
+                    // Aktifkan 3 Tombol
+                    showDenyButton: true,
                     showCancelButton: true,
-                    confirmButtonColor: '#198754',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Lihat di Menu Utama',
-                    cancelButtonText: 'Tutup'
+                    
+                    // Teks Tombol
+                    confirmButtonText: '<i class="bi bi-house-door-fill"></i> Menu Utama',
+                    denyButtonText: '<i class="bi bi-google"></i> Ulas di Google Maps',
+                    cancelButtonText: 'Tutup',
+                    
+                    // Warna Tombol
+                    confirmButtonColor: '#198754', // Hijau (Ke Index)
+                    denyButtonColor: '#0d6efd',    // Biru (Ke Google Maps)
+                    cancelButtonColor: '#6c757d'   // Abu (Tutup)
+                    
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Redirect ke index.html
+                        // AKSI 1: Tombol Hijau -> Ke Index.html
                         window.location.href = 'index.html'; 
+                        
+                    } else if (result.isDenied) {
+                        // AKSI 2: Tombol Biru -> Ke Link Google Maps Review
+                        window.open('https://g.page/r/CXylnEhFIVTrEBM/review', '_blank');
+                        
+                        // Opsional: Reload halaman setelah klik agar form bersih
+                        window.location.reload(); 
+                        
                     } else {
-                        // Reload untuk input baru atau tutup saja
+                        // AKSI 3: Tombol Abu/Cancel -> Reload/Tutup
                         window.location.reload();
                     }
                 });
