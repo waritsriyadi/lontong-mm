@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body { 
@@ -259,7 +261,7 @@
             if (!qrGenerated) {
                 // 1. QR untuk Modal (Layar)
                 new QRCode(document.getElementById("qrcodeScreen"), {
-                    text: targetUrl, // <-- PAKAI TARGET URL
+                    text: targetUrl, 
                     width: 200,
                     height: 200,
                     colorDark : "#198754", 
@@ -269,7 +271,7 @@
 
                 // 2. QR untuk Print (Poster)
                 new QRCode(document.getElementById("qrcodePrint"), {
-                    text: targetUrl, // <-- PAKAI TARGET URL
+                    text: targetUrl,
                     width: 300, 
                     height: 300,
                     colorDark : "#000000",
@@ -357,6 +359,7 @@
             }
         });
 
+        // --- LOGIKA SUBMIT YANG DIPERBARUI (REDIRECT) ---
         document.getElementById('testiForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
@@ -380,12 +383,34 @@
                 };
 
                 await db.collection("testimonies").add(data);
-                alert("✅ Ulasan Anda Berhasil Dikirim!");
-                window.location.reload(); 
+                
+                // --- MENGGUNAKAN SWEETALERT2 UNTUK POPUP CANTIK ---
+                Swal.fire({
+                    title: 'Terima Kasih!',
+                    text: 'Ulasan Anda berhasil dikirim dan akan tampil di halaman utama.',
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#198754',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Lihat di Menu Utama',
+                    cancelButtonText: 'Tutup'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect ke index.html
+                        window.location.href = 'index.html'; 
+                    } else {
+                        // Reload untuk input baru atau tutup saja
+                        window.location.reload();
+                    }
+                });
 
             } catch (error) {
                 console.error("Error:", error);
-                alert("Gagal: " + error.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Mengirim',
+                    text: error.message
+                });
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             }

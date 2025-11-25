@@ -22,14 +22,18 @@
     <meta name="twitter:image" content="https://lontong-mm.web.app/embed.jpg">
 
     <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f35b.png">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- GLOBAL FIXES (HILANGKAN SISAAN PUTIH KANAN) --- */
+        /* --- GLOBAL FIXES --- */
         html, body {
-            overflow-x: hidden; /* KUNCI: Mencegah scroll horizontal */
+            overflow-x: hidden;
             max-width: 100%;
         }
 
@@ -69,7 +73,7 @@
             margin-top: -80px;
             position: relative;
             z-index: 10;
-            flex: 1; /* Mendorong footer ke bawah */
+            flex: 1;
         }
 
         /* --- MENU CARD --- */
@@ -152,74 +156,47 @@
             color: #333;
         }
 
-        /* --- SLIDER TESTIMONI --- */
+        /* --- SLIDER TESTIMONI (SWIPER JS) --- */
         .slider-area {
             position: relative;
             overflow: hidden;
-            padding: 20px 0;
+            padding: 40px 0;
             background: linear-gradient(to bottom, #ffffff, #f4f7f6);
         }
 
-        .slider-area::before,
-        .slider-area::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 100px;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
+        /* Swiper Container */
+        .swiper {
+            width: 100%;
+            padding-bottom: 50px !important; /* Ruang untuk dots navigasi */
+            padding-top: 20px;
         }
 
-        .slider-area::before {
-            left: 0;
-            background: linear-gradient(to right, #f4f7f6, transparent);
-        }
-
-        .slider-area::after {
-            right: 0;
-            background: linear-gradient(to left, #f4f7f6, transparent);
-        }
-
-        :root {
-            --total-items: 10;
-        }
-
-        .slider-track {
+        .swiper-slide {
+            height: auto;
             display: flex;
-            width: calc(350px * var(--total-items) * 2);
-            animation: scroll 40s linear infinite;
+            justify-content: center;
         }
 
-        .slider-track:hover {
-            animation-play-state: paused;
-        }
-
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(-350px * var(--total-items))); }
-        }
-
-        .slide-item {
-            width: 350px;
-            padding: 0 15px;
-            flex-shrink: 0;
-        }
-
+        /* Testi Card Style */
         .testi-card {
             background: white;
             border-radius: 20px;
             padding: 25px;
             height: 100%;
+            width: 100%;
             border: 1px solid rgba(0, 0, 0, 0.05);
             box-shadow: 0 10px 25px rgba(25, 135, 84, 0.08);
             position: relative;
             transition: transform 0.3s ease;
+            cursor: grab;
         }
 
-        .testi-card:hover {
-            transform: translateY(-5px);
-            border-color: #198754;
+        .testi-card:active {
+            cursor: grabbing;
+        }
+
+        .swiper-pagination-bullet-active {
+            background-color: #198754 !important;
         }
 
         .quote-icon {
@@ -245,6 +222,7 @@
             font-weight: bold;
             font-size: 1.2rem;
             box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
+            flex-shrink: 0;
         }
 
         .avatar-img {
@@ -254,6 +232,7 @@
             object-fit: cover;
             border: 2px solid #198754;
             box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
+            flex-shrink: 0;
         }
 
         .star-rating {
@@ -349,7 +328,7 @@
             border-color: rgba(25, 135, 84, 0.1);
         }
 
-        /* --- FOOTER STYLES (RESPONSIVE FIX) --- */
+        /* --- FOOTER STYLES --- */
         .footer-section {
             background: #064e3b;
             background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
@@ -432,28 +411,11 @@
 
         /* FIX KHUSUS MOBILE FOOTER */
         @media (max-width: 991px) {
-            .footer-section {
-                text-align: center; /* Rata tengah di mobile */
-            }
-            
-            .footer-content .d-flex {
-                justify-content: center; /* Center social media icons */
-            }
-
-            .developer-badge {
-                text-align: center;
-                margin-top: 10px;
-            }
-
-            .developer-badge .d-flex.justify-content-between {
-                justify-content: center !important; /* Center title in badge */
-                gap: 10px;
-            }
-            
-            /* Biar icon code tidak nabrak text */
-            .developer-badge .bi-code-slash {
-                display: none; /* Sembunyikan icon code di mobile biar rapi */
-            }
+            .footer-section { text-align: center; }
+            .footer-content .d-flex { justify-content: center; }
+            .developer-badge { text-align: center; margin-top: 10px; }
+            .developer-badge .d-flex.justify-content-between { justify-content: center !important; gap: 10px; }
+            .developer-badge .bi-code-slash { display: none; }
         }
 
         @media (max-width: 768px) {
@@ -505,8 +467,14 @@
                 <p class="text-muted small">Geser atau arahkan kursor untuk menahan.</p>
             </div>
         </div>
-        <div class="slider-track" id="sliderTrack">
-            <div class="text-center w-100 pt-4 text-muted">Memuat testimoni...</div>
+        
+        <div class="container">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper" id="swiperWrapper">
+                    <div class="swiper-slide text-center text-muted pt-4">Memuat testimoni...</div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
     </div>
 
@@ -728,6 +696,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
         const NOMOR_WA = "6289638931396";
@@ -1116,97 +1085,95 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // --- LOAD TESTIMONI ---
-        const track = document.getElementById('sliderTrack');
+        // --- LOAD TESTIMONI DENGAN SWIPER JS ---
+        const swiperWrapper = document.getElementById('swiperWrapper');
 
-        // Ambil data dari collection 'testimonies'
         db.collection("testimonies").orderBy("tanggal", "desc").limit(15).get().then((querySnapshot) => {
             let rawData = [];
             
-            // 1. Kumpulkan data mentah dulu ke dalam Array
             querySnapshot.forEach((doc) => {
                 rawData.push(doc.data());
             });
 
-            // 2. JIKA KOSONG
             if (rawData.length === 0) {
-                track.innerHTML = '<div class="text-center w-100 pt-4">Belum ada testimoni.</div>';
-                track.style.width = "100%";
+                swiperWrapper.innerHTML = '<div class="text-center w-100 p-5">Belum ada testimoni.</div>';
                 return;
             }
 
-            // 3. LOGIKA PENGGANDAAN DATA (PENTING UNTUK KELANCARAN)
-            // Agar slider mulus, minimal kita butuh sekitar 6-8 kartu berjejer.
-            // Jika data asli cuma 3, kita gandakan array-nya sampai jumlahnya cukup.
-            let finalData = [...rawData];
-            
-            // Terus duplikat data sampai minimal ada 8 item
-            while (finalData.length < 8) {
-                finalData = finalData.concat(rawData);
-            }
-
-            // 4. RENDER HTML DARI DATA YANG SUDAH DIPERBANYAK
+            // Render HTML ke dalam wrapper
             let htmlContent = '';
-            finalData.forEach(data => {
-                htmlContent += createCardHTML(data);
+            rawData.forEach(data => {
+                htmlContent += `<div class="swiper-slide">${createCardHTML(data)}</div>`;
             });
 
-            // 5. SETTING ANIMASI INFINITE LOOP
-            // Kita render: [SET LENGKAP] + [SET LENGKAP (DUPLIKAT)]
-            track.innerHTML = htmlContent + htmlContent;
+            swiperWrapper.innerHTML = htmlContent;
 
-            // Hitung total item yang dirender (setelah data digandakan agar cukup panjang)
-            const totalRenderedItems = finalData.length;
-            
-            // Update CSS Variable
-            document.documentElement.style.setProperty('--total-items', totalRenderedItems);
+            // --- INISIALISASI SWIPER ---
+            new Swiper(".mySwiper", {
+                loop: true,               // Agar slider berputar terus
+                spaceBetween: 20,         // Jarak antar slide
+                centeredSlides: false,    // Posisi slide
+                
+                // Konfigurasi Autoplay
+                autoplay: {
+                    delay: 2500,          // Kecepatan geser (2.5 detik)
+                    disableOnInteraction: false, // Lanjut autoplay meski habis digeser user
+                },
 
-            // Atur kecepatan: Semakin banyak item, waktu semakin lama agar kecepatan konstan
-            // Rumus: 4 detik per item
-            const duration = totalRenderedItems * 4; 
-            track.style.animationDuration = `${duration}s`;
+                // Konfigurasi Titik Navigasi
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
 
-            // Pastikan style CSS inline aman
-            track.style.display = 'flex';
-            track.style.width = `calc(350px * ${totalRenderedItems} * 2)`; 
+                // Responsif: Jumlah slide yang muncul per layar
+                breakpoints: {
+                    0: {
+                        slidesPerView: 1, // HP: 1 kartu
+                        spaceBetween: 10,
+                    },
+                    768: {
+                        slidesPerView: 2, // Tablet: 2 kartu
+                        spaceBetween: 20,
+                    },
+                    1024: {
+                        slidesPerView: 3, // Laptop: 3 kartu
+                        spaceBetween: 30,
+                    }
+                }
+            });
 
         }).catch((error) => {
             console.error("Gagal memuat testimoni:", error);
-            track.innerHTML = '<div class="text-center w-100 text-danger">Gagal memuat data.</div>';
+            swiperWrapper.innerHTML = '<div class="text-center w-100 text-danger p-5">Gagal memuat data.</div>';
         });
 
         // Fungsi Helper Membuat HTML Card
         function createCardHTML(data) {
-            // Generate Bintang
             let starsHTML = '';
             for (let i = 0; i < Math.floor(data.rating); i++) starsHTML += '<i class="bi bi-star-fill"></i>';
             if (data.rating % 1 !== 0) starsHTML += '<i class="bi bi-star-half"></i>';
 
-            // LOGIKA FOTO vs INISIAL
             let avatarHTML = '';
-            // Cek jika ada fotoURL dan valid
             if (data.fotoURL && data.fotoURL.length > 20) {
                 avatarHTML = `<img src="${data.fotoURL}" alt="${data.nama}" class="avatar-img">`;
             } else {
-                // Fallback Inisial
                 const inisial = data.nama.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase().substring(0, 2);
                 avatarHTML = `<div class="avatar-circle">${inisial}</div>`;
             }
 
             return `
-            <div class="slide-item">
-                <div class="testi-card">
-                    <div class="quote-icon">”</div>
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        ${avatarHTML}
-                        <div>
-                            <div class="fw-bold text-capitalize">${data.nama}</div>
-                            <small class="text-muted text-capitalize" style="font-size: 0.75rem">${data.status}</small>
-                        </div>
+            <div class="testi-card">
+                <div class="quote-icon">”</div>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    ${avatarHTML}
+                    <div>
+                        <div class="fw-bold text-capitalize">${data.nama}</div>
+                        <small class="text-muted text-capitalize" style="font-size: 0.75rem">${data.status}</small>
                     </div>
-                    <div class="star-rating">${starsHTML}</div>
-                    <p class="text-secondary small mb-0">"${data.pesan}"</p>
                 </div>
+                <div class="star-rating">${starsHTML}</div>
+                <p class="text-secondary small mb-0">"${data.pesan}"</p>
             </div>
             `;
         }
