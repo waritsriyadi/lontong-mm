@@ -66,7 +66,7 @@ if (container) {
     <div class="col-md-6">
         <div class="menu-card d-flex flex-column">
             <div class="position-relative">
-                <img src="${item.img}" onerror="this.src='https://via.placeholder.com/600x400?text=Lontong+MM'" class="menu-img w-100" alt="${item.nama}" width="388" height="290" loading="lazy" decoding="async">
+                <img src="${item.img}" onerror="this.src='https://via.placeholder.com/600x400?text=Lontong+MM'" class="menu-img w-100" alt="${item.nama}">
                 <div class="position-absolute bottom-0 start-0 w-100 p-3" 
                      style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                     <h4 class="text-white fw-bold m-0 text-shadow">${item.nama}</h4>
@@ -105,7 +105,7 @@ function changeToppingQty(menuId, optIdx, change) {
 
     toppingState[key] = newVal;
     const el = document.getElementById(`tqty-${menuId}-${optIdx}`);
-    if (el) el.innerText = newVal;
+    if(el) el.innerText = newVal;
     updatePriceDisplay(menuId);
 }
 
@@ -117,7 +117,7 @@ function updatePriceDisplay(menuId) {
         total += (opt.harga * qty);
     });
     const el = document.getElementById(`price-display-${menuId}`);
-    if (el) el.innerText = 'Rp ' + total.toLocaleString('id-ID');
+    if(el) el.innerText = 'Rp ' + total.toLocaleString('id-ID');
 }
 
 function addToCart(menuId) {
@@ -176,7 +176,7 @@ function resetToppingInputs(menuId) {
     menu.opsi.forEach((opt, idx) => {
         toppingState[`${menuId}-${idx}`] = 0;
         const el = document.getElementById(`tqty-${menuId}-${idx}`);
-        if (el) el.innerText = "0";
+        if(el) el.innerText = "0";
     });
     updatePriceDisplay(menuId);
 }
@@ -402,7 +402,7 @@ if (testimonySection && swiperWrapper) {
 
 function startTestimonialLoader() {
     // Tampilkan loading state
-    if (swiperWrapper) swiperWrapper.innerHTML = '<div class="swiper-slide text-center text-muted pt-4"><div class="spinner-border text-success me-2" role="status"></div>Sedang memuat testimoni...</div>';
+    if(swiperWrapper) swiperWrapper.innerHTML = '<div class="swiper-slide text-center text-muted pt-4"><div class="spinner-border text-success me-2" role="status"></div>Sedang memuat testimoni...</div>';
 
     // Helper untuk load script async
     const loadScript = (src) => {
@@ -420,18 +420,18 @@ function startTestimonialLoader() {
         loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'),
         loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js')
     ])
-        .then(() => {
-            // 2. Load Firestore setelah Firebase App siap
-            return loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js');
-        })
-        .then(() => {
-            // 3. Jalankan logika asli
-            initFirebaseAndSwiper();
-        })
-        .catch(err => {
-            console.error('Error loading scripts:', err);
-            if (swiperWrapper) swiperWrapper.innerHTML = '<div class="text-center w-100 text-danger p-5">Gagal memuat script. Periksa koneksi internet.</div>';
-        });
+    .then(() => {
+        // 2. Load Firestore setelah Firebase App siap
+        return loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js');
+    })
+    .then(() => {
+        // 3. Jalankan logika asli
+        initFirebaseAndSwiper();
+    })
+    .catch(err => {
+        console.error('Error loading scripts:', err);
+        if(swiperWrapper) swiperWrapper.innerHTML = '<div class="text-center w-100 text-danger p-5">Gagal memuat script. Periksa koneksi internet.</div>';
+    });
 }
 
 function initFirebaseAndSwiper() {
