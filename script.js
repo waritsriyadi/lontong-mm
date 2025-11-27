@@ -33,10 +33,12 @@ const menuList = [
     }
 ];
 
-// RENDER MENU UTAMA
+// RENDER MENU UTAMA (OPTIMIZED: BATCH DOM UPDATE)
 const container = document.getElementById('menuContainer');
 if (container) {
-    menuList.forEach(item => {
+    let allCardsHTML = ''; // 1. Buat variabel penampung string
+
+    menuList.forEach((item, index) => { // Tambah index untuk cek LCP
         let opsiHTML = '';
         if (item.opsi && item.opsi.length > 0) {
             opsiHTML += '<div class="mt-3 mb-3 bg-white border rounded p-2">';
@@ -62,11 +64,14 @@ if (container) {
             opsiHTML += '</div>';
         }
 
+        // Trik LCP: Tambahkan fetchpriority="high" hanya untuk gambar pertama
+        const imgPriority = index === 0 ? 'fetchpriority="high"' : 'loading="lazy"';
+
         const cardHTML = `
     <div class="col-md-6">
         <div class="menu-card d-flex flex-column">
             <div class="position-relative">
-                <img src="${item.img}" onerror="this.src='https://via.placeholder.com/600x400?text=Lontong+MM'" class="menu-img w-100" alt="${item.nama}">
+                <img src="${item.img}" ${imgPriority} width="600" height="400" onerror="this.src='https://via.placeholder.com/600x400?text=Lontong+MM'" class="menu-img w-100" alt="${item.nama}">
                 <div class="position-absolute bottom-0 start-0 w-100 p-3" 
                      style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                     <h4 class="text-white fw-bold m-0 text-shadow">${item.nama}</h4>
@@ -91,10 +96,15 @@ if (container) {
             </div>
         </div>
     </div>`;
-        container.innerHTML += cardHTML;
+
+        allCardsHTML += cardHTML; // 2. Kumpulkan string dulu
     });
+
+    container.innerHTML = allCardsHTML; // 3. Masukkan ke DOM hanya SEKALI (Menghilangkan Forced Reflow)
 }
 
+// ... (SISA KODE KE BAWAH TETAP SAMA SEPERTI FILE ANDA SEBELUMNYA) ...
+// (Copy Paste sisa fungsi changeToppingQty, addToCart, dll dari file script.js Anda sebelumnya ke sini)
 // FUNGSI-FUNGSI LOGIKA KERANJANG
 function changeToppingQty(menuId, optIdx, change) {
     const key = `${menuId}-${optIdx}`;
