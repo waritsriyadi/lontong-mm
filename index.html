@@ -6,12 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Lontong MM - Order</title>
 
-    <meta name="description" content="Pesan Lontong Sayur & Lontong Pical khas Minang. Harga sahabat, rasa nikmat! Siap antar atau ambil sendiri di Batam.">
+    <meta name="description"
+        content="Pesan Lontong Sayur & Lontong Pical khas Minang. Harga sahabat, rasa nikmat! Siap antar atau ambil sendiri di Batam.">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://lontong-mm.web.app/">
     <meta property="og:title" content="Lontong MM - Sarapan Nikmat & Murah">
-    <meta property="og:description" content="Pesan Lontong Sayur & Lontong Pical khas Minang. Klik untuk lihat menu & pesan via WA!">
+    <meta property="og:description"
+        content="Pesan Lontong Sayur & Lontong Pical khas Minang. Klik untuk lihat menu & pesan via WA!">
     <meta property="og:image" content="https://lontong-mm.web.app/embed.webp">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -22,17 +24,29 @@
     <meta name="twitter:image" content="https://lontong-mm.web.app/embed.webp">
 
     <link rel="icon" type="image/png" href="logo.webp">
-    
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+        media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print"
+        onload="this.media='all'">
+
+    <noscript>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    </noscript>
 
     <style>
         /* --- GLOBAL FIXES --- */
-        html, body {
+        html,
+        body {
             overflow-x: hidden;
             max-width: 100%;
         }
@@ -167,7 +181,8 @@
         /* Swiper Container */
         .swiper {
             width: 100%;
-            padding-bottom: 50px !important; /* Ruang untuk dots navigasi */
+            padding-bottom: 50px !important;
+            /* Ruang untuk dots navigasi */
             padding-top: 20px;
         }
 
@@ -389,7 +404,7 @@
             transition: all 0.3s ease;
             margin-right: 8px;
             font-size: 1.1rem;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .social-btn:hover {
@@ -411,11 +426,27 @@
 
         /* FIX KHUSUS MOBILE FOOTER */
         @media (max-width: 991px) {
-            .footer-section { text-align: center; }
-            .footer-content .d-flex { justify-content: center; }
-            .developer-badge { text-align: center; margin-top: 10px; }
-            .developer-badge .d-flex.justify-content-between { justify-content: center !important; gap: 10px; }
-            .developer-badge .bi-code-slash { display: none; }
+            .footer-section {
+                text-align: center;
+            }
+
+            .footer-content .d-flex {
+                justify-content: center;
+            }
+
+            .developer-badge {
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .developer-badge .d-flex.justify-content-between {
+                justify-content: center !important;
+                gap: 10px;
+            }
+
+            .developer-badge .bi-code-slash {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
@@ -424,8 +455,15 @@
                 border-bottom-left-radius: 25px;
                 border-bottom-right-radius: 25px;
             }
-            .overlap-container { margin-top: -50px; }
-            .cart-bar { width: 95%; bottom: 15px; }
+
+            .overlap-container {
+                margin-top: -50px;
+            }
+
+            .cart-bar {
+                width: 95%;
+                bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -434,9 +472,10 @@
 
     <div class="hero-section text-center">
         <div class="mb-3">
-            <img src="logo.webp" alt="Logo Lontong MM" style="width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">
+            <img src="logo.webp" alt="Logo Lontong MM"
+                style="width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">
         </div>
-        
+
         <h1 class="fw-bold mb-1">Lontong MM</h1>
         <p class="opacity-75 mb-2 fw-light">Sarapan Nikmat, Harga Sahabat.<br>Perumahan PJB III BC/04, Sagulung.</p>
 
@@ -449,8 +488,10 @@
         </div>
 
         <div class="d-inline-flex gap-2 bg-white bg-opacity-10 p-2 rounded-pill backdrop-blur">
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 - Habis</span>
-            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil / COD</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-clock-fill"></i> 06:00 -
+                Habis</span>
+            <span class="badge bg-white text-success rounded-pill px-3 py-2"><i class="bi bi-geo-alt-fill"></i> Ambil /
+                COD</span>
         </div>
     </div>
 
@@ -470,7 +511,7 @@
                 <p class="text-muted small">Geser atau arahkan kursor untuk menahan.</p>
             </div>
         </div>
-        
+
         <div class="container">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper" id="swiperWrapper">
@@ -492,31 +533,36 @@
                 <div class="accordion shadow-sm rounded-4 overflow-hidden" id="faqAccordion">
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq1">
                                 🕒 Buka jam berapa?
                             </button>
                         </h2>
                         <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body text-muted small">
-                                Kami buka setiap hari mulai pukul <strong>06:00 pagi</strong> sampai habis. Biasanya jam 10:00 sudah sold out.
+                                Kami buka setiap hari mulai pukul <strong>06:00 pagi</strong> sampai habis. Biasanya jam
+                                10:00 sudah sold out.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
                                 📦 Apakah kuahnya dipisah?
                             </button>
                         </h2>
                         <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body text-muted small">
-                                Tentu! Untuk pesanan bungkus, <strong>kuah dan kerupuk kami pisah</strong> agar tidak lembek.
+                                Tentu! Untuk pesanan bungkus, <strong>kuah dan kerupuk kami pisah</strong> agar tidak
+                                lembek.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
                                 🎉 Bisa pesan untuk acara?
                             </button>
                         </h2>
@@ -528,7 +574,8 @@
                     </div>
                     <div class="accordion-item border-0">
                         <h2 class="accordion-header">
-                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq4">
                                 🌶️ Apakah rasanya sangat pedas?
                             </button>
                         </h2>
@@ -549,25 +596,30 @@
 
     <footer class="footer-section">
         <div class="footer-wave">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                preserveAspectRatio="none">
+                <path
+                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                    class="shape-fill"></path>
             </svg>
         </div>
 
         <div class="container footer-content">
             <div class="row g-5 align-items-start">
-                
+
                 <div class="col-lg-5 col-md-6 text-center text-lg-start">
                     <div class="pe-lg-4">
-                        <h3 class="fw-bold mb-3 justify-content-center justify-content-lg-start d-flex align-items-center gap-2">
+                        <h3
+                            class="fw-bold mb-3 justify-content-center justify-content-lg-start d-flex align-items-center gap-2">
                             <img src="logo.webp" alt="Logo" style="width: 35px; height: 35px; object-fit: contain;">
                             Lontong MM
                         </h3>
                         <p class="text-white-50 small lh-lg mb-4">
-                            Menyajikan sarapan pagi dengan cita rasa khas Minang yang otentik. 
+                            Menyajikan sarapan pagi dengan cita rasa khas Minang yang otentik.
                             Kami berkomitmen menghadirkan kelezatan tradisional dengan bahan berkualitas.
                         </p>
-                        <a href="https://wa.me/6289638931396" target="_blank" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                        <a href="https://wa.me/6289638931396" target="_blank"
+                            class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
                             <i class="bi bi-whatsapp me-2"></i> Hubungi Kami
                         </a>
                     </div>
@@ -589,25 +641,31 @@
                             <h6 class="fw-bold text-success text-uppercase small ls-1 mb-0">Developed & Managed By</h6>
                             <i class="bi bi-code-slash text-white-50 d-none d-lg-block"></i>
                         </div>
-                        
-                        <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-start gap-3 mb-3 mt-3">
-                            <img src="wr.webp" alt="Warits Riyadi" class="rounded-circle shadow-sm" style="width: 60px; height: 60px; object-fit: cover; border: 2px solid rgba(255,255,255,0.2);">
-                            
+
+                        <div
+                            class="d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-start gap-3 mb-3 mt-3">
+                            <img src="wr.webp" alt="Warits Riyadi" class="rounded-circle shadow-sm"
+                                style="width: 60px; height: 60px; object-fit: cover; border: 2px solid rgba(255,255,255,0.2);">
+
                             <div class="text-center text-sm-start">
                                 <h5 class="fw-bold m-0">Warits Riyadi</h5>
                                 <small class="text-white-50">Fullstack Developer</small>
                             </div>
                         </div>
-                        
+
                         <p class="text-white-50 small mb-4 fst-italic text-center text-lg-start">
                             "Membangun solusi digital yang bermanfaat dan estetik."
                         </p>
-                        
+
                         <div class="d-flex justify-content-center justify-content-lg-start">
-                            <a href="https://instagram.com/ryd.warits/" target="_blank" class="social-btn" title="Instagram"><i class="bi bi-instagram"></i></a>
-                            <a href="https://linkedin.com/in/waritsriyadi" target="_blank" class="social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                            <a href="https://github.com/waritsriyadi" target="_blank" class="social-btn" title="GitHub"><i class="bi bi-github"></i></a>
-                            <a href="https://waritsriyadi.com" target="_blank" class="social-btn" title="Website"><i class="bi bi-globe"></i></a>
+                            <a href="https://instagram.com/ryd.warits/" target="_blank" class="social-btn"
+                                title="Instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="https://linkedin.com/in/waritsriyadi" target="_blank" class="social-btn"
+                                title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            <a href="https://github.com/waritsriyadi" target="_blank" class="social-btn"
+                                title="GitHub"><i class="bi bi-github"></i></a>
+                            <a href="https://waritsriyadi.com" target="_blank" class="social-btn" title="Website"><i
+                                    class="bi bi-globe"></i></a>
                         </div>
                     </div>
                 </div>
@@ -619,7 +677,8 @@
             <div class="text-center text-white-50 small">
                 <p class="mb-0">
                     © 2025 <strong>Lontong MM</strong>. All Rights Reserved. <br class="d-md-none">
-                    Created with <i class="bi bi-heart-fill text-danger mx-1"></i> by <a href="https://waritsriyadi.com" target="_blank" class="text-white text-decoration-none fw-bold">Warits Riyadi</a>.
+                    Created with <i class="bi bi-heart-fill text-danger mx-1"></i> by <a href="https://waritsriyadi.com"
+                        target="_blank" class="text-white text-decoration-none fw-bold">Warits Riyadi</a>.
                 </p>
             </div>
         </div>
@@ -648,9 +707,11 @@
                             <i class="bi bi-truck fs-5"></i> Informasi Pengiriman
                         </h6>
                         <div class="btn-group w-100 mb-4" role="group">
-                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup" checked onchange="toggleAddress(false)">
+                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup"
+                                checked onchange="toggleAddress(false)">
                             <label class="btn btn-outline-success py-2" for="optPickup">Ambil Sendiri</label>
-                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery" onchange="toggleAddress(true)">
+                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery"
+                                onchange="toggleAddress(true)">
                             <label class="btn btn-outline-success py-2" for="optDelivery">Diantar (Delivery)</label>
                         </div>
                         <div class="mb-3">
@@ -659,19 +720,25 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Catatan (Opsional)</label>
-                            <textarea id="custNote" class="form-control" rows="2" placeholder="Contoh: Kuah dipisah, jangan pedas, dll..."></textarea>
+                            <textarea id="custNote" class="form-control" rows="2"
+                                placeholder="Contoh: Kuah dipisah, jangan pedas, dll..."></textarea>
                         </div>
                         <div id="addressSection" style="display: none;">
                             <div class="mb-3">
-                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span class="text-danger">*</span></label>
-                                <textarea id="custAddress" class="form-control bg-light" rows="3" placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
-                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail agar kurir mudah mencari.</div>
+                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span
+                                        class="text-danger">*</span></label>
+                                <textarea id="custAddress" class="form-control bg-light" rows="3"
+                                    placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
+                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail
+                                    agar kurir mudah mencari.</div>
                             </div>
                             <div class="d-grid gap-2">
-                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()" class="btn btn-outline-primary dashed-border py-2">
+                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()"
+                                    class="btn btn-outline-primary dashed-border py-2">
                                     <i class="bi bi-geo-alt-fill me-1"></i> Otomatis Cari Lokasi Saya
                                 </button>
-                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small" style="display:none;"></div>
+                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small"
+                                    style="display:none;"></div>
                                 <input type="hidden" id="mapsLink">
                             </div>
                         </div>
@@ -691,7 +758,8 @@
     </div>
 
     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050;">
-        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+            aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body" id="toastMessage">Item ditambahkan!</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
@@ -1094,7 +1162,7 @@
 
         db.collection("testimonies").orderBy("tanggal", "desc").limit(15).get().then((querySnapshot) => {
             let rawData = [];
-            
+
             querySnapshot.forEach((doc) => {
                 rawData.push(doc.data());
             });
@@ -1117,7 +1185,7 @@
                 loop: true,               // Agar slider berputar terus
                 spaceBetween: 20,         // Jarak antar slide
                 centeredSlides: false,    // Posisi slide
-                
+
                 // Konfigurasi Autoplay
                 autoplay: {
                     delay: 2500,          // Kecepatan geser (2.5 detik)
