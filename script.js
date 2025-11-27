@@ -1,3 +1,6 @@
+/* =========================================
+   BAGIAN 1: LOGIKA KERANJANG & ORDER (AKTIF LANGSUNG)
+   ========================================= */
 const NOMOR_WA = "6289638931396";
 let cart = [];
 let toppingState = {};
@@ -30,20 +33,20 @@ const menuList = [
     }
 ];
 
-// 1. RENDER MENU UTAMA
+// RENDER MENU UTAMA
 const container = document.getElementById('menuContainer');
+if (container) {
+    menuList.forEach(item => {
+        let opsiHTML = '';
+        if (item.opsi && item.opsi.length > 0) {
+            opsiHTML += '<div class="mt-3 mb-3 bg-white border rounded p-2">';
+            opsiHTML += '<p class="small fw-bold text-success mb-2"><i class="bi bi-basket2"></i> Mau tambah topping?</p>';
 
-menuList.forEach(item => {
-    let opsiHTML = '';
-    if (item.opsi && item.opsi.length > 0) {
-        opsiHTML += '<div class="mt-3 mb-3 bg-white border rounded p-2">';
-        opsiHTML += '<p class="small fw-bold text-success mb-2"><i class="bi bi-basket2"></i> Mau tambah topping?</p>';
+            item.opsi.forEach((opt, idx) => {
+                const hargaStr = opt.harga > 0 ? `+Rp${opt.harga.toLocaleString('id-ID')}` : 'Gratis';
+                toppingState[`${item.id}-${idx}`] = 0;
 
-        item.opsi.forEach((opt, idx) => {
-            const hargaStr = opt.harga > 0 ? `+Rp${opt.harga.toLocaleString('id-ID')}` : 'Gratis';
-            toppingState[`${item.id}-${idx}`] = 0;
-
-            opsiHTML += `
+                opsiHTML += `
             <div class="topping-row">
                 <div class="d-flex flex-column lh-1">
                     <span class="small fw-semibold text-dark">${opt.nama}</span>
@@ -55,11 +58,11 @@ menuList.forEach(item => {
                     <button class="btn-topping-qty" onclick="changeToppingQty(${item.id}, ${idx}, 1)">+</button>
                 </div>
             </div>`;
-        });
-        opsiHTML += '</div>';
-    }
+            });
+            opsiHTML += '</div>';
+        }
 
-    const cardHTML = `
+        const cardHTML = `
     <div class="col-md-6">
         <div class="menu-card d-flex flex-column">
             <div class="position-relative">
@@ -88,10 +91,11 @@ menuList.forEach(item => {
             </div>
         </div>
     </div>`;
-    container.innerHTML += cardHTML;
-});
+        container.innerHTML += cardHTML;
+    });
+}
 
-// 2. FUNGSI UBAH QTY TOPPING
+// FUNGSI-FUNGSI LOGIKA KERANJANG
 function changeToppingQty(menuId, optIdx, change) {
     const key = `${menuId}-${optIdx}`;
     let current = toppingState[key] || 0;
@@ -100,11 +104,11 @@ function changeToppingQty(menuId, optIdx, change) {
     if (newVal > 20) newVal = 20;
 
     toppingState[key] = newVal;
-    document.getElementById(`tqty-${menuId}-${optIdx}`).innerText = newVal;
+    const el = document.getElementById(`tqty-${menuId}-${optIdx}`);
+    if (el) el.innerText = newVal;
     updatePriceDisplay(menuId);
 }
 
-// 3. UPDATE TAMPILAN HARGA MENU
 function updatePriceDisplay(menuId) {
     const menu = menuList.find(m => m.id === menuId);
     let total = menu.hargaDasar;
@@ -112,10 +116,10 @@ function updatePriceDisplay(menuId) {
         const qty = toppingState[`${menuId}-${idx}`];
         total += (opt.harga * qty);
     });
-    document.getElementById(`price-display-${menuId}`).innerText = 'Rp ' + total.toLocaleString('id-ID');
+    const el = document.getElementById(`price-display-${menuId}`);
+    if (el) el.innerText = 'Rp ' + total.toLocaleString('id-ID');
 }
 
-// 4. TAMBAH KE KERANJANG
 function addToCart(menuId) {
     const menu = menuList.find(m => m.id === menuId);
     let selectedToppings = [];
@@ -158,20 +162,25 @@ function addToCart(menuId) {
 
     const toastEl = document.getElementById('liveToast');
     document.getElementById('toastMessage').innerText = `${menu.nama} berhasil ditambahkan!`;
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
+    // Pastikan Bootstrap sudah load sebelum panggil Toast
+    if (typeof bootstrap !== 'undefined') {
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    } else {
+        alert(`${menu.nama} berhasil ditambahkan!`);
+    }
 }
 
 function resetToppingInputs(menuId) {
     const menu = menuList.find(m => m.id === menuId);
     menu.opsi.forEach((opt, idx) => {
         toppingState[`${menuId}-${idx}`] = 0;
-        document.getElementById(`tqty-${menuId}-${idx}`).innerText = "0";
+        const el = document.getElementById(`tqty-${menuId}-${idx}`);
+        if (el) el.innerText = "0";
     });
     updatePriceDisplay(menuId);
 }
 
-// 5. UPDATE TOMBOL FLOATING
 function updateFloatingCartButton() {
     const cartBar = document.getElementById('floatingCart');
     let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -186,7 +195,6 @@ function updateFloatingCartButton() {
     }
 }
 
-// 6. RENDER LIST CART
 function renderCartListHTML() {
     const listContainer = document.getElementById('cartItemsContainer');
     const formContainer = document.getElementById('checkoutForm');
@@ -198,8 +206,11 @@ function renderCartListHTML() {
     if (cart.length === 0) {
         formContainer.style.display = 'none';
         const el = document.getElementById('cartModal');
-        const modal = bootstrap.Modal.getInstance(el);
-        if (modal) modal.hide();
+        // Cek Bootstrap
+        if (typeof bootstrap !== 'undefined') {
+            const modal = bootstrap.Modal.getInstance(el);
+            if (modal) modal.hide();
+        }
         return;
     }
 
@@ -243,8 +254,10 @@ function renderCartListHTML() {
 function showCartModal() {
     if (cart.length === 0) return;
     renderCartListHTML();
-    const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
-    myModal.show();
+    if (typeof bootstrap !== 'undefined') {
+        const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
+        myModal.show();
+    }
 }
 
 function changeCartQty(idx, change) {
@@ -365,84 +378,125 @@ function processCheckout() {
     window.open(url, '_blank');
 }
 
-// --- KONFIGURASI FIREBASE ---
-const firebaseConfig = {
-    apiKey: "AIzaSyCamv42dxGHJEqXMqVIPcOeWGNdM5p7X2E",
-    authDomain: "lontong-mm.firebaseapp.com",
-    projectId: "lontong-mm",
-    storageBucket: "lontong-mm.firebasestorage.app",
-    messagingSenderId: "628261457290",
-    appId: "1:628261457290:web:8cbd5262f3cc3deb30cc73",
-    measurementId: "G-GBN3GE3QKN"
-};
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+/* =========================================
+   BAGIAN 2: LAZY LOAD TESTIMONI (FIREBASE & SWIPER)
+   Hanya dimuat ketika user scroll ke bawah
+   ========================================= */
 
-// --- LOAD TESTIMONI DENGAN SWIPER JS ---
+const testimonySection = document.querySelector('.slider-area');
 const swiperWrapper = document.getElementById('swiperWrapper');
 
-db.collection("testimonies").orderBy("tanggal", "desc").limit(15).get().then((querySnapshot) => {
-    let rawData = [];
+if (testimonySection && swiperWrapper) {
+    // Observer untuk mendeteksi scroll
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            // Jika user melihat slider area, load script!
+            startTestimonialLoader();
+            observer.disconnect(); // Stop observasi setelah load
+        }
+    }, { rootMargin: "200px" }); // Load 200px sebelum elemen muncul
 
-    querySnapshot.forEach((doc) => {
-        rawData.push(doc.data());
-    });
+    observer.observe(testimonySection);
+}
 
-    if (rawData.length === 0) {
-        swiperWrapper.innerHTML = '<div class="text-center w-100 p-5">Belum ada testimoni.</div>';
-        return;
+function startTestimonialLoader() {
+    // Tampilkan loading state
+    if (swiperWrapper) swiperWrapper.innerHTML = '<div class="swiper-slide text-center text-muted pt-4"><div class="spinner-border text-success me-2" role="status"></div>Sedang memuat testimoni...</div>';
+
+    // Helper untuk load script async
+    const loadScript = (src) => {
+        return new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = src;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.body.appendChild(s);
+        });
     }
 
-    // Render HTML ke dalam wrapper
-    let htmlContent = '';
-    rawData.forEach(data => {
-        htmlContent += `<div class="swiper-slide">${createCardHTML(data)}</div>`;
-    });
+    // 1. Load Firebase & Swiper
+    Promise.all([
+        loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'),
+        loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js')
+    ])
+        .then(() => {
+            // 2. Load Firestore setelah Firebase App siap
+            return loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js');
+        })
+        .then(() => {
+            // 3. Jalankan logika asli
+            initFirebaseAndSwiper();
+        })
+        .catch(err => {
+            console.error('Error loading scripts:', err);
+            if (swiperWrapper) swiperWrapper.innerHTML = '<div class="text-center w-100 text-danger p-5">Gagal memuat script. Periksa koneksi internet.</div>';
+        });
+}
 
-    swiperWrapper.innerHTML = htmlContent;
+function initFirebaseAndSwiper() {
+    // --- KONFIGURASI FIREBASE ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyCamv42dxGHJEqXMqVIPcOeWGNdM5p7X2E",
+        authDomain: "lontong-mm.firebaseapp.com",
+        projectId: "lontong-mm",
+        storageBucket: "lontong-mm.firebasestorage.app",
+        messagingSenderId: "628261457290",
+        appId: "1:628261457290:web:8cbd5262f3cc3deb30cc73",
+        measurementId: "G-GBN3GE3QKN"
+    };
 
-    // --- INISIALISASI SWIPER ---
-    new Swiper(".mySwiper", {
-        loop: true,               // Agar slider berputar terus
-        spaceBetween: 20,         // Jarak antar slide
-        centeredSlides: false,    // Posisi slide
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
 
-        // Konfigurasi Autoplay
-        autoplay: {
-            delay: 2500,          // Kecepatan geser (2.5 detik)
-            disableOnInteraction: false, // Lanjut autoplay meski habis digeser user
-        },
+    db.collection("testimonies").orderBy("tanggal", "desc").limit(15).get().then((querySnapshot) => {
+        let rawData = [];
 
-        // Konfigurasi Titik Navigasi
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
+        querySnapshot.forEach((doc) => {
+            rawData.push(doc.data());
+        });
 
-        // Responsif: Jumlah slide yang muncul per layar
-        breakpoints: {
-            0: {
-                slidesPerView: 1, // HP: 1 kartu
-                spaceBetween: 10,
-            },
-            768: {
-                slidesPerView: 2, // Tablet: 2 kartu
-                spaceBetween: 20,
-            },
-            1024: {
-                slidesPerView: 3, // Laptop: 3 kartu
-                spaceBetween: 30,
-            }
+        if (rawData.length === 0) {
+            swiperWrapper.innerHTML = '<div class="text-center w-100 p-5">Belum ada testimoni.</div>';
+            return;
         }
+
+        // Render HTML ke dalam wrapper
+        let htmlContent = '';
+        rawData.forEach(data => {
+            htmlContent += `<div class="swiper-slide">${createCardHTML(data)}</div>`;
+        });
+
+        swiperWrapper.innerHTML = htmlContent;
+
+        // --- INISIALISASI SWIPER ---
+        new Swiper(".mySwiper", {
+            loop: true,
+            spaceBetween: 20,
+            centeredSlides: false,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                0: { slidesPerView: 1, spaceBetween: 10 },
+                768: { slidesPerView: 2, spaceBetween: 20 },
+                1024: { slidesPerView: 3, spaceBetween: 30 }
+            }
+        });
+
+    }).catch((error) => {
+        console.error("Gagal memuat testimoni:", error);
+        swiperWrapper.innerHTML = '<div class="text-center w-100 text-danger p-5">Gagal memuat data testimoni.</div>';
     });
+}
 
-}).catch((error) => {
-    console.error("Gagal memuat testimoni:", error);
-    swiperWrapper.innerHTML = '<div class="text-center w-100 text-danger p-5">Gagal memuat data.</div>';
-});
-
-// Fungsi Helper Membuat HTML Card
 function createCardHTML(data) {
     let starsHTML = '';
     for (let i = 0; i < Math.floor(data.rating); i++) starsHTML += '<i class="bi bi-star-fill"></i>';
@@ -452,7 +506,7 @@ function createCardHTML(data) {
     if (data.fotoURL && data.fotoURL.length > 20) {
         avatarHTML = `<img src="${data.fotoURL}" alt="${data.nama}" class="avatar-img">`;
     } else {
-        const inisial = data.nama.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase().substring(0, 2);
+        const inisial = (data.nama || "User").match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase().substring(0, 2);
         avatarHTML = `<div class="avatar-circle">${inisial}</div>`;
     }
 
@@ -462,8 +516,8 @@ function createCardHTML(data) {
         <div class="d-flex align-items-center gap-3 mb-3">
             ${avatarHTML}
             <div>
-                <div class="fw-bold text-capitalize">${data.nama}</div>
-                <small class="text-muted text-capitalize" style="font-size: 0.75rem">${data.status}</small>
+                <div class="fw-bold text-capitalize">${data.nama || "Pelanggan"}</div>
+                <small class="text-muted text-capitalize" style="font-size: 0.75rem">${data.status || "Pecinta Kuliner"}</small>
             </div>
         </div>
         <div class="star-rating">${starsHTML}</div>
