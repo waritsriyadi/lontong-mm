@@ -66,7 +66,7 @@ if (container) {
     <div class="col-md-6">
         <div class="menu-card d-flex flex-column">
             <div class="position-relative">
-                <img src="${item.img}" onerror="this.src='https://via.placeholder.com/600x400?text=Lontong+MM'" class="menu-img w-100" alt="${item.nama}">
+                <img src="${item.img}" onerror="this.src='https://via.placeholder.com/600x400?text=Lontong+MM'" class="menu-img w-100" alt="${item.nama}" width="388" height="290" loading="lazy" decoding="async">
                 <div class="position-absolute bottom-0 start-0 w-100 p-3" 
                      style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                     <h4 class="text-white fw-bold m-0 text-shadow">${item.nama}</h4>
