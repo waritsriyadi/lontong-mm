@@ -46,6 +46,30 @@
             margin-bottom: 1rem;
         }
 
+        /* --- STYLE KHUSUS KARTU 'HARI INI' (PREMIUM LOOK) --- */
+        .card-today {
+            background-color: #ecfdf5 !important; /* Hijau mint sangat muda */
+            border: 1px solid #10b981 !important; /* Border hijau tipis keliling */
+            position: relative;
+            overflow: hidden; /* Agar garis tidak bocor keluar sudut */
+        }
+
+        /* Garis vertikal hijau di kiri (menggunakan pseudo-element agar rapi di iOS) */
+        .card-today::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 6px; /* Ketebalan garis */
+            background-color: #10b981;
+        }
+
+        /* Geser isi konten agar tidak menabrak garis hijau */
+        .card-today .card-body {
+            padding-left: 24px !important;
+        }
+
         .form-control,
         .input-group-text,
         .btn {
@@ -696,30 +720,105 @@
             if (activeIcon) activeIcon.className = currentSort.direction === 'asc' ? 'bi bi-caret-up-fill text-dark' : 'bi bi-caret-down-fill text-dark';
         }
 
-        function renderDashboard(data) {
+function renderDashboard(data) {
+            // 1. Update Ikon Sort di Header
             updateSortIcons();
-            let labels = [], dUntung = [], dSetor = [], gOmset = 0, gProfit = 0, gSetor = 0;
-            dom.tableDesktop.innerHTML = ''; dom.listMobile.innerHTML = '';
-            data.forEach(d => { gOmset += d.omset; gProfit += d.untung; gSetor += d.setor; });
-            const chartData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
-            chartData.forEach(d => { labels.push(formatChartDate(d.date)); dUntung.push(d.untung); dSetor.push(d.setor); });
 
+            let labels = [], dUntung = [], dSetor = [], gOmset = 0, gProfit = 0, gSetor = 0;
+            dom.tableDesktop.innerHTML = ''; 
+            dom.listMobile.innerHTML = '';
+
+            // 2. Hitung Total & Persiapan Data Chart (Kronologis)
+            data.forEach(d => {
+                gOmset += d.omset; gProfit += d.untung; gSetor += d.setor;
+            });
+
+            const chartData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+            chartData.forEach(d => {
+                labels.push(formatChartDate(d.date)); 
+                dUntung.push(d.untung); 
+                dSetor.push(d.setor);
+            });
+
+            // 3. Update Angka Statistik Atas
             document.getElementById('grandOmset').innerText = 'Rp ' + gOmset.toLocaleString('id-ID');
             document.getElementById('grandSetor').innerText = 'Rp ' + gSetor.toLocaleString('id-ID');
             document.getElementById('grandProfit').innerText = 'Rp ' + gProfit.toLocaleString('id-ID');
 
             let dHtml = '', mHtml = '';
+
+            // 4. Looping Render Tabel & Card
             data.forEach(d => {
                 const json = JSON.stringify(d).replace(/"/g, '&quot;');
+                
+                // Cek apakah tanggal ini = Hari Ini
                 const isToday = new Date(d.date).toDateString() === new Date().toDateString();
+                
+                // Variabel Tampilan Desktop
                 const rowClass = isToday ? 'table-success' : '';
-                const badgeHariIni = isToday ? '<span class="badge bg-success ms-1">Hari Ini</span>' : '';
+                const badgeHariIniDesktop = isToday ? '<span class="badge bg-success ms-2">Hari Ini</span>' : '';
 
-                dHtml += `<tr class="${rowClass}"><td class="ps-3 fw-bold">${formatDate(d.date)} ${badgeHariIni}</td><td><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></td><td class="text-end">Rp ${d.omset.toLocaleString('id-ID')}</td><td class="text-end text-warning">Rp ${d.setor.toLocaleString('id-ID')}</td><td class="text-end text-success fw-bold">Rp ${d.untung.toLocaleString('id-ID')}</td><td class="text-center pe-3"><button class="btn btn-sm btn-light text-primary border" onclick='window.lihatDetail(${json})'><i class="bi bi-eye"></i></button> <button class="btn btn-sm btn-light text-warning border" onclick='window.editData(${json})'><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-light text-danger border" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button></td></tr>`;
-                mHtml += `<div class="card mb-3 shadow-sm border-0 ${isToday ? 'border-start border-4 border-success' : ''}" style="border-radius: 12px;"><div class="card-body"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="card-title mb-0 fw-bold text-primary"><i class="bi bi-calendar-event me-2"></i>${formatDate(d.date)} ${badgeHariIni}</h6><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></div><div class="row g-0 mb-3 text-center bg-light rounded-3 p-2"><div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Omset</div><div class="fw-bold text-dark col-mobile-text">${(d.omset / 1000).toFixed(0)}k</div></div><div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Setor</div><div class="fw-bold text-warning col-mobile-text">${(d.setor / 1000).toFixed(0)}k</div></div><div class="col-4"><div class="text-xs text-muted text-uppercase">Profit</div><div class="fw-bold text-success col-mobile-text">${(d.untung / 1000).toFixed(0)}k</div></div></div><div class="d-flex gap-2"><button class="btn btn-sm btn-outline-primary flex-fill" onclick='window.lihatDetail(${json})'><i class="bi bi-eye me-1"></i>Detail</button><button class="btn btn-sm btn-outline-warning flex-fill" onclick='window.editData(${json})'><i class="bi bi-pencil me-1"></i>Edit</button><button class="btn btn-sm btn-outline-danger" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button></div></div></div>`;
+                // Variabel Tampilan Mobile (Premium Look)
+                // Menggunakan class 'card-today' yang sudah didefinisikan di CSS
+                const cardClass = isToday ? 'card-today shadow' : 'shadow-sm border-0';
+                const dateColor = isToday ? 'text-success' : 'text-primary';
+                const badgeHariIniMobile = isToday ? '<span class="badge bg-success ms-2" style="font-size:0.65rem; vertical-align: text-top;">Hari Ini</span>' : '';
+
+                // --- HTML TABLE DESKTOP ---
+                dHtml += `
+                <tr class="${rowClass}">
+                    <td class="ps-3 fw-bold">${formatDate(d.date)} ${badgeHariIniDesktop}</td>
+                    <td><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></td>
+                    <td class="text-end">Rp ${d.omset.toLocaleString('id-ID')}</td>
+                    <td class="text-end text-warning">Rp ${d.setor.toLocaleString('id-ID')}</td>
+                    <td class="text-end text-success fw-bold">Rp ${d.untung.toLocaleString('id-ID')}</td>
+                    <td class="text-center pe-3">
+                        <button class="btn btn-sm btn-light text-primary border" onclick='window.lihatDetail(${json})'><i class="bi bi-eye"></i></button> 
+                        <button class="btn btn-sm btn-light text-warning border" onclick='window.editData(${json})'><i class="bi bi-pencil"></i></button> 
+                        <button class="btn btn-sm btn-light text-danger border" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>`;
+
+                // --- HTML MOBILE CARD (Premium Style) ---
+                mHtml += `
+                <div class="card mb-3 ${cardClass}" style="border-radius: 12px;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title mb-0 fw-bold ${dateColor}">
+                                <i class="bi bi-calendar-event me-2"></i>${formatDate(d.date)}${badgeHariIniMobile}
+                            </h6>
+                            <span class="badge bg-light text-dark border" style="font-size: 0.7rem;">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span>
+                        </div>
+                        
+                        <div class="row g-0 mb-3 text-center bg-white rounded-3 p-2 border">
+                            <div class="col-4 border-end">
+                                <div class="text-xs text-muted text-uppercase fw-bold" style="font-size:0.65rem; letter-spacing:0.5px;">Omset</div>
+                                <div class="fw-bold text-dark col-mobile-text">${(d.omset/1000).toFixed(0)}k</div>
+                            </div>
+                            <div class="col-4 border-end">
+                                <div class="text-xs text-muted text-uppercase fw-bold" style="font-size:0.65rem; letter-spacing:0.5px;">Setor</div>
+                                <div class="fw-bold text-warning col-mobile-text">${(d.setor/1000).toFixed(0)}k</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="text-xs text-muted text-uppercase fw-bold" style="font-size:0.65rem; letter-spacing:0.5px;">Profit</div>
+                                <div class="fw-bold text-success col-mobile-text">${(d.untung/1000).toFixed(0)}k</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                             <button class="btn btn-sm btn-outline-primary flex-fill fw-bold" onclick='window.lihatDetail(${json})'><i class="bi bi-eye me-1"></i> Detail</button>
+                             <button class="btn btn-sm btn-outline-warning flex-fill fw-bold" onclick='window.editData(${json})'><i class="bi bi-pencil me-1"></i> Edit</button>
+                             <button class="btn btn-sm btn-outline-danger" style="width: 40px;" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>`;
             });
+
+            // 5. Inject ke HTML
             dom.tableDesktop.innerHTML = dHtml || '<tr><td colspan="6" class="text-center py-3 text-muted">Belum ada data</td></tr>';
             dom.listMobile.innerHTML = mHtml;
+            
+            // 6. Update Grafik
             updateChart(labels, dUntung, dSetor);
         }
 
