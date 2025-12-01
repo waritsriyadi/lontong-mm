@@ -25,6 +25,10 @@
             color: #374151;
             padding-bottom: 2rem;
             overflow-x: hidden;
+
+            /* FITUR MOBILE 1: MATIKAN PULL-TO-REFRESH */
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
         }
 
         .navbar {
@@ -325,7 +329,7 @@
                                 <input type="text" id="custName" class="form-control form-control-sm mb-2"
                                     placeholder="Nama Pelanggan..." list="listPelanggan" autocomplete="off">
                                 <datalist id="listPelanggan">
-                                </datalist>
+                                    </datalist>
 
                                 <div class="row g-2 mb-2">
                                     <div class="col-4"><input type="number" class="form-control form-control-sm"
@@ -771,8 +775,32 @@
             document.getElementById('previewSubtotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
         }
 
+        // --- FITUR MOBILE 2: ANTI REFRESH (UPDATE AGRESIF) ---
         window.addEventListener('beforeunload', function (e) {
-            if (orderList.length > 0) { e.preventDefault(); e.returnValue = ''; }
+            if (orderList.length > 0) {
+                e.preventDefault();
+                e.returnValue = 'Data transaksi belum disimpan. Yakin ingin keluar?';
+                return 'Data transaksi belum disimpan. Yakin ingin keluar?';
+            }
+        });
+
+        // --- FITUR MOBILE 3: ANTI BACK BUTTON (HISTORY TRAP) ---
+        function updateHistoryTrap() {
+            if (orderList.length > 0) {
+                if (!history.state || history.state.status !== 'editing') {
+                    history.pushState({ status: 'editing' }, null, '');
+                }
+            }
+        }
+
+        window.addEventListener('popstate', function(event) {
+            if (orderList.length > 0) {
+                if (confirm("Data transaksi belum disimpan dan akan hilang. Yakin ingin kembali?")) {
+                    history.back(); 
+                } else {
+                    history.pushState({ status: 'editing' }, null, '');
+                }
+            }
         });
 
         window.prosesPesanan = () => {
@@ -783,7 +811,9 @@
             if (!nama) { showToast("Nama pembeli wajib diisi!", "warning"); return; }
             const payload = { nama, cL, cT, cB };
             if (detailEditingIndex === -1) orderList.push(payload); else { orderList[detailEditingIndex] = payload; batalEditPesanan(); }
-            resetInputDetail(); renderOrderList();
+            resetInputDetail(); 
+            renderOrderList();
+            updateHistoryTrap(); // Panggil History Trap
         }
 
         window.editPesananDetail = (idx) => {
@@ -809,7 +839,12 @@
             document.getElementById('btnBatalEditDetail').classList.add('d-none');
         }
 
-        window.hapusPesanan = (idx) => { if (idx === detailEditingIndex) { showToast("Selesaikan edit dulu!", "warning"); return; } orderList.splice(idx, 1); renderOrderList(); }
+        window.hapusPesanan = (idx) => { 
+            if (idx === detailEditingIndex) { showToast("Selesaikan edit dulu!", "warning"); return; } 
+            orderList.splice(idx, 1); 
+            renderOrderList();
+            if (orderList.length > 0) updateHistoryTrap();
+        }
 
         function resetInputDetail() {
             document.getElementById('custName').value = ''; document.getElementById('custLontong').value = '1'; document.getElementById('custTelur').value = '0'; document.getElementById('custBakwan').value = '0';
