@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin Lontong MM</title>
-    <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f35b.png">
-    
+    <link rel="icon" type="image/png" href="logo.png">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -27,7 +27,8 @@
             font-family: 'Inter', sans-serif;
             color: #374151;
             padding-bottom: 2rem;
-            overflow-x: hidden; /* FIX: Mencegah scroll samping */
+            overflow-x: hidden;
+            /* Mencegah scroll samping */
         }
 
         /* Navbar Styling */
@@ -36,7 +37,11 @@
             border-bottom: 1px solid #e5e7eb;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
-        .navbar-brand { font-weight: 700; color: #111827 !important; }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #111827 !important;
+        }
 
         /* Card Styling */
         .card {
@@ -47,25 +52,38 @@
             margin-bottom: 1rem;
         }
 
-        .form-control, .input-group-text, .btn {
+        .form-control,
+        .input-group-text,
+        .btn {
             border-radius: 8px;
             padding: 0.6rem 0.8rem;
         }
-        
+
         .form-control:focus {
             border-color: #4e73df;
             box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
         }
 
         /* Chart & Stats */
-        .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; font-weight: 600; }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: #111827; }
-        
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
         .chart-container {
             position: relative;
             height: 320px;
             width: 100%;
-            overflow: hidden; /* FIX: Mencegah chart bocor keluar container */
+            overflow: hidden;
         }
 
         /* Table Styling */
@@ -79,31 +97,88 @@
         }
 
         /* Modal Styles */
-        .modal-content { border: none; border-radius: 16px; overflow: hidden; }
-        .modal-header-custom { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 1.5rem; }
-        .modal-body-custom { padding: 0; background-color: #f9fafb; }
-        .buyer-item { background: white; padding: 1rem; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-        .buyer-item:hover { background: #f0f9ff; }
-        .buyer-name { font-weight: 600; color: #1f2937; font-size: 0.95rem; }
-        .badge-pill-custom { padding: 6px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-left: 4px; }
-        .badge-l { background-color: #dbeafe; color: #1e40af; }
-        .badge-t { background-color: #fef3c7; color: #92400e; }
-        .badge-b { background-color: #f3f4f6; color: #374151; }
-        
+        .modal-content {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .modal-header-custom {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .modal-body-custom {
+            padding: 0;
+            background-color: #f9fafb;
+        }
+
+        .buyer-item {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .buyer-item:hover {
+            background: #f0f9ff;
+        }
+
+        .buyer-name {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 0.95rem;
+        }
+
+        .badge-pill-custom {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .badge-l {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-t {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-b {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+
         /* Mobile Tweaks */
         @media (max-width: 768px) {
-            .chart-container { height: 250px; }
-            .stat-value { font-size: 1.25rem; }
-            .col-mobile-text { font-size: 0.8rem; }
-            
-            /* FIX: Input tanggal di header agar tidak maksa lebar */
+            .chart-container {
+                height: 250px;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            .col-mobile-text {
+                font-size: 0.8rem;
+            }
+
             .header-filter-group {
                 flex-wrap: wrap;
                 width: 100%;
                 margin-top: 10px;
             }
+
             .header-filter-input {
-                flex: 1; /* Input otomatis bagi rata */
+                flex: 1;
                 min-width: 100px;
             }
         }
@@ -113,52 +188,75 @@
 <body>
 
     <nav class="navbar navbar-expand-lg sticky-top mb-4">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand" href="#"><i class="bi bi-shop-window me-2 text-primary"></i>Lontong MM</a>
-            <span class="badge bg-primary bg-opacity-10 text-primary d-none d-md-block">Admin Panel</span>
+        <div class="container-fluid px-4 d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand" href="#"><i class="bi bi-shop-window me-2 text-primary"></i>Lontong MM</a>
+                <span class="badge bg-primary bg-opacity-10 text-primary d-none d-md-block ms-2">Admin Panel</span>
+            </div>
+            <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="logoutAdmin()">
+                <i class="bi bi-box-arrow-right me-1"></i> Keluar
+            </button>
         </div>
     </nav>
 
     <div class="container-fluid px-4">
         <div class="row g-4">
-            
+
             <div class="col-lg-4">
                 <div class="card h-100">
                     <div class="card-header bg-white py-3 border-bottom-0">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2"></i>Form Transaksi</h6>
-                            <button id="btnCancelEdit" class="btn btn-sm btn-light text-danger d-none fw-bold text-xs" onclick="resetFormMode()">Batal Edit</button>
+                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2"></i>Form Transaksi
+                            </h6>
+                            <button id="btnCancelEdit" class="btn btn-sm btn-light text-danger d-none fw-bold text-xs"
+                                onclick="resetFormMode()">Batal Edit</button>
                         </div>
                     </div>
                     <div class="card-body pt-0">
                         <form id="salesForm">
                             <input type="hidden" id="editId">
-                            
+
                             <div class="mb-3">
                                 <label class="form-label text-xs fw-bold text-muted mb-1">TANGGAL</label>
-                                <input type="date" class="form-control bg-light border-0 fw-bold" id="dateInput" required>
+                                <input type="date" class="form-control bg-light border-0 fw-bold" id="dateInput"
+                                    required>
                             </div>
 
                             <div class="p-3 bg-light rounded-3 mb-3 border">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <label class="text-xs fw-bold text-muted">LIST PEMBELI</label>
-                                    <button type="button" class="btn btn-link p-0 text-decoration-none text-xs text-danger d-none" id="btnBatalEditDetail" onclick="batalEditPesanan()">Batal Ubah</button>
+                                    <button type="button"
+                                        class="btn btn-link p-0 text-decoration-none text-xs text-danger d-none"
+                                        id="btnBatalEditDetail" onclick="batalEditPesanan()">Batal Ubah</button>
                                 </div>
 
-                                <input type="text" id="custName" class="form-control form-control-sm mb-2" placeholder="Nama Pelanggan...">
-                                
+                                <input type="text" id="custName" class="form-control form-control-sm mb-2"
+                                    placeholder="Nama Pelanggan...">
+
                                 <div class="row g-2 mb-2">
-                                    <div class="col-4"><input type="number" class="form-control form-control-sm" id="custLontong" value="1" min="0" placeholder="Lontong"></div>
-                                    <div class="col-4"><input type="number" class="form-control form-control-sm" id="custTelur" value="0" min="0" placeholder="Telur"></div>
-                                    <div class="col-4"><input type="number" class="form-control form-control-sm" id="custBakwan" value="0" min="0" placeholder="Bakwan"></div>
+                                    <div class="col-4"><input type="number" class="form-control form-control-sm"
+                                            id="custLontong" value="1" min="0" placeholder="Lontong"></div>
+                                    <div class="col-4"><input type="number" class="form-control form-control-sm"
+                                            id="custTelur" value="0" min="0" placeholder="Telur"></div>
+                                    <div class="col-4"><input type="number" class="form-control form-control-sm"
+                                            id="custBakwan" value="0" min="0" placeholder="Bakwan"></div>
                                 </div>
-                                
-                                <button type="button" id="btnAddDetail" class="btn btn-primary btn-sm w-100 fw-bold" onclick="prosesPesanan()"><i class="bi bi-plus-lg"></i> Tambah</button>
 
-                                <div class="table-responsive mt-2 bg-white rounded border" style="max-height: 150px; overflow-y: auto;">
-                                    <table class="table table-sm table-borderless table-striped text-xs mb-0 align-middle">
+                                <button type="button" id="btnAddDetail" class="btn btn-primary btn-sm w-100 fw-bold"
+                                    onclick="prosesPesanan()"><i class="bi bi-plus-lg"></i> Tambah</button>
+
+                                <div class="table-responsive mt-2 bg-white rounded border"
+                                    style="max-height: 150px; overflow-y: auto;">
+                                    <table
+                                        class="table table-sm table-borderless table-striped text-xs mb-0 align-middle">
                                         <thead class="sticky-top bg-white border-bottom">
-                                            <tr><th class="ps-2">Nama</th><th class="text-center">L</th><th class="text-center">T</th><th class="text-center">B</th><th class="text-end pe-2">#</th></tr>
+                                            <tr>
+                                                <th class="ps-2">Nama</th>
+                                                <th class="text-center">L</th>
+                                                <th class="text-center">T</th>
+                                                <th class="text-center">B</th>
+                                                <th class="text-end pe-2">#</th>
+                                            </tr>
                                         </thead>
                                         <tbody id="listPesananBody"></tbody>
                                     </table>
@@ -170,52 +268,64 @@
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
                                             <div class="text-xs text-muted">Lontong</div>
-                                            <input type="text" id="qtyLontong" class="form-control-plaintext text-center fw-bold p-0 text-dark" value="0" readonly>
+                                            <input type="text" id="qtyLontong"
+                                                class="form-control-plaintext text-center fw-bold p-0 text-dark"
+                                                value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
                                             <div class="text-xs text-muted">Telur</div>
-                                            <input type="text" id="qtyTelur" class="form-control-plaintext text-center fw-bold p-0 text-dark" value="0" readonly>
+                                            <input type="text" id="qtyTelur"
+                                                class="form-control-plaintext text-center fw-bold p-0 text-dark"
+                                                value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
                                             <div class="text-xs text-muted">Bakwan</div>
-                                            <input type="text" id="qtyBakwan" class="form-control-plaintext text-center fw-bold p-0 text-dark" value="0" readonly>
+                                            <input type="text" id="qtyBakwan"
+                                                class="form-control-plaintext text-center fw-bold p-0 text-dark"
+                                                value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="p-3 bg-dark text-white rounded-3">
-                                    <div class="d-flex justify-content-between text-xs text-white-50"><span>Setor Saudara</span><span id="previewSetor">Rp 0</span></div>
-                                    <div class="d-flex justify-content-between fw-bold fs-5 mt-1"><span>Profit Bersih</span><span id="previewUntung" class="text-success">Rp 0</span></div>
+                                    <div class="d-flex justify-content-between text-xs text-white-50"><span>Setor
+                                            Saudara</span><span id="previewSetor">Rp 0</span></div>
+                                    <div class="d-flex justify-content-between fw-bold fs-5 mt-1"><span>Profit
+                                            Bersih</span><span id="previewUntung" class="text-success">Rp 0</span></div>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold" id="btnSave"><i class="bi bi-check-lg me-2"></i>SIMPAN DATA</button>
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold" id="btnSave"><i
+                                    class="bi bi-check-lg me-2"></i>SIMPAN DATA</button>
                         </form>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-8">
-                
+
                 <div class="row g-3 mb-3">
                     <div class="col-md-4">
-                        <div class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-primary">
+                        <div
+                            class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-primary">
                             <div class="stat-label">Total Omset</div>
                             <div class="stat-value" id="grandOmset">Rp 0</div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-warning">
+                        <div
+                            class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-warning">
                             <div class="stat-label">Setor Saudara</div>
                             <div class="stat-value text-warning" id="grandSetor">Rp 0</div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-success">
+                        <div
+                            class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-success">
                             <div class="stat-label">Profit Saya</div>
                             <div class="stat-value text-success" id="grandProfit">Rp 0</div>
                         </div>
@@ -223,36 +333,54 @@
                 </div>
 
                 <div class="card mb-3">
-                    <div class="card-header bg-white py-3 border-bottom-0 d-flex flex-wrap justify-content-between align-items-center">
+                    <div
+                        class="card-header bg-white py-3 border-bottom-0 d-flex flex-wrap justify-content-between align-items-center">
                         <h6 class="m-0 fw-bold text-dark">Grafik Performa</h6>
                         <div class="d-flex gap-2 header-filter-group">
-                            <input type="date" id="filterStartDate" class="form-control form-control-sm header-filter-input">
-                            <input type="date" id="filterEndDate" class="form-control form-control-sm header-filter-input">
-                            <button class="btn btn-sm btn-light border" onclick="resetFilter()"><i class="bi bi-arrow-clockwise"></i></button>
+                            <input type="date" id="filterStartDate"
+                                class="form-control form-control-sm header-filter-input">
+                            <input type="date" id="filterEndDate"
+                                class="form-control form-control-sm header-filter-input">
+                            <button class="btn btn-sm btn-light border" onclick="resetFilter()" title="Reset Filter"><i
+                                    class="bi bi-arrow-clockwise"></i></button>
+                            <button class="btn btn-sm btn-success text-white" onclick="downloadCSV()"
+                                title="Download Excel"><i class="bi bi-file-earmark-spreadsheet"></i></button>
                         </div>
                     </div>
                     <div class="card-body px-3 pb-3 pt-0">
                         <div class="chart-container">
                             <canvas id="salesChart"></canvas>
                         </div>
-                        <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold">Tanggal Filter Terbalik!</div>
+                        <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold">Tanggal Filter
+                            Terbalik!</div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 fw-bold text-dark">Riwayat Transaksi</h6>
+                    <div
+                        class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 fw-bold text-dark">Riwayat Transaksi (14 Hari Terakhir)</h6>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive d-none d-md-block">
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="ps-3">Tanggal</th>
+                                        <th class="ps-3" style="cursor: pointer;" onclick="sortData('date')">
+                                            Tanggal <i id="icon-date" class="bi bi-caret-down-fill text-muted"></i>
+                                        </th>
                                         <th>Rincian (L/T/B)</th>
-                                        <th class="text-end">Omset</th>
-                                        <th class="text-end text-warning">Setor</th>
-                                        <th class="text-end text-success">Profit</th>
+                                        <th class="text-end" style="cursor: pointer;" onclick="sortData('omset')">
+                                            Omset <i id="icon-omset" class="bi bi-filter text-muted"></i>
+                                        </th>
+                                        <th class="text-end text-warning" style="cursor: pointer;"
+                                            onclick="sortData('setor')">
+                                            Setor <i id="icon-setor" class="bi bi-filter text-muted"></i>
+                                        </th>
+                                        <th class="text-end text-success" style="cursor: pointer;"
+                                            onclick="sortData('untung')">
+                                            Profit <i id="icon-untung" class="bi bi-filter text-muted"></i>
+                                        </th>
                                         <th class="text-center pe-3">Aksi</th>
                                     </tr>
                                 </thead>
@@ -279,7 +407,8 @@
                 </div>
                 <div class="modal-body modal-body-custom" id="detailModalBody"></div>
                 <div class="modal-footer bg-light p-2 justify-content-center">
-                    <button type="button" class="btn btn-light btn-sm w-100 text-muted" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-light btn-sm w-100 text-muted"
+                        data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -288,16 +417,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="module">
-        // --- AUTH & FIREBASE ---
-        const PASSWORD_RAHASIA = "123456";
-        if (!sessionStorage.getItem("isLoggedIn")) {
-            const input = prompt("Masukkan Kode Akses Admin:");
-            if (input === PASSWORD_RAHASIA) sessionStorage.setItem("isLoggedIn", "true");
-            else { window.location.href = "index.html"; }
+        // --- AUTH (HASH "123456") ---
+        const AUTH_HASH = "MTIzNDU2";
+
+        window.logoutAdmin = () => {
+            if (confirm("Keluar dari panel admin?")) {
+                sessionStorage.removeItem("isLoggedIn");
+                window.location.href = "index.html";
+            }
         }
 
+        if (!sessionStorage.getItem("isLoggedIn")) {
+            const input = prompt("Masukkan Kode Akses Admin:");
+            if (input && btoa(input) === AUTH_HASH) {
+                sessionStorage.setItem("isLoggedIn", "true");
+            } else {
+                alert("Akses Ditolak!");
+                window.location.href = "index.html";
+            }
+        }
+
+        // --- FIREBASE IMPORTS (Termasuk: getDocs, where, limit) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCamv42dxGHJEqXMqVIPcOeWGNdM5p7X2E",
@@ -312,7 +454,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- CORE VARIABLES ---
+        // --- GLOBAL VARIABLES ---
         const HARGA = { lontong_jual: 11000, lontong_setor: 10000, telur_jual: 3000, telur_modal: 1900, bakwan_jual: 1000, bakwan_setor: 0 };
         const dom = {
             qtyL: document.getElementById('qtyLontong'), qtyT: document.getElementById('qtyTelur'), qtyB: document.getElementById('qtyBakwan'),
@@ -322,8 +464,9 @@
         const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
         const ctx = document.getElementById('salesChart').getContext('2d');
         let globalData = [], orderList = [], detailEditingIndex = -1, chartInstance;
+        let unsubscribeRealtime = null; // Untuk switch mode live vs filter
 
-        // --- CHART JS (FIX: Tanggal Pendek) ---
+        // --- CHART JS ---
         function updateChart(labels, untung, setor) {
             if (chartInstance) chartInstance.destroy();
             chartInstance = new Chart(ctx, {
@@ -336,31 +479,33 @@
                     ]
                 },
                 options: {
-                    responsive: true, 
+                    responsive: true,
                     maintainAspectRatio: false,
                     categoryPercentage: 0.8,
                     barPercentage: 0.9,
                     plugins: { legend: { position: 'bottom' }, tooltip: { mode: 'index', intersect: false } },
-                    scales: { 
-                        x: { stacked: true, grid: { display: false } }, 
-                        y: { stacked: true, grid: { color: '#f3f4f6' }, ticks: { callback: v => v/1000 + 'k' } } 
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { stacked: true, grid: { color: '#f3f4f6' }, ticks: { callback: v => v / 1000 + 'k' } }
                     }
                 }
             });
         }
 
-        // --- ORDER LIST LOGIC ---
+        // --- LOGIKA FORM & ORDER LIST ---
         window.prosesPesanan = () => {
             const nama = document.getElementById('custName').value;
-            const cL = parseInt(document.getElementById('custLontong').value) || 0;
-            const cT = parseInt(document.getElementById('custTelur').value) || 0;
-            const cB = parseInt(document.getElementById('custBakwan').value) || 0;
+            // Validasi: Tidak boleh negatif
+            const cL = Math.max(0, parseInt(document.getElementById('custLontong').value) || 0);
+            const cT = Math.max(0, parseInt(document.getElementById('custTelur').value) || 0);
+            const cB = Math.max(0, parseInt(document.getElementById('custBakwan').value) || 0);
+
             if (!nama) { alert("Nama wajib diisi!"); return; }
 
             const payload = { nama, cL, cT, cB };
             if (detailEditingIndex === -1) orderList.push(payload);
             else { orderList[detailEditingIndex] = payload; batalEditPesanan(); }
-            
+
             resetInputDetail(); renderOrderList();
         }
 
@@ -384,7 +529,7 @@
         }
 
         window.hapusPesanan = (idx) => {
-            if(idx === detailEditingIndex) { alert("Selesaikan edit dulu!"); return; }
+            if (idx === detailEditingIndex) { alert("Selesaikan edit dulu!"); return; }
             orderList.splice(idx, 1); renderOrderList();
         }
 
@@ -410,7 +555,11 @@
         }
 
         function hitungEstimasi() {
-            const qL = parseInt(dom.qtyL.value)||0, qT = parseInt(dom.qtyT.value)||0, qB = parseInt(dom.qtyB.value)||0;
+            // Validasi: Cegah minus saat hitung total
+            let qL = parseInt(dom.qtyL.value) || 0; if (qL < 0) qL = 0;
+            let qT = parseInt(dom.qtyT.value) || 0; if (qT < 0) qT = 0;
+            let qB = parseInt(dom.qtyB.value) || 0; if (qB < 0) qB = 0;
+
             const omset = (qL * HARGA.lontong_jual) + (qT * HARGA.telur_jual) + (qB * HARGA.bakwan_jual);
             const setor = (qL * HARGA.lontong_setor) + (qB * HARGA.bakwan_setor);
             const untung = (omset - setor) - (qT * HARGA.telur_modal);
@@ -420,41 +569,92 @@
             return { qL, qT, qB, omset, setor, untung };
         }
 
-        // --- SUBMIT ---
+        // --- SUBMIT DATA ---
         document.getElementById('salesForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSave'), cId = dom.editId.value, calc = hitungEstimasi();
-            if(calc.qL===0 && calc.qT===0 && calc.qB===0){ alert("Data Kosong!"); return; }
+            if (calc.qL === 0 && calc.qT === 0 && calc.qB === 0) { alert("Data Kosong!"); return; }
 
             btn.disabled = true; btn.innerHTML = 'Menyimpan...';
             try {
                 const payload = { date: dom.dateInput.value, lontong: calc.qL, telur: calc.qT, bakwan: calc.qB, omset: calc.omset, setor: calc.setor, untung: calc.untung, detail_pelanggan: orderList, timestamp: new Date() };
                 if (cId) await updateDoc(doc(db, "penjualan_detail", cId), payload); else await addDoc(collection(db, "penjualan_detail"), payload);
                 alert("Berhasil!"); resetFormMode();
-            } catch (err) { alert("Error: " + err.message); } 
+            } catch (err) { alert("Error: " + err.message); }
             finally { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg me-2"></i>SIMPAN DATA'; }
         });
 
-        // --- DASHBOARD RENDER ---
-        dom.filterStart.addEventListener('change', applyFilter); dom.filterEnd.addEventListener('change', applyFilter);
-        window.resetFilter = () => { dom.filterStart.value = ''; dom.filterEnd.value = ''; applyFilter(); }
+        // --- LOGIKA SORTING (BARU) ---
+        let currentSort = { column: 'date', direction: 'desc' };
 
-        function applyFilter() {
-            const s = dom.filterStart.value, e = dom.filterEnd.value, msg = document.getElementById('filterMsg');
-            if (s && e && s > e) { msg.classList.remove('d-none'); return; } else msg.classList.add('d-none');
-            const filtered = globalData.filter(i => (!s && !e) || (s && i.date < s ? false : e && i.date > e ? false : true));
-            renderDashboard(filtered);
+        window.sortData = (column) => {
+            // 1. Tentukan arah sort (jika klik kolom sama, balik arahnya)
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'desc'; // Default desc (besar ke kecil) untuk angka
+            }
+
+            // 2. Lakukan Sorting pada array globalData
+            globalData.sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+
+                // Khusus tanggal, ubah ke format waktu agar bisa dibandingkan
+                if (column === 'date') {
+                    valA = new Date(valA).getTime();
+                    valB = new Date(valB).getTime();
+                }
+
+                if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            // 3. Render ulang tampilan
+            renderDashboard(globalData);
         }
 
+        // Helper untuk update Ikon Panah di Header
+        function updateSortIcons() {
+            // Reset semua ikon jadi filter (netral)
+            ['date', 'omset', 'setor', 'untung'].forEach(col => {
+                const icon = document.getElementById(`icon-${col}`);
+                if (icon) icon.className = 'bi bi-filter text-muted';
+            });
+
+            // Set ikon aktif
+            const activeIcon = document.getElementById(`icon-${currentSort.column}`);
+            if (activeIcon) {
+                activeIcon.className = currentSort.direction === 'asc'
+                    ? 'bi bi-caret-up-fill text-dark'
+                    : 'bi bi-caret-down-fill text-dark';
+            }
+        }
+
+        // --- RENDER DASHBOARD ---
         function renderDashboard(data) {
+            // 1. Update Ikon Sort di Header
+            updateSortIcons();
+
             let labels = [], dUntung = [], dSetor = [], gOmset = 0, gProfit = 0, gSetor = 0;
             dom.tableDesktop.innerHTML = ''; dom.listMobile.innerHTML = '';
 
+            // Hitung Total Grand
             data.forEach(d => {
                 gOmset += d.omset; gProfit += d.untung; gSetor += d.setor;
-                // FIX: Pakai format tanggal pendek untuk Chart
-                labels.push(formatChartDate(d.date)); 
-                dUntung.push(d.untung); dSetor.push(d.setor);
+            });
+
+            // --- PENTING: LOGIKA GRAFIK ---
+            // Grafik harus SELALU urut tanggal (Lama -> Baru) agar enak dilihat
+            // Jadi kita buat copy data (tempData) lalu sort by date ascending khusus untuk chart
+            const chartData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            chartData.forEach(d => {
+                labels.push(formatChartDate(d.date));
+                dUntung.push(d.untung);
+                dSetor.push(d.setor);
             });
 
             document.getElementById('grandOmset').innerText = 'Rp ' + gOmset.toLocaleString('id-ID');
@@ -462,17 +662,18 @@
             document.getElementById('grandProfit').innerText = 'Rp ' + gProfit.toLocaleString('id-ID');
 
             let dHtml = '', mHtml = '';
-            [...data].reverse().forEach(d => {
+
+            // --- RENDER TABEL (Sesuai Urutan User) ---
+            // Gunakan variabel 'data' yang sudah disort oleh fungsi sortData()
+            data.forEach(d => {
                 const json = JSON.stringify(d).replace(/"/g, '&quot;');
-                
-                // --- DESKTOP TABLE ---
+
                 dHtml += `<tr>
                     <td class="ps-3 fw-bold">${formatDate(d.date)}</td><td><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></td>
                     <td class="text-end">Rp ${d.omset.toLocaleString('id-ID')}</td><td class="text-end text-warning">Rp ${d.setor.toLocaleString('id-ID')}</td><td class="text-end text-success fw-bold">Rp ${d.untung.toLocaleString('id-ID')}</td>
                     <td class="text-center pe-3"><button class="btn btn-sm btn-light text-primary border" onclick='window.lihatDetail(${json})'><i class="bi bi-eye"></i></button> <button class="btn btn-sm btn-light text-warning border" onclick='window.editData(${json})'><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-light text-danger border" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button></td>
                 </tr>`;
 
-                // --- MOBILE CARD (FIX: Lebih Lengkap) ---
                 mHtml += `
                 <div class="card mb-3 shadow-sm border-0" style="border-radius: 12px;">
                     <div class="card-body">
@@ -480,22 +681,11 @@
                             <h6 class="card-title mb-0 fw-bold text-primary"><i class="bi bi-calendar-event me-2"></i>${formatDate(d.date)}</h6>
                             <span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span>
                         </div>
-                        
                         <div class="row g-0 mb-3 text-center bg-light rounded-3 p-2">
-                            <div class="col-4 border-end">
-                                <div class="text-xs text-muted text-uppercase" style="font-size:0.7rem">Omset</div>
-                                <div class="fw-bold text-dark col-mobile-text">${(d.omset/1000).toFixed(0)}k</div>
-                            </div>
-                            <div class="col-4 border-end">
-                                <div class="text-xs text-muted text-uppercase" style="font-size:0.7rem">Setor</div>
-                                <div class="fw-bold text-warning col-mobile-text">${(d.setor/1000).toFixed(0)}k</div>
-                            </div>
-                            <div class="col-4">
-                                <div class="text-xs text-muted text-uppercase" style="font-size:0.7rem">Profit</div>
-                                <div class="fw-bold text-success col-mobile-text">${(d.untung/1000).toFixed(0)}k</div>
-                            </div>
+                            <div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Omset</div><div class="fw-bold text-dark col-mobile-text">${(d.omset / 1000).toFixed(0)}k</div></div>
+                            <div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Setor</div><div class="fw-bold text-warning col-mobile-text">${(d.setor / 1000).toFixed(0)}k</div></div>
+                            <div class="col-4"><div class="text-xs text-muted text-uppercase">Profit</div><div class="fw-bold text-success col-mobile-text">${(d.untung / 1000).toFixed(0)}k</div></div>
                         </div>
-
                         <div class="d-flex gap-2">
                              <button class="btn btn-sm btn-outline-primary flex-fill" onclick='window.lihatDetail(${json})'><i class="bi bi-eye me-1"></i>Detail</button>
                              <button class="btn btn-sm btn-outline-warning flex-fill" onclick='window.editData(${json})'><i class="bi bi-pencil me-1"></i>Edit</button>
@@ -506,57 +696,117 @@
             });
             dom.tableDesktop.innerHTML = dHtml || '<tr><td colspan="6" class="text-center py-3 text-muted">Belum ada data</td></tr>';
             dom.listMobile.innerHTML = mHtml;
+
+            // Update chart dengan data yang kronologis (bukan data sortiran tabel)
             updateChart(labels, dUntung, dSetor);
         }
 
-        // --- RENDER DETAIL ---
-        window.lihatDetail = (d) => {
-            const body = document.getElementById('detailModalBody'); 
-            const dateDisplay = document.getElementById('modalDateDisplay');
-            
-            body.innerHTML = '';
-            dateDisplay.innerText = formatDate(d.date);
+        // --- DOWNLOAD EXCEL ---
+        window.downloadCSV = () => {
+            if (globalData.length === 0) { alert("Tidak ada data untuk diunduh."); return; }
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Tanggal,Lontong,Telur,Bakwan,Omset,Setor,Profit Bersih\n";
+            globalData.forEach(row => {
+                let rowData = [row.date, row.lontong, row.telur, row.bakwan, row.omset, row.setor, row.untung].join(",");
+                csvContent += rowData + "\n";
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Laporan_LontongMM_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
+        // --- MANAJEMEN DATA (HYBRID MODE) ---
+
+        // Mode 1: LIVE (Real-time) - Hanya 14 data terbaru
+        function loadLatestData() {
+            if (unsubscribeRealtime) { unsubscribeRealtime(); unsubscribeRealtime = null; }
+            const q = query(collection(db, "penjualan_detail"), orderBy("date", "desc"), limit(14));
+            unsubscribeRealtime = onSnapshot(q, (s) => {
+                globalData = [];
+                s.forEach(doc => globalData.push({ id: doc.id, ...doc.data() }));
+                renderDashboard(globalData);
+            });
+        }
+
+        // Mode 2: FILTER (One-time Fetch) - Cari data lama di server
+        window.cariDataTanggal = async () => {
+            const start = dom.filterStart.value;
+            const end = dom.filterEnd.value;
+            const msg = document.getElementById('filterMsg');
+
+            if (!start && !end) { msg.classList.add('d-none'); loadLatestData(); return; }
+            if (start && end && start > end) { msg.classList.remove('d-none'); return; } else { msg.classList.add('d-none'); }
+
+            if (unsubscribeRealtime) { unsubscribeRealtime(); unsubscribeRealtime = null; }
+
+            // Tampilkan Loading
+            dom.tableDesktop.innerHTML = '<tr><td colspan="6" class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm"></div> Mencari data lama...</td></tr>';
+
+            try {
+                let qConstraint = [];
+                if (start) qConstraint.push(where("date", ">=", start));
+                if (end) qConstraint.push(where("date", "<=", end));
+                qConstraint.push(orderBy("date", "desc"));
+
+                const q = query(collection(db, "penjualan_detail"), ...qConstraint);
+                const snapshot = await getDocs(q);
+
+                globalData = [];
+                snapshot.forEach(doc => globalData.push({ id: doc.id, ...doc.data() }));
+
+                if (globalData.length === 0) alert("Data tidak ditemukan pada tanggal tersebut.");
+                renderDashboard(globalData);
+            } catch (error) {
+                console.error("Gagal cari data:", error);
+                alert("Error: Jika ini pertama kali, mungkin perlu Index Firestore. Cek Console Browser.");
+            }
+        }
+
+        dom.filterStart.addEventListener('change', window.cariDataTanggal);
+        dom.filterEnd.addEventListener('change', window.cariDataTanggal);
+        window.resetFilter = () => { dom.filterStart.value = ''; dom.filterEnd.value = ''; document.getElementById('filterMsg').classList.add('d-none'); loadLatestData(); }
+
+        // --- HELPER LAIN ---
+        window.lihatDetail = (d) => {
+            const body = document.getElementById('detailModalBody');
+            document.getElementById('modalDateDisplay').innerText = formatDate(d.date);
+            body.innerHTML = '';
             if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) {
                 body.innerHTML = `<div class="text-center py-4 text-muted fst-italic">Tidak ada rincian pembeli.</div>`;
             } else {
                 d.detail_pelanggan.forEach(i => {
                     let badges = '';
-                    if(i.cL > 0) badges += `<span class="badge-pill-custom badge-l">Lontong ${i.cL}</span>`;
-                    if(i.cT > 0) badges += `<span class="badge-pill-custom badge-t">Telur ${i.cT}</span>`;
-                    if(i.cB > 0) badges += `<span class="badge-pill-custom badge-b">Bakwan ${i.cB}</span>`;
-
-                    body.innerHTML += `
-                    <div class="buyer-item">
-                        <span class="buyer-name">${i.nama}</span>
-                        <div>${badges}</div>
-                    </div>`;
+                    if (i.cL > 0) badges += `<span class="badge-pill-custom badge-l">Lontong ${i.cL}</span>`;
+                    if (i.cT > 0) badges += `<span class="badge-pill-custom badge-t">Telur ${i.cT}</span>`;
+                    if (i.cB > 0) badges += `<span class="badge-pill-custom badge-b">Bakwan ${i.cB}</span>`;
+                    body.innerHTML += `<div class="buyer-item"><span class="buyer-name">${i.nama}</span><div>${badges}</div></div>`;
                 });
             }
             detailModal.show();
         }
-
         window.editData = (d) => {
             dom.editId.value = d.id; dom.dateInput.value = d.date; orderList = d.detail_pelanggan || [];
             batalEditPesanan(); renderOrderList();
             document.getElementById('btnCancelEdit').classList.remove('d-none');
-            // Scroll ke atas saat edit (mobile friendly)
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         window.resetFormMode = () => {
             dom.editId.value = ''; document.getElementById('salesForm').reset(); orderList = []; batalEditPesanan(); renderOrderList(); dom.dateInput.valueAsDate = new Date();
             document.getElementById('btnCancelEdit').classList.add('d-none');
         }
-        window.hapusData = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, "penjualan_detail", id)); }
-        
-        // --- FORMAT TANGGAL ---
+        window.hapusData = async (id) => { if (confirm("Hapus?")) await deleteDoc(doc(db, "penjualan_detail", id)); }
+
         function formatDate(d) { return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); }
-        // FIX: Fungsi baru untuk chart
         function formatChartDate(d) { return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }); }
-        
-        // INIT
-        onSnapshot(query(collection(db, "penjualan_detail"), orderBy("date", "asc")), (s) => { globalData = []; s.forEach(d => globalData.push({ id: d.id, ...d.data() })); applyFilter(); });
+
+        // INIT START
+        loadLatestData();
         dom.dateInput.valueAsDate = new Date();
     </script>
 </body>
+
 </html>
