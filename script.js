@@ -1,41 +1,109 @@
 /* =========================================
-   BAGIAN 1: LOGIKA KERANJANG & ORDER (AKTIF LANGSUNG)
+   BAGIAN 0: INISIALISASI FIREBASE & CONFIG
    ========================================= */
 const NOMOR_WA = "6289638931396";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCamv42dxGHJEqXMqVIPcOeWGNdM5p7X2E",
+    authDomain: "lontong-mm.firebaseapp.com",
+    projectId: "lontong-mm",
+    storageBucket: "lontong-mm.firebasestorage.app",
+    messagingSenderId: "628261457290",
+    appId: "1:628261457290:web:8cbd5262f3cc3deb30cc73",
+    measurementId: "G-GBN3GE3QKN"
+};
+
+// Init Firebase Global
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+/* =========================================
+   BAGIAN 1: DATA MENU & FETCH HARGA
+   ========================================= */
 let cart = [];
 let toppingState = {};
 
-// --- DATA MENU ---
-const menuList = [
+// Default Menu (Harga akan di-overwrite oleh Firebase)
+let menuList = [
     {
         id: 1,
         nama: "Lontong Sayur",
         desc: "Sarapan ala 'Urang Awak'! Lontong lembut disiram kuah gulai nangka yang kental.",
-        hargaDasar: 11000,
+        hargaDasar: 11000, // Default
         img: "ltsyr.webp",
         opsi: [
-            { nama: "Telur Rebus", harga: 3000 },
-            { nama: "Bakwan Goreng", harga: 1000 },
-            { nama: "Kerupuk Tambahan", harga: 1000 }
+            { id: 'telur', nama: "Telur Rebus", harga: 3000 },
+            { id: 'bakwan', nama: "Bakwan Goreng", harga: 1000 },
+            { id: 'kerupuk', nama: "Kerupuk Tambahan", harga: 1000 }
         ]
     },
     {
         id: 2,
         nama: "Lontong Pical",
         desc: "Khas Minang! Lontong, mie kuning, sayuran disiram bumbu kacang pedas gurih.",
-        hargaDasar: 11000,
+        hargaDasar: 11000, // Default
         img: "ltpcl.webp",
         opsi: [
-            { nama: "Telur Rebus", harga: 3000 },
-            { nama: "Bakwan Goreng", harga: 1000 },
-            { nama: "Kerupuk Tambahan", harga: 1000 }
+            { id: 'telur', nama: "Telur Rebus", harga: 3000 },
+            { id: 'bakwan', nama: "Bakwan Goreng", harga: 1000 },
+            { id: 'kerupuk', nama: "Kerupuk Tambahan", harga: 1000 }
         ]
     }
 ];
 
-// RENDER MENU UTAMA
-const container = document.getElementById('menuContainer');
-if (container) {
+// FUNGSI UTAMA: Ambil Harga -> Render Menu
+function initMenu() {
+    const container = document.getElementById('menuContainer');
+    if (!container) return;
+
+    // Tampilkan Loading hanya saat pertama kali (jika container kosong)
+    if (!container.innerHTML.trim()) {
+        container.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-success" role="status"></div><p class="mt-2 text-muted small">Menghubungkan ke server...</p></div>';
+    }
+
+    // MENGGUNAKAN onSnapshot UNTUK REAL-TIME UPDATES
+    db.doc("settings/harga_terkini").onSnapshot((doc) => {
+        if (doc.exists) {
+            const hargaDB = doc.data();
+
+            // --- UPDATE HARGA MENU BERDASARKAN DB SECARA LIVE ---
+
+            // Update Lontong Sayur (ID 1)
+            menuList[0].hargaDasar = hargaDB.lontong_jual || 11000;
+            menuList[0].opsi.find(o => o.id === 'telur').harga = hargaDB.telur_jual || 3000;
+            menuList[0].opsi.find(o => o.id === 'bakwan').harga = hargaDB.bakwan_jual || 1000;
+            // Pastikan kerupuk ada di list opsi sebelum update
+            const opsiKerupuk1 = menuList[0].opsi.find(o => o.id === 'kerupuk');
+            if (opsiKerupuk1) opsiKerupuk1.harga = hargaDB.kerupuk_jual || 1000;
+
+            // Update Lontong Pical (ID 2)
+            menuList[1].hargaDasar = hargaDB.lontong_jual || 11000;
+            menuList[1].opsi.find(o => o.id === 'telur').harga = hargaDB.telur_jual || 3000;
+            menuList[1].opsi.find(o => o.id === 'bakwan').harga = hargaDB.bakwan_jual || 1000;
+            const opsiKerupuk2 = menuList[1].opsi.find(o => o.id === 'kerupuk');
+            if (opsiKerupuk2) opsiKerupuk2.harga = hargaDB.kerupuk_jual || 1000;
+
+            console.log("Harga diperbarui secara Real-time!");
+
+            // RENDER ULANG TAMPILAN SETELAH DAPAT DATA BARU
+            renderMenuHTML();
+
+            // (Opsional) Update harga di keranjang jika user sedang memilih item
+            // updatePriceDisplay(1); 
+            // updatePriceDisplay(2);
+        }
+    }, (error) => {
+        console.error("Gagal mengambil update harga:", error);
+    });
+}
+
+// FUNGSI RENDER HTML
+function renderMenuHTML() {
+    const container = document.getElementById('menuContainer');
+    container.innerHTML = ''; // Clear loading
+
     menuList.forEach(item => {
         let opsiHTML = '';
         if (item.opsi && item.opsi.length > 0) {
@@ -95,7 +163,14 @@ if (container) {
     });
 }
 
-// FUNGSI-FUNGSI LOGIKA KERANJANG
+// Jalankan saat script dimuat
+initMenu();
+
+
+/* =========================================
+   BAGIAN 2: LOGIKA KERANJANG (CART)
+   ========================================= */
+
 function changeToppingQty(menuId, optIdx, change) {
     const key = `${menuId}-${optIdx}`;
     let current = toppingState[key] || 0;
@@ -105,7 +180,7 @@ function changeToppingQty(menuId, optIdx, change) {
 
     toppingState[key] = newVal;
     const el = document.getElementById(`tqty-${menuId}-${optIdx}`);
-    if(el) el.innerText = newVal;
+    if (el) el.innerText = newVal;
     updatePriceDisplay(menuId);
 }
 
@@ -117,7 +192,7 @@ function updatePriceDisplay(menuId) {
         total += (opt.harga * qty);
     });
     const el = document.getElementById(`price-display-${menuId}`);
-    if(el) el.innerText = 'Rp ' + total.toLocaleString('id-ID');
+    if (el) el.innerText = 'Rp ' + total.toLocaleString('id-ID');
 }
 
 function addToCart(menuId) {
@@ -162,7 +237,6 @@ function addToCart(menuId) {
 
     const toastEl = document.getElementById('liveToast');
     document.getElementById('toastMessage').innerText = `${menu.nama} berhasil ditambahkan!`;
-    // Pastikan Bootstrap sudah load sebelum panggil Toast
     if (typeof bootstrap !== 'undefined') {
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
@@ -176,7 +250,7 @@ function resetToppingInputs(menuId) {
     menu.opsi.forEach((opt, idx) => {
         toppingState[`${menuId}-${idx}`] = 0;
         const el = document.getElementById(`tqty-${menuId}-${idx}`);
-        if(el) el.innerText = "0";
+        if (el) el.innerText = "0";
     });
     updatePriceDisplay(menuId);
 }
@@ -206,7 +280,6 @@ function renderCartListHTML() {
     if (cart.length === 0) {
         formContainer.style.display = 'none';
         const el = document.getElementById('cartModal');
-        // Cek Bootstrap
         if (typeof bootstrap !== 'undefined') {
             const modal = bootstrap.Modal.getInstance(el);
             if (modal) modal.hide();
@@ -380,80 +453,29 @@ function processCheckout() {
 
 
 /* =========================================
-   BAGIAN 2: LAZY LOAD TESTIMONI (FIREBASE & SWIPER)
-   Hanya dimuat ketika user scroll ke bawah
+   BAGIAN 3: LAZY LOAD TESTIMONI
    ========================================= */
 
 const testimonySection = document.querySelector('.slider-area');
 const swiperWrapper = document.getElementById('swiperWrapper');
 
 if (testimonySection && swiperWrapper) {
-    // Observer untuk mendeteksi scroll
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            // Jika user melihat slider area, load script!
-            startTestimonialLoader();
-            observer.disconnect(); // Stop observasi setelah load
+            loadTestimonials(); // Panggil fungsi fetch data
+            observer.disconnect();
         }
-    }, { rootMargin: "200px" }); // Load 200px sebelum elemen muncul
+    }, { rootMargin: "200px" });
 
     observer.observe(testimonySection);
 }
 
-function startTestimonialLoader() {
-    // Tampilkan loading state
-    if(swiperWrapper) swiperWrapper.innerHTML = '<div class="swiper-slide text-center text-muted pt-4"><div class="spinner-border text-success me-2" role="status"></div>Sedang memuat testimoni...</div>';
+function loadTestimonials() {
+    swiperWrapper.innerHTML = '<div class="swiper-slide text-center text-muted pt-4"><div class="spinner-border text-success me-2" role="status"></div>Sedang memuat testimoni...</div>';
 
-    // Helper untuk load script async
-    const loadScript = (src) => {
-        return new Promise((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = src;
-            s.onload = resolve;
-            s.onerror = reject;
-            document.body.appendChild(s);
-        });
-    }
-
-    // 1. Load Firebase & Swiper
-    Promise.all([
-        loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js'),
-        loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js')
-    ])
-    .then(() => {
-        // 2. Load Firestore setelah Firebase App siap
-        return loadScript('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js');
-    })
-    .then(() => {
-        // 3. Jalankan logika asli
-        initFirebaseAndSwiper();
-    })
-    .catch(err => {
-        console.error('Error loading scripts:', err);
-        if(swiperWrapper) swiperWrapper.innerHTML = '<div class="text-center w-100 text-danger p-5">Gagal memuat script. Periksa koneksi internet.</div>';
-    });
-}
-
-function initFirebaseAndSwiper() {
-    // --- KONFIGURASI FIREBASE ---
-    const firebaseConfig = {
-        apiKey: "AIzaSyCamv42dxGHJEqXMqVIPcOeWGNdM5p7X2E",
-        authDomain: "lontong-mm.firebaseapp.com",
-        projectId: "lontong-mm",
-        storageBucket: "lontong-mm.firebasestorage.app",
-        messagingSenderId: "628261457290",
-        appId: "1:628261457290:web:8cbd5262f3cc3deb30cc73",
-        measurementId: "G-GBN3GE3QKN"
-    };
-
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.firestore();
-
+    // Langsung pakai 'db' karena Firebase sudah di-init di atas
     db.collection("testimonies").orderBy("tanggal", "desc").limit(15).get().then((querySnapshot) => {
         let rawData = [];
-
         querySnapshot.forEach((doc) => {
             rawData.push(doc.data());
         });
@@ -463,7 +485,6 @@ function initFirebaseAndSwiper() {
             return;
         }
 
-        // Render HTML ke dalam wrapper
         let htmlContent = '';
         rawData.forEach(data => {
             htmlContent += `<div class="swiper-slide">${createCardHTML(data)}</div>`;
@@ -471,7 +492,7 @@ function initFirebaseAndSwiper() {
 
         swiperWrapper.innerHTML = htmlContent;
 
-        // --- INISIALISASI SWIPER ---
+        // Init Swiper
         new Swiper(".mySwiper", {
             loop: true,
             spaceBetween: 20,
