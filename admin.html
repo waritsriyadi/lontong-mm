@@ -79,7 +79,28 @@
             overflow: hidden;
         }
 
-        .table thead th {
+        /* --- FIX TAMPILAN TABEL MOBILE (STICKY HEADER) --- */
+        .table-responsive-fix {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #fff;
+            position: relative;
+        }
+
+        .table-responsive-fix thead th {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff; /* Wajib solid agar tidak tembus */
+            z-index: 10;
+            box-shadow: inset 0 -1px 0 #dee2e6;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #6b7280;
+        }
+
+        .table-main thead th {
             background-color: #f9fafb;
             color: #6b7280;
             font-weight: 600;
@@ -105,7 +126,7 @@
             background-color: #f9fafb;
         }
 
-        /* UX FIX: Buyer Item Flex Wrap */
+        /* --- FIX MODAL DETAIL ITEM (FLEX WRAP) --- */
         .buyer-item {
             background: white;
             padding: 12px 16px;
@@ -151,43 +172,21 @@
             display: inline-block;
         }
 
-        .badge-l {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-
-        .badge-t {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        .badge-b {
-            background-color: #f3f4f6;
-            color: #374151;
-        }
+        .badge-l { background-color: #dbeafe; color: #1e40af; }
+        .badge-t { background-color: #fef3c7; color: #92400e; }
+        .badge-b { background-color: #f3f4f6; color: #374151; }
 
         @media (max-width: 400px) {
-            .buyer-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .buyer-badges {
-                justify-content: flex-start;
-                width: 100%;
-            }
+            .buyer-item { flex-direction: column; align-items: flex-start; }
+            .buyer-badges { justify-content: flex-start; width: 100%; }
         }
 
-        /* FIX TAMPILAN MOBILE (IPHONE/ANDROID) */
+        /* --- FIX TAMPILAN MOBILE UMUM --- */
         @media (max-width: 768px) {
-            .chart-container {
-                height: 250px;
-            }
-
-            .stat-value {
-                font-size: 1.25rem;
-            }
-
+            .chart-container { height: 250px; }
+            .stat-value { font-size: 1.25rem; }
+            
+            /* Filter Tanggal & Tombol Dashboard */
             .header-filter-group {
                 display: flex;
                 flex-wrap: wrap;
@@ -292,23 +291,30 @@
                                             placeholder="Bakwan"></div>
                                 </div>
 
+                                <div class="d-flex justify-content-between mb-2 px-1">
+                                    <small class="text-muted fw-bold" style="font-size: 0.7rem;">Subtotal
+                                        Pesanan:</small>
+                                    <small class="fw-bold text-primary" id="previewSubtotal"
+                                        style="font-size: 0.7rem;">Rp 0</small>
+                                </div>
+
                                 <button type="button" id="btnAddDetail" class="btn btn-primary btn-sm w-100 fw-bold"
                                     onclick="prosesPesanan()"><i class="bi bi-plus-lg"></i> Tambah</button>
 
-                                <div class="table-responsive mt-2 bg-white rounded border"
-                                    style="max-height: 150px; overflow-y: auto;">
-                                    <table
-                                        class="table table-sm table-borderless table-striped text-xs mb-0 align-middle">
-                                        <thead class="sticky-top bg-white border-bottom">
+                                <div class="table-responsive-fix mt-2">
+                                    <table class="table table-sm table-borderless table-striped text-xs mb-0 align-middle">
+                                        <thead>
                                             <tr>
-                                                <th class="ps-2">Nama</th>
-                                                <th class="text-center">L</th>
-                                                <th class="text-center">T</th>
-                                                <th class="text-center">B</th>
-                                                <th class="text-end pe-2">#</th>
+                                                <th class="ps-3 py-2">Nama</th>
+                                                <th class="text-center py-2">L</th>
+                                                <th class="text-center py-2">T</th>
+                                                <th class="text-center py-2">B</th>
+                                                <th class="text-end py-2">Total</th>
+                                                <th class="text-end pe-3 py-2">#</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="listPesananBody"></tbody>
+                                        <tbody id="listPesananBody">
+                                            </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -416,7 +422,7 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive d-none d-md-block">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover align-middle mb-0 table-main">
                                 <thead class="table-light">
                                     <tr>
                                         <th class="ps-3" style="cursor: pointer;" onclick="sortData('date')">Tanggal <i
@@ -476,6 +482,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="module">
+        // --- 1. LOGIN SYSTEM ---
         const AUTH_HASH = "MTIzNDU2";
         const overlay = document.getElementById('loginOverlay');
         const passInput = document.getElementById('passcodeInput');
@@ -496,25 +503,14 @@
             }
         }
 
-        if (sessionStorage.getItem("isLoggedIn")) {
-            overlay.remove();
-        }
-
-        if (passInput) {
-            passInput.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    window.checkLogin();
-                }
-            });
-        }
+        if (sessionStorage.getItem("isLoggedIn")) { overlay.remove(); }
+        if (passInput) { passInput.addEventListener("keypress", function (event) { if (event.key === "Enter") { window.checkLogin(); } }); }
 
         window.logoutAdmin = () => {
-            if (confirm("Keluar dari panel admin?")) {
-                sessionStorage.removeItem("isLoggedIn");
-                window.location.reload();
-            }
+            if (confirm("Keluar dari panel admin?")) { sessionStorage.removeItem("isLoggedIn"); window.location.reload(); }
         }
 
+        // --- 2. FIREBASE & APP LOGIC ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -522,6 +518,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // HARGA UPDATE: Bakwan Setor = 0
         const HARGA = { lontong_jual: 11000, lontong_setor: 10000, telur_jual: 3000, telur_modal: 1900, bakwan_jual: 1000, bakwan_setor: 0 };
         const dom = {
             qtyL: document.getElementById('qtyLontong'), qtyT: document.getElementById('qtyTelur'), qtyB: document.getElementById('qtyBakwan'),
@@ -534,7 +531,7 @@
         let unsubscribeRealtime = null;
         let currentSort = { column: 'date', direction: 'desc' };
 
-        // --- TOAST NOTIFICATION FUNCTION ---
+        // --- 3. HELPER FUNCTIONS ---
         window.showToast = (message, type = 'success') => {
             const toastEl = document.getElementById('liveToast');
             const msgEl = document.getElementById('toastMessage');
@@ -553,6 +550,25 @@
             });
         }
 
+        // --- 4. PREVIEW SUBTOTAL (FITUR BARU) ---
+        ['custLontong', 'custTelur', 'custBakwan'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateSubtotalPreview);
+        });
+
+        function updateSubtotalPreview() {
+            const cL = Math.max(0, parseInt(document.getElementById('custLontong').value) || 0);
+            const cT = Math.max(0, parseInt(document.getElementById('custTelur').value) || 0);
+            const cB = Math.max(0, parseInt(document.getElementById('custBakwan').value) || 0);
+            const total = (cL * HARGA.lontong_jual) + (cT * HARGA.telur_jual) + (cB * HARGA.bakwan_jual);
+            document.getElementById('previewSubtotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        // --- 5. ANTI REFRESH (FITUR BARU) ---
+        window.addEventListener('beforeunload', function (e) {
+            if (orderList.length > 0) { e.preventDefault(); e.returnValue = ''; }
+        });
+
+        // --- 6. CORE LOGIC ---
         window.prosesPesanan = () => {
             const nama = document.getElementById('custName').value;
             const cL = Math.max(0, parseInt(document.getElementById('custLontong').value) || 0);
@@ -566,11 +582,25 @@
 
         window.editPesananDetail = (idx) => {
             const d = orderList[idx];
-            document.getElementById('custName').value = d.nama; document.getElementById('custLontong').value = d.cL; document.getElementById('custTelur').value = d.cT; document.getElementById('custBakwan').value = d.cB;
+            
+            // Isi Form
+            const inputNama = document.getElementById('custName');
+            inputNama.value = d.nama; 
+            document.getElementById('custLontong').value = d.cL; 
+            document.getElementById('custTelur').value = d.cT; 
+            document.getElementById('custBakwan').value = d.cB;
+            
+            updateSubtotalPreview(); 
             detailEditingIndex = idx;
+            
+            // UI Update
             document.getElementById('btnAddDetail').innerHTML = '<i class="bi bi-pencil"></i> Update';
             document.getElementById('btnAddDetail').classList.replace('btn-primary', 'btn-warning');
             document.getElementById('btnBatalEditDetail').classList.remove('d-none');
+
+            // SCROLL & FOCUS (FITUR BARU)
+            inputNama.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            inputNama.focus(); 
         }
 
         window.batalEditPesanan = () => {
@@ -582,14 +612,31 @@
 
         window.hapusPesanan = (idx) => { if (idx === detailEditingIndex) { showToast("Selesaikan edit dulu!", "warning"); return; } orderList.splice(idx, 1); renderOrderList(); }
 
-        function resetInputDetail() { document.getElementById('custName').value = ''; document.getElementById('custLontong').value = '1'; document.getElementById('custTelur').value = '0'; document.getElementById('custBakwan').value = '0'; }
+        function resetInputDetail() {
+            document.getElementById('custName').value = ''; document.getElementById('custLontong').value = '1'; document.getElementById('custTelur').value = '0'; document.getElementById('custBakwan').value = '0';
+            updateSubtotalPreview(); // Reset preview
+        }
 
         function renderOrderList() {
             const tbody = document.getElementById('listPesananBody'); tbody.innerHTML = '';
             let tL = 0, tT = 0, tB = 0;
             orderList.forEach((i, idx) => {
                 tL += i.cL; tT += i.cT; tB += i.cB;
-                tbody.innerHTML += `<tr><td class="ps-2 fw-bold text-dark">${i.nama}</td><td class="text-center">${i.cL}</td><td class="text-center">${i.cT}</td><td class="text-center">${i.cB}</td><td class="text-end pe-2"><i class="bi bi-pencil-square text-warning me-2" style="cursor:pointer" onclick="editPesananDetail(${idx})"></i><i class="bi bi-x-circle text-danger" style="cursor:pointer" onclick="hapusPesanan(${idx})"></i></td></tr>`;
+                // SUBTOTAL PER ORANG (FITUR BARU)
+                const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual);
+                
+                tbody.innerHTML += `
+                <tr>
+                    <td class="ps-3 fw-bold text-dark text-truncate" style="max-width: 90px;">${i.nama}</td>
+                    <td class="text-center">${i.cL}</td>
+                    <td class="text-center">${i.cT}</td>
+                    <td class="text-center">${i.cB}</td>
+                    <td class="text-end fw-bold text-primary" style="font-size: 0.75rem;">${(subtotal / 1000).toLocaleString('id-ID') + 'k'}</td>
+                    <td class="text-end pe-3">
+                        <i class="bi bi-pencil-square text-warning me-2" style="cursor:pointer" onclick="editPesananDetail(${idx})"></i>
+                        <i class="bi bi-x-circle text-danger" style="cursor:pointer" onclick="hapusPesanan(${idx})"></i>
+                    </td>
+                </tr>`;
             });
             dom.qtyL.value = tL; dom.qtyT.value = tT; dom.qtyB.value = tB; hitungEstimasi();
         }
@@ -601,7 +648,7 @@
             const omset = (qL * HARGA.lontong_jual) + (qT * HARGA.telur_jual) + (qB * HARGA.bakwan_jual);
             const setor = (qL * HARGA.lontong_setor) + (qB * HARGA.bakwan_setor);
             const untung = (omset - setor) - (qT * HARGA.telur_modal);
-            document.getElementById('previewOmset').innerText = 'Rp ' + omset.toLocaleString('id-ID'); // Hidden field
+            document.getElementById('previewOmset').innerText = 'Rp ' + omset.toLocaleString('id-ID');
             document.getElementById('previewSetor').innerText = 'Rp ' + setor.toLocaleString('id-ID');
             document.getElementById('previewUntung').innerText = 'Rp ' + untung.toLocaleString('id-ID');
             return { qL, qT, qB, omset, setor, untung };
@@ -615,12 +662,14 @@
             try {
                 const payload = { date: dom.dateInput.value, lontong: calc.qL, telur: calc.qT, bakwan: calc.qB, omset: calc.omset, setor: calc.setor, untung: calc.untung, detail_pelanggan: orderList, timestamp: new Date() };
                 if (cId) await updateDoc(doc(db, "penjualan_detail", cId), payload); else await addDoc(collection(db, "penjualan_detail"), payload);
-                showToast("Data transaksi berhasil disimpan!", "success"); resetFormMode();
+                showToast("Data transaksi berhasil disimpan!", "success");
+                orderList = []; // Clear list
+                resetFormMode();
             } catch (err) { showToast("Error: " + err.message, "danger"); }
             finally { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg me-2"></i>SIMPAN DATA'; }
         });
 
-        // --- COPY REPORT WA ---
+        // --- COPY REPORT WA (FIX ENTER) ---
         window.copyReport = () => {
             const d = dom.dateInput.value;
             const qL = dom.qtyL.value; const qT = dom.qtyT.value; const qB = dom.qtyB.value;
@@ -662,8 +711,12 @@
             let dHtml = '', mHtml = '';
             data.forEach(d => {
                 const json = JSON.stringify(d).replace(/"/g, '&quot;');
-                dHtml += `<tr><td class="ps-3 fw-bold">${formatDate(d.date)}</td><td><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></td><td class="text-end">Rp ${d.omset.toLocaleString('id-ID')}</td><td class="text-end text-warning">Rp ${d.setor.toLocaleString('id-ID')}</td><td class="text-end text-success fw-bold">Rp ${d.untung.toLocaleString('id-ID')}</td><td class="text-center pe-3"><button class="btn btn-sm btn-light text-primary border" onclick='window.lihatDetail(${json})'><i class="bi bi-eye"></i></button> <button class="btn btn-sm btn-light text-warning border" onclick='window.editData(${json})'><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-light text-danger border" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button></td></tr>`;
-                mHtml += `<div class="card mb-3 shadow-sm border-0" style="border-radius: 12px;"><div class="card-body"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="card-title mb-0 fw-bold text-primary"><i class="bi bi-calendar-event me-2"></i>${formatDate(d.date)}</h6><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></div><div class="row g-0 mb-3 text-center bg-light rounded-3 p-2"><div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Omset</div><div class="fw-bold text-dark col-mobile-text">${(d.omset / 1000).toFixed(0)}k</div></div><div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Setor</div><div class="fw-bold text-warning col-mobile-text">${(d.setor / 1000).toFixed(0)}k</div></div><div class="col-4"><div class="text-xs text-muted text-uppercase">Profit</div><div class="fw-bold text-success col-mobile-text">${(d.untung / 1000).toFixed(0)}k</div></div></div><div class="d-flex gap-2"><button class="btn btn-sm btn-outline-primary flex-fill" onclick='window.lihatDetail(${json})'><i class="bi bi-eye me-1"></i>Detail</button><button class="btn btn-sm btn-outline-warning flex-fill" onclick='window.editData(${json})'><i class="bi bi-pencil me-1"></i>Edit</button><button class="btn btn-sm btn-outline-danger" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button></div></div></div>`;
+                const isToday = new Date(d.date).toDateString() === new Date().toDateString();
+                const rowClass = isToday ? 'table-success' : '';
+                const badgeHariIni = isToday ? '<span class="badge bg-success ms-1">Hari Ini</span>' : '';
+
+                dHtml += `<tr class="${rowClass}"><td class="ps-3 fw-bold">${formatDate(d.date)} ${badgeHariIni}</td><td><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></td><td class="text-end">Rp ${d.omset.toLocaleString('id-ID')}</td><td class="text-end text-warning">Rp ${d.setor.toLocaleString('id-ID')}</td><td class="text-end text-success fw-bold">Rp ${d.untung.toLocaleString('id-ID')}</td><td class="text-center pe-3"><button class="btn btn-sm btn-light text-primary border" onclick='window.lihatDetail(${json})'><i class="bi bi-eye"></i></button> <button class="btn btn-sm btn-light text-warning border" onclick='window.editData(${json})'><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-light text-danger border" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button></td></tr>`;
+                mHtml += `<div class="card mb-3 shadow-sm border-0 ${isToday ? 'border-start border-4 border-success' : ''}" style="border-radius: 12px;"><div class="card-body"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="card-title mb-0 fw-bold text-primary"><i class="bi bi-calendar-event me-2"></i>${formatDate(d.date)} ${badgeHariIni}</h6><span class="badge bg-light text-dark border">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span></div><div class="row g-0 mb-3 text-center bg-light rounded-3 p-2"><div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Omset</div><div class="fw-bold text-dark col-mobile-text">${(d.omset / 1000).toFixed(0)}k</div></div><div class="col-4 border-end"><div class="text-xs text-muted text-uppercase">Setor</div><div class="fw-bold text-warning col-mobile-text">${(d.setor / 1000).toFixed(0)}k</div></div><div class="col-4"><div class="text-xs text-muted text-uppercase">Profit</div><div class="fw-bold text-success col-mobile-text">${(d.untung / 1000).toFixed(0)}k</div></div></div><div class="d-flex gap-2"><button class="btn btn-sm btn-outline-primary flex-fill" onclick='window.lihatDetail(${json})'><i class="bi bi-eye me-1"></i>Detail</button><button class="btn btn-sm btn-outline-warning flex-fill" onclick='window.editData(${json})'><i class="bi bi-pencil me-1"></i>Edit</button><button class="btn btn-sm btn-outline-danger" onclick='window.hapusData("${d.id}")'><i class="bi bi-trash"></i></button></div></div></div>`;
             });
             dom.tableDesktop.innerHTML = dHtml || '<tr><td colspan="6" class="text-center py-3 text-muted">Belum ada data</td></tr>';
             dom.listMobile.innerHTML = mHtml;
