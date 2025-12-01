@@ -26,7 +26,7 @@
             padding-bottom: 2rem;
             overflow-x: hidden;
 
-            /* FITUR MOBILE 1: MATIKAN PULL-TO-REFRESH */
+            /* FITUR MOBILE: MATIKAN PULL-TO-REFRESH */
             overscroll-behavior-y: contain;
             -webkit-overflow-scrolling: touch;
         }
@@ -133,6 +133,157 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
+        /* --- STYLE BARU: LIST COMPACT --- */
+        .order-list-container {
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .order-card {
+            background-color: #ffffff;
+            border: 1px solid #f3f4f6;
+            border-left: 4px solid #3b82f6;
+            /* Aksen biru di kiri */
+            border-radius: 6px;
+            /* Radius lebih kotak agar rapi */
+            padding: 8px 12px;
+            /* Padding diperkecil (lebih tipis) */
+            margin-bottom: 6px;
+            /* Jarak antar item dirapatkan */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .order-info {
+            flex: 1;
+            min-width: 0;
+            margin-right: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .order-name {
+            font-weight: 700;
+            color: #374151;
+            font-size: 0.85rem;
+            /* Font nama sedikit diperkecil */
+            margin-bottom: 2px;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .order-badges {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .badge-item {
+            font-size: 0.65rem;
+            /* Badge lebih mungil */
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .bg-lontong {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #dbeafe;
+        }
+
+        .bg-telur {
+            background-color: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fef3c7;
+        }
+
+        .bg-bakwan {
+            background-color: #f9fafb;
+            color: #4b5563;
+            border: 1px solid #e5e7eb;
+        }
+
+        .order-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-tag {
+            font-weight: 700;
+            color: #059669;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+
+        .action-btn-group {
+            display: flex;
+            gap: 2px;
+        }
+
+        .btn-action-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: #9ca3af;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+        }
+
+        .btn-action-icon:hover {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-action-icon.text-danger:hover {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        .btn-action-icon.text-warning:hover {
+            background-color: #fffbeb;
+            color: #d97706;
+        }
+
+        .order-total {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .price-tag {
+            font-weight: 800;
+            color: #059669;
+            font-size: 0.95rem;
+        }
+
+        .action-btn-group {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 2px;
+            border: 1px solid #f3f4f6;
+        }
+
+        .dashed-border {
+            border: 2px dashed #e5e7eb;
+        }
+
+        /* --- MODAL STYLES --- */
         .modal-content {
             border: none;
             border-radius: 16px;
@@ -150,16 +301,35 @@
             background-color: #f9fafb;
         }
 
+        /* RIWAYAT TRANSAKSI STYLES */
         .buyer-item {
-            background: white;
+            /* Gunakan flexbox agar nama di kiri, harga di kanan */
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            /* Align top agar rapi jika badge banyak */
             padding: 12px 16px;
             border-bottom: 1px solid #f3f4f6;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
+        }
+
+        .buyer-left {
+            flex: 1;
+            /* Mengambil sisa ruang */
+            padding-right: 10px;
+        }
+
+        .buyer-price {
+            font-weight: 700;
+            color: #198754;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            /* Agar harga tidak turun baris */
+        }
+
+        .modal-summary-footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 15px;
         }
 
         .buyer-item:hover {
@@ -210,25 +380,9 @@
             color: #374151;
         }
 
-        @media (max-width: 400px) {
-            .buyer-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .buyer-badges {
-                justify-content: flex-start;
-                width: 100%;
-            }
-        }
-
         @media (max-width: 768px) {
             .chart-container {
                 height: 250px;
-            }
-
-            .stat-value {
-                font-size: 1.25rem;
             }
 
             .header-filter-group {
@@ -243,13 +397,6 @@
                 flex: 1 1 40% !important;
                 width: auto !important;
                 min-width: 0;
-            }
-
-            .header-filter-group .btn {
-                flex: 1 1 auto;
-                display: flex;
-                justify-content: center;
-                align-items: center;
             }
         }
     </style>
@@ -329,7 +476,7 @@
                                 <input type="text" id="custName" class="form-control form-control-sm mb-2"
                                     placeholder="Nama Pelanggan..." list="listPelanggan" autocomplete="off">
                                 <datalist id="listPelanggan">
-                                    </datalist>
+                                </datalist>
 
                                 <div class="row g-2 mb-2">
                                     <div class="col-4"><input type="number" class="form-control form-control-sm"
@@ -353,22 +500,7 @@
                                 <button type="button" id="btnAddDetail" class="btn btn-primary btn-sm w-100 fw-bold"
                                     onclick="prosesPesanan()"><i class="bi bi-plus-lg"></i> Tambah</button>
 
-                                <div class="table-responsive-fix mt-2">
-                                    <table
-                                        class="table table-sm table-borderless table-striped text-xs mb-0 align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th class="ps-3 py-2">Nama</th>
-                                                <th class="text-center py-2">L</th>
-                                                <th class="text-center py-2">T</th>
-                                                <th class="text-center py-2">B</th>
-                                                <th class="text-end py-2">Total</th>
-                                                <th class="text-end pe-3 py-2">#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="listPesananBody">
-                                        </tbody>
-                                    </table>
+                                <div class="order-list-container mt-3" id="listPesananContainer">
                                 </div>
                             </div>
 
@@ -719,7 +851,6 @@
                 telur_modal: parseInt(document.getElementById('set_telur_modal').value) || 0,
                 bakwan_jual: parseInt(document.getElementById('set_bakwan_jual').value) || 0,
                 bakwan_setor: parseInt(document.getElementById('set_bakwan_setor').value) || 0,
-                // Simpan Kerupuk
                 kerupuk_jual: parseInt(document.getElementById('set_kerupuk_jual').value) || 0
             };
 
@@ -793,10 +924,10 @@
             }
         }
 
-        window.addEventListener('popstate', function(event) {
+        window.addEventListener('popstate', function (event) {
             if (orderList.length > 0) {
                 if (confirm("Data transaksi belum disimpan dan akan hilang. Yakin ingin kembali?")) {
-                    history.back(); 
+                    history.back();
                 } else {
                     history.pushState({ status: 'editing' }, null, '');
                 }
@@ -811,7 +942,7 @@
             if (!nama) { showToast("Nama pembeli wajib diisi!", "warning"); return; }
             const payload = { nama, cL, cT, cB };
             if (detailEditingIndex === -1) orderList.push(payload); else { orderList[detailEditingIndex] = payload; batalEditPesanan(); }
-            resetInputDetail(); 
+            resetInputDetail();
             renderOrderList();
             updateHistoryTrap(); // Panggil History Trap
         }
@@ -839,9 +970,9 @@
             document.getElementById('btnBatalEditDetail').classList.add('d-none');
         }
 
-        window.hapusPesanan = (idx) => { 
-            if (idx === detailEditingIndex) { showToast("Selesaikan edit dulu!", "warning"); return; } 
-            orderList.splice(idx, 1); 
+        window.hapusPesanan = (idx) => {
+            if (idx === detailEditingIndex) { showToast("Selesaikan edit dulu!", "warning"); return; }
+            orderList.splice(idx, 1);
             renderOrderList();
             if (orderList.length > 0) updateHistoryTrap();
         }
@@ -852,25 +983,61 @@
         }
 
         function renderOrderList() {
-            const tbody = document.getElementById('listPesananBody'); tbody.innerHTML = '';
+            const container = document.getElementById('listPesananContainer');
+            container.innerHTML = '';
+
             let tL = 0, tT = 0, tB = 0;
+
+            if (orderList.length === 0) {
+                container.innerHTML = `
+            <div class="text-center py-3 text-muted border rounded-3 bg-light dashed-border" style="opacity:0.7">
+                <i class="bi bi-basket3 fs-4"></i>
+                <p class="small mb-0 mt-1" style="font-size:0.75rem">List Kosong</p>
+            </div>`;
+                dom.qtyL.value = 0; dom.qtyT.value = 0; dom.qtyB.value = 0;
+                hitungEstimasi();
+                return;
+            }
+
             orderList.forEach((i, idx) => {
                 tL += i.cL; tT += i.cT; tB += i.cB;
+
                 const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual);
-                tbody.innerHTML += `
-                <tr>
-                    <td class="ps-3 fw-bold text-dark text-truncate" style="max-width: 90px;">${i.nama}</td>
-                    <td class="text-center">${i.cL}</td>
-                    <td class="text-center">${i.cT}</td>
-                    <td class="text-center">${i.cB}</td>
-                    <td class="text-end fw-bold text-primary" style="font-size: 0.75rem;">${(subtotal / 1000).toLocaleString('id-ID') + 'k'}</td>
-                    <td class="text-end pe-3">
-                        <i class="bi bi-pencil-square text-warning me-2" style="cursor:pointer" onclick="editPesananDetail(${idx})"></i>
-                        <i class="bi bi-x-circle text-danger" style="cursor:pointer" onclick="hapusPesanan(${idx})"></i>
-                    </td>
-                </tr>`;
+
+                // Badge Singkatan (L:1, T:2) agar hemat tempat atau Teks pendek
+                let badgesHtml = '';
+                if (i.cL > 0) badgesHtml += `<span class="badge-item bg-lontong">Lontong ${i.cL}</span>`;
+                if (i.cT > 0) badgesHtml += `<span class="badge-item bg-telur">Telur ${i.cT}</span>`;
+                if (i.cB > 0) badgesHtml += `<span class="badge-item bg-bakwan">Bakwan ${i.cB}</span>`;
+
+                if (badgesHtml === '') badgesHtml = `<span class="badge-item bg-light text-muted" style="font-size:0.6rem">Tanpa Item</span>`;
+
+                // Render HTML Compact
+                const cardItem = `
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-name">${i.nama}</div>
+                <div class="order-badges">${badgesHtml}</div>
+            </div>
+            
+            <div class="order-right">
+                <div class="price-tag">Rp ${subtotal.toLocaleString('id-ID')}</div>
+                <div class="action-btn-group">
+                    <button type="button" class="btn-action-icon text-warning" onclick="editPesananDetail(${idx})" title="Edit">
+                        <i class="bi bi-pencil-square" style="font-size: 0.9rem;"></i>
+                    </button>
+                    <button type="button" class="btn-action-icon text-danger" onclick="hapusPesanan(${idx})" title="Hapus">
+                        <i class="bi bi-trash" style="font-size: 0.9rem;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>`;
+
+                container.innerHTML += cardItem;
             });
-            dom.qtyL.value = tL; dom.qtyT.value = tT; dom.qtyB.value = tB; hitungEstimasi();
+
+            dom.qtyL.value = tL; dom.qtyT.value = tT; dom.qtyB.value = tB;
+            hitungEstimasi();
         }
 
         function hitungEstimasi() {
@@ -1038,12 +1205,70 @@
         window.resetFilter = () => { dom.filterStart.value = ''; dom.filterEnd.value = ''; document.getElementById('filterMsg').classList.add('d-none'); loadLatestData(); }
 
         window.lihatDetail = (d) => {
-            const body = document.getElementById('detailModalBody'); document.getElementById('modalDateDisplay').innerText = formatDate(d.date); body.innerHTML = '';
-            if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) body.innerHTML = `<div class="text-center py-4 text-muted fst-italic">Tidak ada rincian pembeli.</div>`; else {
+            const body = document.getElementById('detailModalBody');
+            document.getElementById('modalDateDisplay').innerText = formatDate(d.date);
+            body.innerHTML = '';
+
+            // 1. Render List Pembeli
+            if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) {
+                body.innerHTML = `<div class="text-center py-4 text-muted fst-italic">Tidak ada rincian pembeli.</div>`;
+            } else {
+                // Wrapper untuk list agar bisa di-scroll jika panjang
+                let contentHtml = `<div style="max-height: 50vh; overflow-y: auto;">`;
+
                 d.detail_pelanggan.forEach(i => {
-                    let badges = ''; if (i.cL > 0) badges += `<span class="badge-pill-custom badge-l">Lontong ${i.cL}</span>`; if (i.cT > 0) badges += `<span class="badge-pill-custom badge-t">Telur ${i.cT}</span>`; if (i.cB > 0) badges += `<span class="badge-pill-custom badge-b">Bakwan ${i.cB}</span>`;
-                    body.innerHTML += `<div class="buyer-item"><div class="buyer-name">${i.nama}</div><div class="buyer-badges">${badges}</div></div>`;
+                    // Cek properti kerupuk (jaga-jaga data lama belum ada cK)
+                    let cK = i.cK || 0;
+
+                    // Hitung Subtotal per Orang (Berdasarkan harga saat ini)
+                    const subtotal = (i.cL * HARGA.lontong_jual) +
+                        (i.cT * HARGA.telur_jual) +
+                        (i.cB * HARGA.bakwan_jual) +
+                        (cK * HARGA.kerupuk_jual);
+
+                    // Generate Badges
+                    let badges = '';
+                    if (i.cL > 0) badges += `<span class="badge-pill-custom badge-l">Lontong ${i.cL}</span>`;
+                    if (i.cT > 0) badges += `<span class="badge-pill-custom badge-t">Telur ${i.cT}</span>`;
+                    if (i.cB > 0) badges += `<span class="badge-pill-custom badge-b">Bakwan ${i.cB}</span>`;
+                    if (cK > 0) badges += `<span class="badge-pill-custom bg-danger bg-opacity-10 text-danger">Krupuk ${cK}</span>`;
+
+                    // HTML Item
+                    contentHtml += `
+            <div class="buyer-item">
+                <div class="buyer-left">
+                    <div class="buyer-name mb-1">${i.nama}</div>
+                    <div class="buyer-badges justify-content-start">${badges}</div>
+                </div>
+                <div class="buyer-price">
+                    Rp ${subtotal.toLocaleString('id-ID')}
+                </div>
+            </div>`;
                 });
+
+                contentHtml += `</div>`; // Tutup wrapper scroll
+
+                // 2. Render Summary Footer (Omset, Setor, Profit)
+                // Kita gunakan data total (d.omset, dll) yang tersimpan di DB agar akurat
+                contentHtml += `
+        <div class="modal-summary-footer">
+            <div class="row text-center g-2">
+                <div class="col-4 border-end">
+                    <div class="text-xs text-muted fw-bold mb-1">TOTAL OMSET</div>
+                    <div class="fw-bold text-dark fs-6">Rp ${d.omset.toLocaleString('id-ID')}</div>
+                </div>
+                <div class="col-4 border-end">
+                    <div class="text-xs text-muted fw-bold mb-1 text-uppercase">Setor Saudara</div>
+                    <div class="fw-bold text-warning fs-6">Rp ${d.setor.toLocaleString('id-ID')}</div>
+                </div>
+                <div class="col-4">
+                    <div class="text-xs text-muted fw-bold mb-1">PROFIT BERSIH</div>
+                    <div class="fw-bold text-success fs-6">Rp ${d.untung.toLocaleString('id-ID')}</div>
+                </div>
+            </div>
+        </div>`;
+
+                body.innerHTML = contentHtml;
             }
             detailModal.show();
         }
