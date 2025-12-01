@@ -188,29 +188,22 @@
                 font-size: 1.25rem;
             }
 
-            /* Container Filter */
             .header-filter-group {
                 display: flex;
                 flex-wrap: wrap;
                 width: 100%;
                 margin-top: 10px;
                 gap: 8px !important;
-                /* Paksa jarak antar elemen 8px */
             }
 
-            /* 1. Input Tanggal: Paksa tampil berdua di Baris Pertama (50%-50%) */
             .header-filter-input {
                 flex: 1 1 40% !important;
-                /* Flex-grow, Flex-shrink, Basis 40% */
                 width: auto !important;
                 min-width: 0;
-                /* Mencegah overflow */
             }
 
-            /* 2. Semua Tombol (Reset, Excel, WA): Paksa tampil di Baris Kedua & Bagi Rata */
             .header-filter-group .btn {
                 flex: 1 1 auto;
-                /* Tombol akan membagi rata lebar layar */
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -634,7 +627,7 @@
             const omset = document.getElementById('previewOmset').innerText;
             const setor = document.getElementById('previewSetor').innerText;
             const untung = document.getElementById('previewUntung').innerText;
-            const text = `*LAPORAN LONTONG MM* 📅 ${formatDate(d)}\n\n📦 *Penjualan:*\n- Lontong: ${qL} porsi\n- Telur: ${qT} butir\n- Bakwan: ${qB} biji\n\n💰 *Keuangan:*\n- Omset: ${omset}\n- Setor: ${setor}\n- *Profit Bersih: ${untung}*\n\nTerima kasih.`;
+            const text = `*LAPORAN LONTONG MM*\n📅 ${formatDate(d)}\n\n📦 *Penjualan:*\n- Lontong: ${qL} porsi\n- Telur: ${qT} butir\n- Bakwan: ${qB} biji\n\n💰 *Keuangan:*\n- Omset: ${omset}\n- Setor: ${setor}\n- *Profit Bersih: ${untung}*\n\nTerima kasih.`;
             navigator.clipboard.writeText(text).then(() => showToast("Laporan disalin! Silakan paste di WA.", "success")).catch(err => showToast("Gagal menyalin text.", "danger"));
         }
 
