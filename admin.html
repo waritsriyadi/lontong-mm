@@ -202,6 +202,26 @@
 </head>
 
 <body>
+    <div id="loginOverlay"
+        class="position-fixed top-0 start-0 w-100 h-100 bg-light d-flex justify-content-center align-items-center"
+        style="z-index: 10000;">
+        <div class="card border-0 shadow-lg p-4" style="max-width: 400px; width: 90%; border-radius: 16px;">
+            <div class="text-center mb-4">
+                <img src="logo.png" alt="Logo" style="width: 60px; height: 60px; object-fit: contain;" class="mb-2">
+                <h4 class="fw-bold text-primary">Admin Lontong MM</h4>
+                <p class="text-muted small">Silakan masukkan kode akses untuk masuk.</p>
+            </div>
+            <div class="mb-3">
+                <input type="password" id="passcodeInput" class="form-control form-control-lg text-center fw-bold"
+                    placeholder="Kode Akses" autofocus>
+            </div>
+            <button class="btn btn-primary w-100 py-2 fw-bold rounded-3" onclick="checkLogin()">MASUK <i
+                    class="bi bi-arrow-right-short"></i></button>
+            <p id="loginError" class="text-danger text-center small mt-3 fw-bold d-none">
+                <i class="bi bi-x-circle-fill"></i> Kode Salah!
+            </p>
+        </div>
+    </div>
 
     <nav class="navbar navbar-expand-lg sticky-top mb-4">
         <div class="container-fluid px-4 d-flex justify-content-between">
@@ -392,7 +412,8 @@
                                                 id="icon-date" class="bi bi-caret-down-fill text-muted"></i></th>
                                         <th>Rincian (L/T/B)</th>
                                         <th class="text-end" style="cursor: pointer;" onclick="sortData('omset')">Omset
-                                            <i id="icon-omset" class="bi bi-filter text-muted"></i></th>
+                                            <i id="icon-omset" class="bi bi-filter text-muted"></i>
+                                        </th>
                                         <th class="text-end text-warning" style="cursor: pointer;"
                                             onclick="sortData('setor')">Setor <i id="icon-setor"
                                                 class="bi bi-filter text-muted"></i></th>
@@ -445,10 +466,42 @@
 
     <script type="module">
         const AUTH_HASH = "MTIzNDU2";
-        window.logoutAdmin = () => { if (confirm("Keluar dari panel admin?")) { sessionStorage.removeItem("isLoggedIn"); window.location.href = "index.html"; } }
-        if (!sessionStorage.getItem("isLoggedIn")) {
-            const input = prompt("Masukkan Kode Akses Admin:");
-            if (input && btoa(input) === AUTH_HASH) sessionStorage.setItem("isLoggedIn", "true"); else { alert("Akses Ditolak!"); window.location.href = "index.html"; }
+        const overlay = document.getElementById('loginOverlay');
+        const passInput = document.getElementById('passcodeInput');
+        const errorMsg = document.getElementById('loginError');
+
+        window.checkLogin = () => {
+            const input = passInput.value;
+            if (input && btoa(input) === AUTH_HASH) {
+                sessionStorage.setItem("isLoggedIn", "true");
+                overlay.style.transition = "opacity 0.5s";
+                overlay.style.opacity = "0";
+                setTimeout(() => overlay.remove(), 500);
+            } else {
+                errorMsg.classList.remove('d-none');
+                passInput.classList.add('is-invalid');
+                passInput.value = '';
+                passInput.focus();
+            }
+        }
+
+        if (sessionStorage.getItem("isLoggedIn")) {
+            overlay.remove();
+        }
+
+        if (passInput) {
+            passInput.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    window.checkLogin();
+                }
+            });
+        }
+
+        window.logoutAdmin = () => {
+            if (confirm("Keluar dari panel admin?")) {
+                sessionStorage.removeItem("isLoggedIn");
+                window.location.reload();
+            }
         }
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
