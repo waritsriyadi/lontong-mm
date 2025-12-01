@@ -759,10 +759,13 @@ function renderDashboard(data) {
                 const badgeHariIniDesktop = isToday ? '<span class="badge bg-success ms-2">Hari Ini</span>' : '';
 
                 // Variabel Tampilan Mobile (Premium Look)
-                // Menggunakan class 'card-today' yang sudah didefinisikan di CSS
                 const cardClass = isToday ? 'card-today shadow' : 'shadow-sm border-0';
                 const dateColor = isToday ? 'text-success' : 'text-primary';
-                const badgeHariIniMobile = isToday ? '<span class="badge bg-success ms-2" style="font-size:0.65rem; vertical-align: text-top;">Hari Ini</span>' : '';
+                
+                // PERBAIKAN: Badge "Hari Ini" dibuat label terpisah di ATAS tanggal
+                const todayLabel = isToday 
+                    ? '<div class="badge bg-success mb-1" style="font-size:0.65rem; width:fit-content;">HARI INI</div>' 
+                    : '';
 
                 // --- HTML TABLE DESKTOP ---
                 dHtml += `
@@ -779,15 +782,21 @@ function renderDashboard(data) {
                     </td>
                 </tr>`;
 
-                // --- HTML MOBILE CARD (Premium Style) ---
+                // --- HTML MOBILE CARD (FIXED LAYOUT) ---
                 mHtml += `
                 <div class="card mb-3 ${cardClass}" style="border-radius: 12px;">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="card-title mb-0 fw-bold ${dateColor}">
-                                <i class="bi bi-calendar-event me-2"></i>${formatDate(d.date)}${badgeHariIniMobile}
-                            </h6>
-                            <span class="badge bg-light text-dark border" style="font-size: 0.7rem;">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span>
+                        <!-- HEADER CARD: Gunakan align-items-start agar rapi -->
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="d-flex flex-column">
+                                <!-- Badge muncul di sini (di atas tanggal) -->
+                                ${todayLabel}
+                                <h6 class="card-title mb-0 fw-bold ${dateColor}">
+                                    <i class="bi bi-calendar-event me-2"></i>${formatDate(d.date)}
+                                </h6>
+                            </div>
+                            <!-- Badge Rincian (Kanan Atas) -->
+                            <span class="badge bg-light text-dark border mt-1" style="font-size: 0.7rem;">L:${d.lontong} T:${d.telur} B:${d.bakwan}</span>
                         </div>
                         
                         <div class="row g-0 mb-3 text-center bg-white rounded-3 p-2 border">
