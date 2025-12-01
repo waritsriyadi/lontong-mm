@@ -27,6 +27,7 @@
             font-family: 'Inter', sans-serif;
             color: #374151;
             padding-bottom: 2rem;
+            overflow-x: hidden; /* FIX: Mencegah scroll samping */
         }
 
         /* Navbar Styling */
@@ -64,6 +65,7 @@
             position: relative;
             height: 320px;
             width: 100%;
+            overflow: hidden; /* FIX: Mencegah chart bocor keluar container */
         }
 
         /* Table Styling */
@@ -93,6 +95,17 @@
             .chart-container { height: 250px; }
             .stat-value { font-size: 1.25rem; }
             .col-mobile-text { font-size: 0.8rem; }
+            
+            /* FIX: Input tanggal di header agar tidak maksa lebar */
+            .header-filter-group {
+                flex-wrap: wrap;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .header-filter-input {
+                flex: 1; /* Input otomatis bagi rata */
+                min-width: 100px;
+            }
         }
     </style>
 </head>
@@ -210,11 +223,11 @@
                 </div>
 
                 <div class="card mb-3">
-                    <div class="card-header bg-white py-3 border-bottom-0 d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-white py-3 border-bottom-0 d-flex flex-wrap justify-content-between align-items-center">
                         <h6 class="m-0 fw-bold text-dark">Grafik Performa</h6>
-                        <div class="d-flex gap-2">
-                            <input type="date" id="filterStartDate" class="form-control form-control-sm" style="width: 130px;">
-                            <input type="date" id="filterEndDate" class="form-control form-control-sm" style="width: 130px;">
+                        <div class="d-flex gap-2 header-filter-group">
+                            <input type="date" id="filterStartDate" class="form-control form-control-sm header-filter-input">
+                            <input type="date" id="filterEndDate" class="form-control form-control-sm header-filter-input">
                             <button class="btn btn-sm btn-light border" onclick="resetFilter()"><i class="bi bi-arrow-clockwise"></i></button>
                         </div>
                     </div>
