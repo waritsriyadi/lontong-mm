@@ -132,13 +132,27 @@ body {
     border-radius: 10px;
     margin-bottom: 10px;
 }
-.payment-selector input[type="radio"] { display: none; }
-.payment-selector label {
-    flex: 1; text-align: center; padding: 6px; font-size: 0.8rem; font-weight: 600;
-    border-radius: 8px; cursor: pointer; color: #64748b; transition: all 0.2s;
+
+.payment-selector input[type="radio"] {
+    display: none;
 }
-.payment-selector input[type="radio"]:checked + label {
-    background: white; color: #198754; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+.payment-selector label {
+    flex: 1;
+    text-align: center;
+    padding: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.payment-selector input[type="radio"]:checked+label {
+    background: white;
+    color: #198754;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* --- STYLE QRIS FULL & BUTTONS --- */
@@ -156,8 +170,10 @@ body {
     width: auto;
     max-width: 100%;
     height: auto;
-    max-height: 250px; /* KUNCI: Batasi tinggi agar tidak perlu scroll panjang */
-    object-fit: contain; /* Pastikan gambar utuh tidak terpotong */
+    max-height: 250px;
+    /* KUNCI: Batasi tinggi agar tidak perlu scroll panjang */
+    object-fit: contain;
+    /* Pastikan gambar utuh tidak terpotong */
     border-radius: 8px;
     display: block;
     margin: 0 auto 10px auto;
@@ -287,6 +303,38 @@ body {
 .btn-add:active {
     background: #198754;
     color: white;
+}
+
+/* --- PERBAIKAN LAYOUT KERANJANG (MOBILE FIX) --- */
+.cart-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    /* Jarak antara nama menu dan harga */
+    margin-bottom: 8px;
+}
+
+.cart-item-title {
+    flex: 1;
+    /* Mengambil ruang sisa agar nama menu bisa panjang */
+    min-width: 0;
+    /* Mencegah overflow teks panjang */
+}
+
+.cart-item-price {
+    font-weight: bold;
+    font-size: 1rem;
+    white-space: nowrap;
+    /* Mencegah harga turun baris sendiri */
+    text-align: right;
+}
+
+.cart-item-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
 }
 
 .cart-bar {
@@ -478,5 +526,11 @@ body {
     .cart-bar {
         width: 95%;
         bottom: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-body {
+        padding: 15px !important;
     }
 }

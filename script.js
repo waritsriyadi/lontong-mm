@@ -275,6 +275,7 @@ function renderCartListHTML() {
 
     if (cart.length === 0) {
         formContainer.style.display = 'none';
+        // Tutup modal jika kosong (opsional)
         const el = document.getElementById('cartModal');
         if (typeof bootstrap !== 'undefined') {
             const modal = bootstrap.Modal.getInstance(el);
@@ -288,27 +289,33 @@ function renderCartListHTML() {
     cart.forEach((item, idx) => {
         let toppingHTML = '';
         if (item.toppings.length > 0) {
+            // Format topping agar rapi
             const tText = item.toppings.map(t => `${t.nama} x${t.qty}`).join(', ');
-            toppingHTML = `<small class="text-muted d-block fst-italic" style="font-size: 0.75rem">+ ${tText}</small>`;
+            toppingHTML = `<div class="text-muted small fst-italic mt-1" style="font-size: 0.75rem; line-height: 1.3;">+ ${tText}</div>`;
         } else {
-            toppingHTML = `<small class="text-muted d-block" style="font-size: 0.75rem">Tanpa Topping</small>`;
+            toppingHTML = `<div class="text-muted small mt-1" style="font-size: 0.75rem;">Tanpa Topping</div>`;
         }
 
         const subtotal = item.hargaPerItem * item.qty;
         grandTotal += subtotal;
 
+        // STRUKTUR HTML BARU (LEBIH STABIL DI MOBILE)
         listContainer.innerHTML += `
         <div class="py-3 border-bottom">
-            <div class="d-flex justify-content-between mb-2">
-                <div>
-                    <h6 class="fw-bold m-0">${item.nama}</h6>
+            <div class="cart-item-header">
+                <div class="cart-item-title">
+                    <h6 class="fw-bold m-0 text-dark">${item.nama}</h6>
                     ${toppingHTML}
                 </div>
-                <div class="fw-bold">Rp ${subtotal.toLocaleString('id-ID')}</div>
+                <div class="cart-item-price text-success">
+                    Rp ${subtotal.toLocaleString('id-ID')}
+                </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <small class="text-secondary">@ Rp ${item.hargaPerItem.toLocaleString('id-ID')}</small>
-                <div class="qty-control">
+
+            <div class="cart-item-details">
+                <small class="text-secondary fw-bold">@ Rp ${item.hargaPerItem.toLocaleString('id-ID')}</small>
+                
+                <div class="qty-control shadow-sm">
                     <button class="qty-btn" onclick="changeCartQty(${idx}, -1)">-</button>
                     <div class="qty-display">${item.qty}</div>
                     <button class="qty-btn" onclick="changeCartQty(${idx}, 1)">+</button>
@@ -349,9 +356,9 @@ function toggleAddress(isDelivery) {
 function togglePayment(isQRIS) {
     const qrisSec = document.getElementById('qrisSection');
     qrisSec.style.display = isQRIS ? 'block' : 'none';
-    
+
     // Auto scroll ke QRIS biar kelihatan jika di HP
-    if(isQRIS) {
+    if (isQRIS) {
         qrisSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
@@ -408,11 +415,11 @@ function processCheckout() {
     }
 
     const note = document.getElementById('custNote').value.trim();
-    
+
     // --- AMBIL DATA PENGIRIMAN & PEMBAYARAN ---
     const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
     const paymentType = document.querySelector('input[name="paymentType"]:checked').value;
-    
+
     const address = document.getElementById('custAddress').value.trim();
     const maps = document.getElementById('mapsLink').value;
 
@@ -448,7 +455,7 @@ function processCheckout() {
     message += `*TOTAL BELANJA: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
 
     // --- FORMAT PESAN BARU (Metode Pengiriman & Pembayaran) ---
-    
+
     // 1. Pengiriman
     if (deliveryType === 'pickup') {
         message += `Metode: *AMBIL SENDIRI (PICKUP)*\n`;
