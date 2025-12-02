@@ -221,7 +221,7 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#faq2">
-                                📦 Apakah kuahnya dipisah?
+                                🍲 Apakah kuahnya dipisah?
                             </button>
                         </h2>
                         <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
@@ -235,7 +235,7 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button fw-bold collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#faq3">
-                                🎉 Bisa pesan untuk acara?
+                                📅 Bisa pesan untuk acara?
                             </button>
                         </h2>
                         <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
@@ -348,7 +348,7 @@
 
             <div class="text-center text-white-50 small">
                 <p class="mb-0">
-                    © 2025 <strong>Lontong MM</strong>. All Rights Reserved. <br class="d-md-none">
+                    &copy; 2025 <strong>Lontong MM</strong>. All Rights Reserved. <br class="d-md-none">
                     Created with <i class="bi bi-heart-fill text-danger mx-1"></i> by <a href="https://waritsriyadi.com"
                         target="_blank" class="text-white text-decoration-none fw-bold">Warits Riyadi</a>.
                 </p>
@@ -372,48 +372,80 @@
                     <h5 class="modal-title fw-bold">Rincian Pesanan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
-                    <div id="cartItemsContainer" class="mb-4"></div>
-                    <div id="checkoutForm" style="display: none;" class="border-top pt-4">
-                        <h6 class="fw-bold mb-3 small text-uppercase text-secondary d-flex align-items-center gap-2">
-                            <i class="bi bi-truck fs-5"></i> Informasi Pengiriman
-                        </h6>
-                        <div class="btn-group w-100 mb-4" role="group">
-                            <input type="radio" class="btn-check" name="deliveryType" id="optPickup" value="pickup"
-                                checked onchange="toggleAddress(false)">
-                            <label class="btn btn-outline-success py-2" for="optPickup">Ambil Sendiri</label>
-                            <input type="radio" class="btn-check" name="deliveryType" id="optDelivery" value="delivery"
-                                onchange="toggleAddress(true)">
-                            <label class="btn btn-outline-success py-2" for="optDelivery">Diantar (Delivery)</label>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Nama Pemesan</label>
-                            <input type="text" id="custName" class="form-control" placeholder="Contoh: Budi">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Catatan (Opsional)</label>
-                            <textarea id="custNote" class="form-control" rows="2"
-                                placeholder="Contoh: Kuah dipisah, jangan pedas, dll..."></textarea>
-                        </div>
-                        <div id="addressSection" style="display: none;">
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-muted">Alamat Lengkap <span
-                                        class="text-danger">*</span></label>
-                                <textarea id="custAddress" class="form-control bg-light" rows="3"
-                                    placeholder="Wajib diisi: Blok, Nomor Rumah, Patokan..."></textarea>
-                                <div class="form-text text-muted" style="font-size: 0.75rem">*Mohon isi alamat detail
-                                    agar kurir mudah mencari.</div>
+                <div class="modal-body p-3">
+                    <div id="cartItemsContainer" class="mb-2" style="max-height: 150px; overflow-y: auto;"></div>
+
+                    <div id="checkoutForm" style="display: none;" class="border-top pt-2">
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <small class="fw-bold text-secondary d-block mb-1"
+                                    style="font-size: 0.7rem;">PENGIRIMAN</small>
+                                <div class="payment-selector">
+                                    <input type="radio" name="deliveryType" id="optPickup" value="pickup" checked
+                                        onchange="toggleAddress(false)">
+                                    <label for="optPickup">Ambil</label>
+                                    <input type="radio" name="deliveryType" id="optDelivery" value="delivery"
+                                        onchange="toggleAddress(true)">
+                                    <label for="optDelivery">Antar</label>
+                                </div>
                             </div>
-                            <div class="d-grid gap-2">
-                                <button type="button" id="btnGetLoc" onclick="getGeoLocation()"
-                                    class="btn btn-outline-primary dashed-border py-2">
-                                    <i class="bi bi-geo-alt-fill me-1"></i> Otomatis Cari Lokasi Saya
-                                </button>
-                                <div id="locStatus" class="alert alert-light border-0 p-2 text-center small"
-                                    style="display:none;"></div>
-                                <input type="hidden" id="mapsLink">
+                            <div class="col-6">
+                                <small class="fw-bold text-secondary d-block mb-1"
+                                    style="font-size: 0.7rem;">PEMBAYARAN</small>
+                                <div class="payment-selector">
+                                    <input type="radio" name="paymentType" id="payCOD" value="cod" checked
+                                        onchange="togglePayment(false)">
+                                    <label for="payCOD">Tunai</label>
+                                    <input type="radio" name="paymentType" id="payQRIS" value="qris"
+                                        onchange="togglePayment(true)">
+                                    <label for="payQRIS">QRIS</label>
+                                </div>
                             </div>
                         </div>
+
+                        <div id="qrisSection" class="mb-3" style="display: none;">
+                            <div class="qris-full-wrapper">
+                                <img src="qris.jpg" alt="QRIS Lontong MM" class="qris-image-full">
+
+                                <a href="qris.jpg" download="QRIS-LontongMM.jpg" class="btn-download-qr">
+                                    <i class="bi bi-download"></i> Simpan Gambar QRIS
+                                </a>
+                            </div>
+
+                            <div class="alert alert-info p-2 mb-0 small d-flex gap-2 align-items-start bg-opacity-10 border-0"
+                                style="font-size: 0.75rem;">
+                                <i class="bi bi-info-circle-fill mt-1"></i>
+                                <div>
+                                    <strong>Cara Bayar:</strong> Simpan gambar, buka E-Wallet (GoPay/Dana/dll), pilih
+                                    menu <b>Scan</b> &rarr; <b>Ambil dari Galeri</b>.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <input type="text" id="custName" class="form-control form-control-sm"
+                                    placeholder="Nama Pemesan (Wajib)">
+                            </div>
+                            <div class="col-12">
+                                <textarea id="custNote" class="form-control form-control-sm" rows="1"
+                                    placeholder="Catatan (Opsional)"></textarea>
+                            </div>
+                        </div>
+
+                        <div id="addressSection" class="mt-2" style="display: none;">
+                            <textarea id="custAddress" class="form-control form-control-sm bg-light mb-2" rows="2"
+                                placeholder="Alamat Lengkap..."></textarea>
+                            <button type="button" id="btnGetLoc" onclick="getGeoLocation()"
+                                class="btn btn-outline-success btn-sm w-100 dashed-border" style="font-size: 0.8rem;">
+                                <i class="bi bi-geo-alt-fill me-1"></i> Cari Lokasi Saya
+                            </button>
+                            <div id="locStatus" class="alert alert-light border-0 p-1 text-center small mt-1"
+                                style="display:none;"></div>
+                            <input type="hidden" id="mapsLink">
+                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer bg-light d-flex justify-content-between">

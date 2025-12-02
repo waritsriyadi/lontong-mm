@@ -89,10 +89,6 @@ function initMenu() {
 
             // RENDER ULANG TAMPILAN SETELAH DAPAT DATA BARU
             renderMenuHTML();
-
-            // (Opsional) Update harga di keranjang jika user sedang memilih item
-            // updatePriceDisplay(1); 
-            // updatePriceDisplay(2);
         }
     }, (error) => {
         console.error("Gagal mengambil update harga:", error);
@@ -350,6 +346,16 @@ function toggleAddress(isDelivery) {
     section.style.display = isDelivery ? 'block' : 'none';
 }
 
+function togglePayment(isQRIS) {
+    const qrisSec = document.getElementById('qrisSection');
+    qrisSec.style.display = isQRIS ? 'block' : 'none';
+    
+    // Auto scroll ke QRIS biar kelihatan jika di HP
+    if(isQRIS) {
+        qrisSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
 function getGeoLocation() {
     const btn = document.getElementById('btnGetLoc');
     const status = document.getElementById('locStatus');
@@ -402,11 +408,15 @@ function processCheckout() {
     }
 
     const note = document.getElementById('custNote').value.trim();
-    const type = document.querySelector('input[name="deliveryType"]:checked').value;
+    
+    // --- AMBIL DATA PENGIRIMAN & PEMBAYARAN ---
+    const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+    const paymentType = document.querySelector('input[name="paymentType"]:checked').value;
+    
     const address = document.getElementById('custAddress').value.trim();
     const maps = document.getElementById('mapsLink').value;
 
-    if (type === 'delivery') {
+    if (deliveryType === 'delivery') {
         if (!address) {
             alert("Mohon isi 'Alamat Lengkap' agar pesanan bisa diantar.");
             document.getElementById('custAddress').focus();
@@ -437,12 +447,22 @@ function processCheckout() {
     message += `--------------------------------\n`;
     message += `*TOTAL BELANJA: Rp ${grandTotal.toLocaleString('id-ID')}*\n`;
 
-    if (type === 'pickup') {
+    // --- FORMAT PESAN BARU (Metode Pengiriman & Pembayaran) ---
+    
+    // 1. Pengiriman
+    if (deliveryType === 'pickup') {
         message += `Metode: *AMBIL SENDIRI (PICKUP)*\n`;
     } else {
         message += `Metode: *DELIVERY (ANTAR)*\n`;
         if (address) message += `Alamat: ${address}\n`;
         if (maps) message += `Maps: ${maps}\n`;
+    }
+
+    // 2. Pembayaran (Bagian Baru)
+    if (paymentType === 'qris') {
+        message += `Pembayaran: *QRIS / TRANSFER* (Bukti Terlampir)\n`;
+    } else {
+        message += `Pembayaran: *TUNAI (COD)*\n`;
     }
 
     message += `--------------------------------\nMohon diproses ya kak. Terima kasih!`;
