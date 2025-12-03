@@ -10,25 +10,62 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
             --primary-bg: #f3f4f6;
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --nav-height: 70px;
         }
 
         body {
             background-color: var(--primary-bg);
             font-family: 'Inter', sans-serif;
             color: #374151;
-            padding-bottom: 2rem;
+            /* Padding bawah untuk HP agar tidak ketutup navbar */
+            padding-bottom: calc(var(--nav-height) + 20px);
             overflow-x: hidden;
             overscroll-behavior-y: contain;
             -webkit-overflow-scrolling: touch;
         }
 
+        /* --- LOGIKA TAMPILAN MOBILE (TAB MODE) --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .mobile-hidden-view {
+                display: none !important;
+            }
+
+            .mobile-active-view {
+                display: block !important;
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .mobile-hidden-view {
+                display: block !important;
+            }
+
+            body {
+                padding-bottom: 2rem;
+            }
+        }
+
+        /* --- NAVBAR & GENERAL --- */
         .navbar {
             background: #ffffff;
             border-bottom: 1px solid #e5e7eb;
@@ -48,29 +85,71 @@
             margin-bottom: 1rem;
         }
 
-        .card-today {
-            background-color: #ecfdf5 !important;
-            border: 1px solid #10b981 !important;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-today::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* --- MOBILE BOTTOM NAV --- */
+        .bottom-nav {
+            position: fixed;
             bottom: 0;
-            width: 6px;
-            background-color: #10b981;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            height: var(--nav-height);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            border-top: 1px solid #f3f4f6;
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
-        .card-today .card-body {
-            padding-left: 24px !important;
+        .nav-item-mobile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 0.65rem;
+            font-weight: 600;
+            width: 100%;
+            height: 100%;
+            transition: all 0.2s;
         }
 
+        .nav-item-mobile i {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+            transition: transform 0.2s;
+        }
+
+        .nav-item-mobile.active {
+            color: #3b82f6;
+        }
+
+        .nav-item-mobile.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-item-mobile.main-action i {
+            background-color: #eff6ff;
+            color: #3b82f6;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.2rem;
+        }
+
+        .nav-item-mobile.main-action.active i {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+        }
+
+        /* --- FORMS & UI --- */
         .form-control,
-        .input-group-text,
         .btn {
             border-radius: 8px;
             padding: 0.6rem 0.8rem;
@@ -84,7 +163,6 @@
         .stat-label {
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
             color: #6b7280;
             font-weight: 600;
         }
@@ -102,26 +180,6 @@
             overflow: hidden;
         }
 
-        .table-responsive-fix {
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            background: #fff;
-            position: relative;
-        }
-
-        .table-responsive-fix thead th {
-            position: sticky;
-            top: 0;
-            background-color: #ffffff;
-            z-index: 10;
-            box-shadow: inset 0 -1px 0 #dee2e6;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #6b7280;
-        }
-
         .table-main thead th {
             background-color: #f9fafb;
             color: #6b7280;
@@ -131,7 +189,7 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
-        /* --- STYLE AUTOCOMPLETE & CHIPS --- */
+        /* --- AUTOCOMPLETE & INPUT --- */
         .suggestion-box {
             position: absolute;
             top: 100%;
@@ -157,8 +215,7 @@
             justify-content: space-between;
         }
 
-        .suggestion-item:hover,
-        .suggestion-item.active {
+        .suggestion-item:hover {
             background-color: #eff6ff;
             color: #2563eb;
         }
@@ -183,16 +240,80 @@
             user-select: none;
         }
 
-        .chip-langganan:active {
-            background-color: #bae6fd;
-            transform: scale(0.95);
-        }
-
         .input-wrapper {
             position: relative;
         }
 
-        /* --- STYLE BARU: LIST COMPACT --- */
+        /* --- STEPPER --- */
+        .stepper-container {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .stepper-label {
+            font-weight: 700;
+            color: #374151;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stepper-sublabel {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .stepper-group {
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .btn-stepper {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #ffffff;
+            color: #ef4444;
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-plus {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+        }
+
+        .input-stepper {
+            width: 45px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #111827;
+            margin: 0 4px;
+            padding: 0;
+        }
+
+        /* --- ORDER LIST COMPACT (INPUT PAGE) --- */
         .order-list-container {
             max-height: 350px;
             overflow-y: auto;
@@ -226,7 +347,6 @@
             color: #374151;
             font-size: 0.85rem;
             margin-bottom: 2px;
-            line-height: 1.2;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -295,211 +415,213 @@
             justify-content: center;
             border-radius: 4px;
             color: #9ca3af;
-            transition: all 0.2s;
             background: transparent;
             border: none;
         }
 
-        .btn-action-icon:hover {
-            background-color: #f3f4f6;
-            color: #374151;
-        }
-
-        .btn-action-icon.text-danger:hover {
-            background-color: #fef2f2;
-            color: #dc2626;
-        }
-
-        .btn-action-icon.text-warning:hover {
-            background-color: #fffbeb;
-            color: #d97706;
-        }
-
-        .order-total {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
-        }
-
-        .dashed-border {
-            border: 2px dashed #e5e7eb;
-        }
-
-        /* --- MODAL STYLES --- */
+        /* --- MODAL STYLES (DIPERBARUI SESUAI GAMBAR) --- */
         .modal-content {
             border: none;
-            border-radius: 16px;
+            border-radius: 12px;
+            /* Sedikit lebih kotak sesuai gambar */
             overflow: hidden;
         }
 
+        /* Header Biru Royal */
         .modal-header-custom {
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            background-color: #2563eb;
+            /* Biru terang seperti di gambar */
             color: white;
-            padding: 1.5rem;
+            padding: 1rem 1.25rem;
+            border-bottom: none;
         }
 
+        .modal-header-custom .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            opacity: 0.8;
+        }
+
+        /* Body Modal Putih Bersih */
         .modal-body-custom {
             padding: 0;
-            background-color: #f9fafb;
+            background-color: #ffffff;
         }
 
-        /* RIWAYAT TRANSAKSI STYLES */
+        /* Scroll Area */
+        .scroller-content {
+            max-height: 55vh;
+            overflow-y: auto;
+            padding: 0 1.25rem;
+            /* Padding kiri kanan untuk list */
+        }
+
+        /* Scrollbar Custom (Agar terlihat rapi) */
+        .scroller-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scroller-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .scroller-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        /* ITEM PEMBELI (LIST STYLE) */
         .buyer-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            /* Garis tipis pemisah antar item */
+        }
+
+        .buyer-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Layout Baris Nama & Harga */
+        .buyer-top-row {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 12px 16px;
-            border-bottom: 1px solid #f3f4f6;
+            margin-bottom: 6px;
         }
 
-        .buyer-left {
-            flex: 1;
-            padding-right: 10px;
+        .buyer-name {
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 0.95rem;
+            margin-right: 8px;
         }
 
         .buyer-price {
             font-weight: 700;
-            color: #198754;
-            font-size: 0.9rem;
+            color: #10b981;
+            /* Hijau sesuai gambar */
+            font-size: 0.95rem;
             white-space: nowrap;
         }
 
-        /* --- STYLE INPUT STEPPER --- */
-        .stepper-container {
-            background-color: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-        }
-
-        .stepper-label {
-            font-weight: 700;
-            color: #374151;
-            font-size: 0.95rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stepper-sublabel {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            font-weight: 500;
-        }
-
-        .stepper-group {
-            display: flex;
-            align-items: center;
-            background: #f3f4f6;
-            border-radius: 8px;
-            padding: 2px;
-        }
-
-        .btn-stepper {
-            width: 36px;
-            height: 36px;
+        /* Badge BARU (Outline Style) */
+        .badge-baru-visual {
+            background-color: transparent;
+            color: #10b981;
+            border: 1px solid #10b981;
+            font-size: 0.6rem;
+            padding: 1px 5px;
             border-radius: 6px;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.1s;
+            font-weight: 700;
+            vertical-align: middle;
+            display: inline-block;
+            line-height: 1.2;
         }
 
-        .btn-minus {
-            background-color: #ffffff;
-            color: #ef4444;
-            border: 1px solid #e5e7eb;
-        }
-
-        .btn-plus {
-            background-color: #3b82f6;
-            color: white;
-        }
-
-        .btn-stepper:active {
-            transform: scale(0.9);
-        }
-
-        .input-stepper {
-            width: 45px;
-            text-align: center;
-            border: none;
-            background: transparent;
-            font-weight: 800;
-            font-size: 1rem;
-            color: #111827;
-            margin: 0 4px;
-            padding: 0;
-        }
-
-        .input-stepper::-webkit-outer-spin-button,
-        .input-stepper::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        .modal-summary-footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #e9ecef;
-            padding: 15px;
-        }
-
-        .buyer-item:hover {
-            background: #f0f9ff;
-        }
-
-        .buyer-name {
-            font-weight: 600;
-            color: #1f2937;
-            font-size: 0.95rem;
-            flex: 1 1 auto;
-            min-width: 120px;
-            word-break: break-word;
-            overflow-wrap: anywhere;
-            line-height: 1.4;
-            margin-right: 4px;
-        }
-
-        .buyer-badges {
+        /* Item Pills Container */
+        .item-badges-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
-            justify-content: flex-end;
-            flex: 0 1 auto;
+            gap: 6px;
         }
 
-        .badge-pill-custom {
-            padding: 6px 10px;
-            border-radius: 8px;
+        /* Pill Item Style */
+        .item-pill {
             font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-weight: 600;
-            white-space: nowrap;
             display: inline-block;
         }
 
-        .badge-l {
-            background-color: #dbeafe;
-            color: #1e40af;
+        /* Warna Pill (Disesuaikan dengan Gambar) */
+        .pill-l {
+            background-color: #e0f2fe;
+            color: #0284c7;
         }
 
-        .badge-t {
+        /* Lontong: Biru muda */
+        .pill-t {
             background-color: #fef3c7;
-            color: #92400e;
+            color: #b45309;
         }
 
-        .badge-b {
+        /* Telur: Kuning/Oranye muda */
+        .pill-b {
             background-color: #f3f4f6;
-            color: #374151;
+            color: #4b5563;
+        }
+
+        /* Bakwan: Abu muda */
+        .pill-k {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* Kerupuk: Merah muda */
+
+        /* FOOTER SUMMARY (3 KOLOM DENGAN DIVIDER) */
+        .modal-summary-footer {
+            background-color: #f9fafb;
+            /* Abu sangat muda untuk footer */
+            border-top: 1px solid #e5e7eb;
+            padding: 15px 0;
+        }
+
+        .summary-box {
+            text-align: center;
+            position: relative;
+            padding: 0 5px;
+        }
+
+        /* Garis vertikal pemisah */
+        .summary-box:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 10%;
+            height: 80%;
+            border-right: 1px solid #d1d5db;
+        }
+
+        .summary-label {
+            font-size: 0.65rem;
+            color: #6b7280;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .summary-val-dark {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #1f2937;
+        }
+
+        .summary-val-warn {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #f59e0b;
+        }
+
+        .summary-val-success {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .modal-footer-close {
+            padding: 0;
+            border-top: none;
+        }
+
+        .btn-close-bottom {
+            width: 100%;
+            border-radius: 0;
+            background: white;
+            color: #6b7280;
+            padding: 12px;
+            font-weight: 500;
+            border-top: 1px solid #e5e7eb;
         }
 
         @media (max-width: 768px) {
@@ -534,40 +656,41 @@
                 <h4 class="fw-bold text-primary">Admin Lontong MM</h4>
                 <p class="text-muted small">Silakan masukkan kode akses untuk masuk.</p>
             </div>
-            <div class="mb-3">
-                <input type="password" id="passcodeInput" class="form-control form-control-lg text-center fw-bold"
-                    placeholder="Kode Akses" autofocus>
-            </div>
+            <div class="mb-3"><input type="password" id="passcodeInput"
+                    class="form-control form-control-lg text-center fw-bold" placeholder="Kode Akses" autofocus></div>
             <button class="btn btn-primary w-100 py-2 fw-bold rounded-3" onclick="checkLogin()">MASUK <i
                     class="bi bi-arrow-right-short"></i></button>
-            <p id="loginError" class="text-danger text-center small mt-3 fw-bold d-none">
-                <i class="bi bi-x-circle-fill"></i> Kode Salah!
-            </p>
+            <p id="loginError" class="text-danger text-center small mt-3 fw-bold d-none"><i
+                    class="bi bi-x-circle-fill"></i> Kode Salah!</p>
         </div>
     </div>
 
-    <nav class="navbar navbar-expand-lg sticky-top mb-4">
+    <nav class="navbar navbar-expand-lg sticky-top mb-4 d-none d-md-flex">
         <div class="container-fluid px-4 d-flex justify-content-between">
             <div class="d-flex align-items-center">
                 <a class="navbar-brand" href="#"><i class="bi bi-shop-window me-2 text-primary"></i>Lontong MM</a>
-                <span class="badge bg-primary bg-opacity-10 text-primary d-none d-md-block ms-2">Admin Panel</span>
+                <span class="badge bg-primary bg-opacity-10 text-primary ms-2">Admin Panel</span>
             </div>
             <div class="d-flex gap-2">
                 <button class="btn btn-sm btn-outline-secondary border-0 fw-bold" onclick="bukaModalHarga()"
-                    title="Atur Harga">
-                    <i class="bi bi-gear-fill"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="logoutAdmin()">
-                    <i class="bi bi-box-arrow-right me-1"></i> Keluar
-                </button>
+                    title="Atur Harga"><i class="bi bi-gear-fill"></i></button>
+                <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="logoutAdmin()"><i
+                        class="bi bi-box-arrow-right me-1"></i> Keluar</button>
             </div>
         </div>
     </nav>
 
-    <div class="container-fluid px-4">
+    <div class="d-md-none sticky-top bg-white border-bottom py-2 px-3 d-flex justify-content-between align-items-center shadow-sm"
+        style="z-index: 900;">
+        <div class="fw-bold text-dark"><i class="bi bi-shop-window me-2 text-primary"></i>Lontong MM</div>
+        <button class="btn btn-sm btn-light border-0" onclick="bukaModalHarga()"><i
+                class="bi bi-gear-fill text-muted"></i></button>
+    </div>
+
+    <div class="container-fluid px-4 mt-3 mt-md-0">
         <div class="row g-4">
 
-            <div class="col-lg-4">
+            <div class="col-lg-4" id="section-form">
                 <div class="card h-100">
                     <div class="card-header bg-white py-3 border-bottom-0">
                         <div class="d-flex justify-content-between align-items-center">
@@ -580,13 +703,11 @@
                     <div class="card-body pt-0">
                         <form id="salesForm">
                             <input type="hidden" id="editId">
-
                             <div class="mb-3">
                                 <label class="form-label text-xs fw-bold text-muted mb-1">TANGGAL</label>
                                 <input type="date" class="form-control bg-light border-0 fw-bold" id="dateInput"
                                     required>
                             </div>
-
                             <div class="p-3 bg-light rounded-3 mb-3 border">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <label class="text-xs fw-bold text-muted"><i class="bi bi-cart-fill me-1"></i>ITEM
@@ -595,119 +716,85 @@
                                         class="btn btn-link p-0 text-decoration-none text-xs text-danger d-none"
                                         id="btnBatalEditDetail" onclick="batalEditPesanan()">Batal Ubah</button>
                                 </div>
-
                                 <div class="mb-3 input-wrapper">
                                     <label class="text-xs fw-bold text-muted ms-1 mb-1">NAMA PELANGGAN</label>
-
                                     <input type="text" id="custName" class="form-control fw-bold border-0 shadow-sm"
                                         style="padding: 12px;" placeholder="Ketik nama atau pilih langganan..."
                                         autocomplete="off">
-
                                     <div id="suggestionList" class="suggestion-box"></div>
-
-                                    <div id="chipsArea" class="chips-container">
-                                    </div>
+                                    <div id="chipsArea" class="chips-container"></div>
                                 </div>
-
                                 <div class="stepper-container">
-                                    <div class="stepper-label">
-                                        Lontong
-                                        <span class="stepper-sublabel">Menu Utama</span>
+                                    <div class="stepper-label">Lontong<span class="stepper-sublabel">Menu Utama</span>
                                     </div>
                                     <div class="stepper-group">
                                         <button type="button" class="btn-stepper btn-minus"
-                                            onclick="ubahJumlah('custLontong', -1)">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
+                                            onclick="ubahJumlah('custLontong', -1)"><i class="bi bi-dash"></i></button>
                                         <input type="number" id="custLontong" class="input-stepper" value="1" min="0"
                                             readonly>
                                         <button type="button" class="btn-stepper btn-plus"
-                                            onclick="ubahJumlah('custLontong', 1)">
-                                            <i class="bi bi-plus"></i>
-                                        </button>
+                                            onclick="ubahJumlah('custLontong', 1)"><i class="bi bi-plus"></i></button>
                                     </div>
                                 </div>
-
                                 <div class="stepper-container">
-                                    <div class="stepper-label">
-                                        Telur
-                                        <span class="stepper-sublabel">Topping</span>
-                                    </div>
+                                    <div class="stepper-label">Telur<span class="stepper-sublabel">Topping</span></div>
                                     <div class="stepper-group">
                                         <button type="button" class="btn-stepper btn-minus"
-                                            onclick="ubahJumlah('custTelur', -1)">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
+                                            onclick="ubahJumlah('custTelur', -1)"><i class="bi bi-dash"></i></button>
                                         <input type="number" id="custTelur" class="input-stepper" value="0" min="0"
                                             readonly>
                                         <button type="button" class="btn-stepper btn-plus"
-                                            onclick="ubahJumlah('custTelur', 1)">
-                                            <i class="bi bi-plus"></i>
-                                        </button>
+                                            onclick="ubahJumlah('custTelur', 1)"><i class="bi bi-plus"></i></button>
                                     </div>
                                 </div>
-
                                 <div class="stepper-container">
-                                    <div class="stepper-label">
-                                        Bakwan
-                                        <span class="stepper-sublabel">Gorengan</span>
+                                    <div class="stepper-label">Bakwan<span class="stepper-sublabel">Gorengan</span>
                                     </div>
                                     <div class="stepper-group">
                                         <button type="button" class="btn-stepper btn-minus"
-                                            onclick="ubahJumlah('custBakwan', -1)">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
+                                            onclick="ubahJumlah('custBakwan', -1)"><i class="bi bi-dash"></i></button>
                                         <input type="number" id="custBakwan" class="input-stepper" value="0" min="0"
                                             readonly>
                                         <button type="button" class="btn-stepper btn-plus"
-                                            onclick="ubahJumlah('custBakwan', 1)">
-                                            <i class="bi bi-plus"></i>
-                                        </button>
+                                            onclick="ubahJumlah('custBakwan', 1)"><i class="bi bi-plus"></i></button>
                                     </div>
                                 </div>
-
                                 <div class="d-flex justify-content-between align-items-center mt-3 px-1 mb-2">
                                     <small class="text-muted fw-bold">Total Harga Item:</small>
                                     <span class="fw-bold text-primary fs-5" id="previewSubtotal">Rp 0</span>
                                 </div>
-
                                 <button type="button" id="btnAddDetail"
                                     class="btn btn-primary w-100 py-2 fw-bold rounded-3 shadow-sm"
-                                    onclick="prosesPesanan()">
-                                    <i class="bi bi-plus-lg me-1"></i> MASUKKAN KE KERANJANG
-                                </button>
-
+                                    onclick="prosesPesanan()"><i class="bi bi-plus-lg me-1"></i> MASUKKAN KE
+                                    KERANJANG</button>
                                 <div class="order-list-container mt-3" id="listPesananContainer"></div>
                             </div>
-
                             <div class="mb-3">
                                 <div class="row g-2 text-center mb-2">
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
-                                            <div class="text-xs text-muted">Lontong</div>
-                                            <input type="text" id="qtyLontong"
+                                            <div class="text-xs text-muted">Lontong</div><input type="text"
+                                                id="qtyLontong"
                                                 class="form-control-plaintext text-center fw-bold p-0 text-dark"
                                                 value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
-                                            <div class="text-xs text-muted">Telur</div>
-                                            <input type="text" id="qtyTelur"
+                                            <div class="text-xs text-muted">Telur</div><input type="text" id="qtyTelur"
                                                 class="form-control-plaintext text-center fw-bold p-0 text-dark"
                                                 value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
-                                            <div class="text-xs text-muted">Bakwan</div>
-                                            <input type="text" id="qtyBakwan"
+                                            <div class="text-xs text-muted">Bakwan</div><input type="text"
+                                                id="qtyBakwan"
                                                 class="form-control-plaintext text-center fw-bold p-0 text-dark"
                                                 value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="p-3 bg-dark text-white rounded-3">
                                     <div class="d-flex justify-content-between text-xs text-white-50"><span>Setor
                                             Saudara</span><span id="previewSetor">Rp 0</span></div>
@@ -716,7 +803,6 @@
                                     <div class="d-none" id="previewOmset">Rp 0</div>
                                 </div>
                             </div>
-
                             <button type="submit" class="btn btn-success w-100 py-2 fw-bold" id="btnSave"><i
                                     class="bi bi-check-lg me-2"></i>SIMPAN DATA</button>
                             <button type="button" class="btn btn-outline-primary w-100 py-2 fw-bold mt-2"
@@ -727,56 +813,54 @@
             </div>
 
             <div class="col-lg-8">
-
-                <div class="row g-3 mb-3">
-                    <div class="col-md-4">
-                        <div
-                            class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-primary">
-                            <div class="stat-label">Total Omset</div>
-                            <div class="stat-value" id="grandOmset">Rp 0</div>
+                <div id="section-stats">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <div
+                                class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-primary">
+                                <div class="stat-label">Total Omset</div>
+                                <div class="stat-value" id="grandOmset">Rp 0</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div
+                                class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-warning">
+                                <div class="stat-label">Setor Saudara</div>
+                                <div class="stat-value text-warning" id="grandSetor">Rp 0</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div
+                                class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-success">
+                                <div class="stat-label">Profit Saya</div>
+                                <div class="stat-value text-success" id="grandProfit">Rp 0</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="card mb-3">
                         <div
-                            class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-warning">
-                            <div class="stat-label">Setor Saudara</div>
-                            <div class="stat-value text-warning" id="grandSetor">Rp 0</div>
+                            class="card-header bg-white py-3 border-bottom-0 d-flex flex-wrap justify-content-between align-items-center">
+                            <h6 class="m-0 fw-bold text-dark">Grafik Performa</h6>
+                            <div class="d-flex gap-2 header-filter-group">
+                                <input type="date" id="filterStartDate"
+                                    class="form-control form-control-sm header-filter-input">
+                                <input type="date" id="filterEndDate"
+                                    class="form-control form-control-sm header-filter-input">
+                                <button class="btn btn-sm btn-light border" onclick="resetFilter()"
+                                    title="Reset Filter"><i class="bi bi-arrow-clockwise"></i></button>
+                                <button class="btn btn-sm btn-success text-white" onclick="downloadCSV()"
+                                    title="Download Excel"><i class="bi bi-file-earmark-spreadsheet"></i></button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-success">
-                            <div class="stat-label">Profit Saya</div>
-                            <div class="stat-value text-success" id="grandProfit">Rp 0</div>
+                        <div class="card-body px-3 pb-3 pt-0">
+                            <div class="chart-container"><canvas id="salesChart"></canvas></div>
+                            <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold">Tanggal
+                                Filter Terbalik!</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mb-3">
-                    <div
-                        class="card-header bg-white py-3 border-bottom-0 d-flex flex-wrap justify-content-between align-items-center">
-                        <h6 class="m-0 fw-bold text-dark">Grafik Performa</h6>
-                        <div class="d-flex gap-2 header-filter-group">
-                            <input type="date" id="filterStartDate"
-                                class="form-control form-control-sm header-filter-input">
-                            <input type="date" id="filterEndDate"
-                                class="form-control form-control-sm header-filter-input">
-                            <button class="btn btn-sm btn-light border" onclick="resetFilter()" title="Reset Filter"><i
-                                    class="bi bi-arrow-clockwise"></i></button>
-                            <button class="btn btn-sm btn-success text-white" onclick="downloadCSV()"
-                                title="Download Excel"><i class="bi bi-file-earmark-spreadsheet"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body px-3 pb-3 pt-0">
-                        <div class="chart-container">
-                            <canvas id="salesChart"></canvas>
-                        </div>
-                        <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold">Tanggal Filter
-                            Terbalik!</div>
-                    </div>
-                </div>
-
-                <div class="card">
+                <div class="card" id="section-history">
                     <div
                         class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
                         <h6 class="m-0 fw-bold text-dark">Riwayat Transaksi (14 Hari Terakhir)</h6>
@@ -811,12 +895,31 @@
         </div>
     </div>
 
+    <div class="bottom-nav d-md-none">
+        <a href="#" class="nav-item-mobile main-action active" onclick="switchMobileMenu(this, 'input')">
+            <i class="bi bi-plus-lg"></i>
+            <span>Input</span>
+        </a>
+        <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(this, 'stats')">
+            <i class="bi bi-bar-chart-line-fill"></i>
+            <span>Laporan</span>
+        </a>
+        <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(this, 'history')">
+            <i class="bi bi-clock-history"></i>
+            <span>Riwayat</span>
+        </a>
+        <a href="#" class="nav-item-mobile" onclick="logoutAdmin()">
+            <i class="bi bi-box-arrow-right text-danger"></i>
+            <span class="text-danger">Keluar</span>
+        </a>
+    </div>
+
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
         <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert"
             aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
-                <div class="toast-body" id="toastMessage">Berhasil disimpan!</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                <div class="toast-body" id="toastMessage">Berhasil disimpan!</div><button type="button"
+                    class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
     </div>
@@ -826,16 +929,13 @@
             <div class="modal-content shadow-lg">
                 <div class="modal-header-custom d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="m-0 fw-bold mb-1">Rincian Pembeli</h5>
-                        <small class="opacity-75" id="modalDateDisplay">Tanggal Transaksi</small>
+                        <h5 class="m-0 fw-bold mb-1">Rincian Pembeli</h5><small class="opacity-75"
+                            id="modalDateDisplay">Tanggal Transaksi</small>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body modal-body-custom" id="detailModalBody"></div>
-                <div class="modal-footer bg-light p-2 justify-content-center">
-                    <button type="button" class="btn btn-light btn-sm w-100 text-muted"
-                        data-bs-dismiss="modal">Tutup</button>
-                </div>
+                <div class="modal-footer p-0 border-0" style="display:none;"></div>
             </div>
         </div>
     </div>
@@ -845,56 +945,41 @@
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-white border-bottom">
                     <h5 class="modal-title fw-bold text-dark"><i
-                            class="bi bi-gear-fill me-2 text-primary"></i>Pengaturan Harga</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            class="bi bi-gear-fill me-2 text-primary"></i>Pengaturan Harga</h5><button type="button"
+                        class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body bg-light">
-                    <div class="alert alert-info py-2 px-3 small mb-3">
-                        <i class="bi bi-info-circle me-1"></i> Perubahan harga akan berlaku untuk transaksi baru.
-                    </div>
+                    <div class="alert alert-info py-2 px-3 small mb-3"><i class="bi bi-info-circle me-1"></i> Perubahan
+                        harga akan berlaku untuk transaksi baru.</div>
                     <form id="formHarga">
                         <div class="card mb-3 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Lontong</h6>
                             <div class="row g-2">
-                                <div class="col-6">
-                                    <label class="small text-muted fw-bold">Harga Jual</label>
-                                    <input type="number" id="set_lontong_jual" class="form-control" placeholder="Rp">
-                                </div>
-                                <div class="col-6">
-                                    <label class="small text-muted fw-bold">Setor Saudara</label>
-                                    <input type="number" id="set_lontong_setor" class="form-control" placeholder="Rp">
+                                <div class="col-6"><label class="small text-muted fw-bold">Harga Jual</label><input
+                                        type="number" id="set_lontong_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold">Setor Saudara</label><input
+                                        type="number" id="set_lontong_setor" class="form-control" placeholder="Rp">
                                 </div>
                             </div>
                         </div>
-
                         <div class="card mb-3 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-warning mb-2 border-bottom pb-2">Telur</h6>
                             <div class="row g-2">
-                                <div class="col-4">
-                                    <label class="small text-muted fw-bold">Jual</label>
-                                    <input type="number" id="set_telur_jual" class="form-control" placeholder="Rp">
-                                </div>
-                                <div class="col-4">
-                                    <label class="small text-muted fw-bold">Modal</label>
-                                    <input type="number" id="set_telur_modal" class="form-control" placeholder="Rp">
-                                </div>
-                                <div class="col-4 d-flex align-items-end">
-                                    <small class="text-muted" style="font-size:0.65rem">Setor = 0 (Otomatis)</small>
-                                </div>
+                                <div class="col-4"><label class="small text-muted fw-bold">Jual</label><input
+                                        type="number" id="set_telur_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-4"><label class="small text-muted fw-bold">Modal</label><input
+                                        type="number" id="set_telur_modal" class="form-control" placeholder="Rp"></div>
+                                <div class="col-4 d-flex align-items-end"><small class="text-muted"
+                                        style="font-size:0.65rem">Setor = 0 (Otomatis)</small></div>
                             </div>
                         </div>
-
                         <div class="card mb-2 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-secondary mb-2 border-bottom pb-2">Bakwan</h6>
                             <div class="row g-2">
-                                <div class="col-6">
-                                    <label class="small text-muted fw-bold">Harga Jual</label>
-                                    <input type="number" id="set_bakwan_jual" class="form-control" placeholder="Rp">
-                                </div>
-                                <div class="col-6">
-                                    <label class="small text-muted fw-bold">Setor Saudara</label>
-                                    <input type="number" id="set_bakwan_setor" class="form-control" placeholder="Rp">
-                                </div>
+                                <div class="col-6"><label class="small text-muted fw-bold">Harga Jual</label><input
+                                        type="number" id="set_bakwan_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold">Setor Saudara</label><input
+                                        type="number" id="set_bakwan_setor" class="form-control" placeholder="Rp"></div>
                             </div>
                         </div>
                         <div class="card mb-2 p-3 border-0 shadow-sm">
@@ -906,13 +991,9 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer bg-white">
-                    <button type="button" class="btn btn-light text-muted fw-bold"
-                        data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary fw-bold" onclick="simpanHarga()">
-                        <i class="bi bi-save me-1"></i> Simpan Perubahan
-                    </button>
-                </div>
+                <div class="modal-footer bg-white"><button type="button" class="btn btn-light text-muted fw-bold"
+                        data-bs-dismiss="modal">Batal</button><button type="button" class="btn btn-primary fw-bold"
+                        onclick="simpanHarga()"><i class="bi bi-save me-1"></i> Simpan Perubahan</button></div>
             </div>
         </div>
     </div>
@@ -920,7 +1001,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="module">
-        // --- 1. LOGIN SYSTEM ---
         const AUTH_HASH = "MTIzNDU2";
         const overlay = document.getElementById('loginOverlay');
         const passInput = document.getElementById('passcodeInput');
@@ -944,11 +1024,8 @@
         if (sessionStorage.getItem("isLoggedIn")) { overlay.remove(); }
         if (passInput) { passInput.addEventListener("keypress", function (event) { if (event.key === "Enter") { window.checkLogin(); } }); }
 
-        window.logoutAdmin = () => {
-            if (confirm("Keluar dari panel admin?")) { sessionStorage.removeItem("isLoggedIn"); window.location.reload(); }
-        }
+        window.logoutAdmin = () => { if (confirm("Keluar dari panel admin?")) { sessionStorage.removeItem("isLoggedIn"); window.location.reload(); } }
 
-        // --- 2. FIREBASE & APP LOGIC ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -972,7 +1049,6 @@
         let unsubscribeRealtime = null;
         let currentSort = { column: 'date', direction: 'desc' };
 
-        // --- 3. HELPER FUNCTIONS ---
         window.showToast = (message, type = 'success') => {
             const toastEl = document.getElementById('liveToast');
             const msgEl = document.getElementById('toastMessage');
@@ -982,17 +1058,42 @@
             toast.show();
         }
 
-        // FUNGSI PENTING: Normalisasi Tanggal ke YYYY-MM-DD untuk perbandingan akurat
         function normalizeDate(d) {
             if (!d) return "";
             if (typeof d === 'string') {
                 if (d.includes('T')) return d.split('T')[0];
                 return d;
             }
-            if (d.toDate) { // Firestore Timestamp
-                return d.toDate().toISOString().split('T')[0];
-            }
+            if (d.toDate) { return d.toDate().toISOString().split('T')[0]; }
             return new Date(d).toISOString().split('T')[0];
+        }
+
+        // --- LOGIKA MENU TABS MOBILE ---
+        window.switchMobileMenu = (el, targetId) => {
+            document.querySelectorAll('.nav-item-mobile').forEach(item => item.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            document.getElementById('section-form').classList.remove('mobile-active-view');
+            document.getElementById('section-form').classList.add('mobile-hidden-view');
+            document.getElementById('section-stats').classList.remove('mobile-active-view');
+            document.getElementById('section-stats').classList.add('mobile-hidden-view');
+            document.getElementById('section-history').classList.remove('mobile-active-view');
+            document.getElementById('section-history').classList.add('mobile-hidden-view');
+
+            let target;
+            if (targetId === 'input') target = document.getElementById('section-form');
+            else if (targetId === 'stats') target = document.getElementById('section-stats');
+            else if (targetId === 'history') target = document.getElementById('section-history');
+
+            if (target) {
+                target.classList.remove('mobile-hidden-view');
+                target.classList.add('mobile-active-view');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        if (window.innerWidth < 768) {
+            window.switchMobileMenu(null, 'input');
         }
 
         async function setupHarga() {
@@ -1001,10 +1102,7 @@
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) { HARGA = docSnap.data(); } else { await setDoc(docRef, HARGA); }
                 updateSubtotalPreview();
-            } catch (e) {
-                console.error("Gagal memuat harga:", e);
-                showToast("Gagal memuat harga terkini.", "warning");
-            }
+            } catch (e) { console.error("Gagal memuat harga:", e); }
         }
         setupHarga();
 
@@ -1039,14 +1137,10 @@
                 updateSubtotalPreview();
                 showToast("Harga berhasil diperbarui!", "success");
                 modalHarga.hide();
-            } catch (error) {
-                showToast("Gagal menyimpan: " + error.message, "danger");
-            } finally {
-                btn.disabled = false; btn.innerHTML = originalText;
-            }
+            } catch (error) { showToast("Gagal menyimpan: " + error.message, "danger"); }
+            finally { btn.disabled = false; btn.innerHTML = originalText; }
         }
 
-        // 1. Generate Chips & Data Pelanggan
         function updateCustomerList() {
             const counts = {};
             globalData.forEach(trx => {
@@ -1098,8 +1192,6 @@
                 });
             } else { suggestBox.style.display = 'none'; }
 
-            // Indikator Real-time Warna
-            // (Hanya cek di cache lokal untuk kecepatan UI, validasi asli saat tombol Tambah)
             if (val.length > 2) {
                 if (window.cekStatusPelangganLokal(val)) {
                     inputNama.classList.add('border-success');
@@ -1171,7 +1263,6 @@
             updateSubtotalPreview();
         }
 
-        // Cek Status Lokal (Hanya untuk UI Border Hijau)
         window.cekStatusPelangganLokal = (namaInput) => {
             if (!namaInput) return false;
             const cleanInput = namaInput.trim().toLowerCase();
@@ -1179,13 +1270,9 @@
             return count <= 1;
         }
 
-        // --- FUNGSI UTAMA: CEK KRONOLOGI + REALTIME FIREBASE ---
         async function cekStatusRealtime(namaInput, tanggalInputStr) {
             const cleanName = namaInput.trim().toLowerCase();
             const inputDateStr = normalizeDate(tanggalInputStr);
-
-            // 1. Cek dulu di Global Data (Lokal 14 Hari)
-            // Cari tanggal paling awal yang tercatat di view
             let minDateLocal = null;
             let foundInLocal = false;
 
@@ -1202,47 +1289,28 @@
                 }
             });
 
-            // Jika di lokal sudah ada data yang LEBIH TUA dari input, pasti BUKAN BARU
-            if (foundInLocal && minDateLocal < inputDateStr) {
-                return false;
-            }
+            if (foundInLocal && minDateLocal < inputDateStr) { return false; }
 
-            // 2. Jika di lokal tidak ada yang lebih tua (atau tidak ada sama sekali),
-            // Kita WAJIB cek ke Database (untuk menangani kasus pelanggan lama > 14 hari)
-            // Query: Cari dokumen dimana tanggal < inputDateStr. 
-            // Note: Firestore tidak bisa query array contains object property dengan mudah tanpa index composite.
-            // Solusi Efisien: Query berdasarkan tanggal (mundur), lalu filter manual di client.
-            // Kita batasi limit agar tidak berat.
-            
             try {
                 const q = query(
-                    collection(db, "penjualan_detail"), 
-                    where("date", "<", inputDateStr), // Cari transaksi MASA LALU
-                    orderBy("date", "desc"), 
-                    limit(50) // Cek 50 transaksi terakhir sebelum tanggal ini
+                    collection(db, "penjualan_detail"),
+                    where("date", "<", inputDateStr),
+                    orderBy("date", "desc"),
+                    limit(50)
                 );
-                
                 const snapshot = await getDocs(q);
                 let foundInDb = false;
-                
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    if(data.detail_pelanggan) {
+                    if (data.detail_pelanggan) {
                         if (data.detail_pelanggan.some(p => p.nama.trim().toLowerCase() === cleanName)) {
                             foundInDb = true;
                         }
                     }
                 });
-
-                if (foundInDb) return false; // Ketemu di masa lalu DB -> Bukan Baru
-
-            } catch(e) {
-                console.warn("Gagal cek DB realtime, fallback ke lokal:", e);
-                // Jika gagal koneksi, anggap baru (atau sesuai lokal)
-                return true; 
-            }
-
-            return true; // Tidak ketemu di masa lalu (Lokal & DB) -> BARU
+                if (foundInDb) return false;
+            } catch (e) { return true; }
+            return true;
         }
 
         window.prosesPesanan = async () => {
@@ -1257,22 +1325,19 @@
             const cT = Math.max(0, parseInt(document.getElementById('custTelur').value) || 0);
             const cB = Math.max(0, parseInt(document.getElementById('custBakwan').value) || 0);
 
-            if (!nama) { 
-                showToast("Nama pembeli wajib diisi!", "warning"); 
+            if (!nama) {
+                showToast("Nama pembeli wajib diisi!", "warning");
                 btn.innerHTML = originalText; btn.disabled = false;
-                return; 
+                return;
             }
 
             let statusBaru = false;
             const cleanName = nama.trim().toLowerCase();
-
-            // Cek duplikat di keranjang saat ini
             const existsInCart = orderList.some(item => item.nama.toLowerCase() === cleanName);
 
             if (existsInCart && detailEditingIndex === -1) {
                 statusBaru = false;
             } else {
-                // CEK ASYNC KE FIREBASE
                 statusBaru = await cekStatusRealtime(nama, tgl);
             }
 
@@ -1281,7 +1346,6 @@
             if (detailEditingIndex === -1) {
                 orderList.push(payload);
             } else {
-                // Saat edit, cek ulang
                 payload.is_new = await cekStatusRealtime(nama, tgl);
                 orderList[detailEditingIndex] = payload;
                 batalEditPesanan();
@@ -1290,7 +1354,6 @@
             resetInputDetail();
             renderOrderList();
             updateHistoryTrap();
-            
             btn.innerHTML = originalText; btn.disabled = false;
         }
 
@@ -1543,15 +1606,14 @@
         window.resetFilter = () => { dom.filterStart.value = ''; dom.filterEnd.value = ''; document.getElementById('filterMsg').classList.add('d-none'); loadLatestData(); }
 
         // --- VISUAL LOGIC: Tentukan Tanggal Paling Awal di List (Overrule) ---
-        // Fungsi ini mencari tanggal paling awal untuk seorang pelanggan DARI DATA YANG TERMUAT SAJA
         function getEarliestDateInView(customerName) {
             const cleanName = customerName.trim().toLowerCase();
             let earliestDate = null;
-            
+
             globalData.forEach(doc => {
                 if (doc.detail_pelanggan && doc.detail_pelanggan.some(p => p.nama.trim().toLowerCase() === cleanName)) {
                     const dStr = normalizeDate(doc.date);
-                    if(!earliestDate || dStr < earliestDate) {
+                    if (!earliestDate || dStr < earliestDate) {
                         earliestDate = dStr;
                     }
                 }
@@ -1559,72 +1621,130 @@
             return earliestDate;
         }
 
+        // --- UPDATE FUNGSI LIHAT DETAIL (SESUAI GAMBAR) ---
         window.lihatDetail = (d) => {
             const body = document.getElementById('detailModalBody');
-            document.getElementById('modalDateDisplay').innerText = formatDate(d.date);
+            // Format Tanggal Header: "3 Desember 2025"
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = new Date(d.date).toLocaleDateString('id-ID', options);
+
+            document.getElementById('modalDateDisplay').innerText = formattedDate;
             body.innerHTML = '';
 
+            // Footer Button (Tutup)
+            const closeBtnHtml = `
+            <div class="modal-footer-close">
+                <button type="button" class="btn btn-light btn-close-bottom" data-bs-dismiss="modal">Tutup</button>
+            </div>`;
+
             if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) {
-                body.innerHTML = `<div class="text-center py-4 text-muted fst-italic">Tidak ada rincian pembeli.</div>`;
+                body.innerHTML = `
+                <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-1 opacity-25"></i>
+                    <p class="small mt-2">Tidak ada data pembeli.</p>
+                </div>` + closeBtnHtml;
             } else {
-                let contentHtml = `<div style="max-height: 50vh; overflow-y: auto;">`;
+                // 1. Wrapper Scroll Content
+                let contentHtml = `<div class="scroller-content pt-2">`;
 
                 d.detail_pelanggan.forEach(i => {
-                    let cK = i.cK || 0;
+                    let cK = i.cK || 0; // Kerupuk handling
+                    // Hitung subtotal per item
                     const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual) + (cK * HARGA.kerupuk_jual);
 
-                    // --- LOGIKA TAMPILAN BADGE "BARU" (VISUAL) ---
-                    // 1. Ambil tanggal transaksi ini
+                    // --- LOGIKA BADGE "BARU" ---
                     const currentDateStr = normalizeDate(d.date);
-                    // 2. Ambil tanggal paling awal yang diketahui sistem dari data yang sedang dilihat
                     const earliestKnownDate = getEarliestDateInView(i.nama);
-                    
+
                     let showBadge = false;
-
-                    // Logika: 
-                    // Jika transaksi ini adalah yang paling awal di list -> Tampilkan Badge (sementara)
-                    // Jika transaksi ini BUKAN paling awal (ada tanggal lebih tua) -> Pasti BUKAN Badge
-                    
                     if (currentDateStr === earliestKnownDate) {
-                        // Ini adalah transaksi paling tua di list.
-                        // Apakah ini benar-benar baru? Cek flag dari DB (is_new)
-                        // Jika is_new == true, maka tampilkan.
-                        // Jika is_new tidak ada (data lama), kita asumsikan True karena ini earliest di view.
-                        if (i.hasOwnProperty('is_new')) {
-                            showBadge = i.is_new;
-                        } else {
-                            showBadge = true; 
-                        }
-                    } else {
-                        // Ada transaksi lebih tua di tanggal lain -> Hapus Badge
-                        showBadge = false;
+                        if (i.hasOwnProperty('is_new')) { showBadge = i.is_new; } else { showBadge = true; }
                     }
 
-                    let htmlNama = `<div class="buyer-name mb-1">${i.nama}</div>`;
-                    if (showBadge) {
-                        htmlNama = `<div class="buyer-name mb-1 d-flex align-items-center">${i.nama}<span class="badge bg-success bg-opacity-10 text-success border border-success px-2 ms-2" style="font-size:0.6rem;">BARU</span></div>`;
-                    }
+                    let badgeHtml = showBadge ? `<span class="badge-baru-visual ms-2">BARU</span>` : '';
 
-                    let badges = '';
-                    if (i.cL > 0) badges += `<span class="badge-pill-custom badge-l">Lontong ${i.cL}</span>`;
-                    if (i.cT > 0) badges += `<span class="badge-pill-custom badge-t">Telur ${i.cT}</span>`;
-                    if (i.cB > 0) badges += `<span class="badge-pill-custom badge-b">Bakwan ${i.cB}</span>`;
-                    if (cK > 0) badges += `<span class="badge-pill-custom bg-danger bg-opacity-10 text-danger">Krupuk ${cK}</span>`;
+                    // --- ITEM PILLS ---
+                    let itemBadges = '';
+                    if (i.cL > 0) itemBadges += `<span class="item-pill pill-l">Lontong ${i.cL}</span>`;
+                    if (i.cT > 0) itemBadges += `<span class="item-pill pill-t">Telur ${i.cT}</span>`;
+                    if (i.cB > 0) itemBadges += `<span class="item-pill pill-b">Bakwan ${i.cB}</span>`;
+                    if (cK > 0) itemBadges += `<span class="item-pill pill-k">Krupuk ${cK}</span>`;
 
+                    // Fallback jika kosong
+                    if (itemBadges === '') itemBadges = `<span class="text-muted small fst-italic" style="font-size:0.7rem">Item Lainnya</span>`;
+
+                    // --- RENDER PER ITEM (CLEAN LIST STYLE) ---
                     contentHtml += `
-                <div class="buyer-item">
-                    <div class="buyer-left">${htmlNama} <div class="buyer-badges justify-content-start">${badges}</div></div>
-                    <div class="buyer-price">Rp ${subtotal.toLocaleString('id-ID')}</div>
-                </div>`;
+                    <div class="buyer-item">
+                        <div class="buyer-top-row">
+                            <div class="d-flex align-items-center">
+                                <span class="buyer-name">${i.nama}</span>
+                                ${badgeHtml}
+                            </div>
+                            <div class="buyer-price">Rp ${subtotal.toLocaleString('id-ID')}</div>
+                        </div>
+                        <div class="item-badges-container">
+                            ${itemBadges}
+                        </div>
+                    </div>`;
                 });
 
-                contentHtml += `</div>`;
-                contentHtml += `<div class="modal-summary-footer"><div class="row text-center g-2"><div class="col-4 border-end"><div class="text-xs text-muted fw-bold mb-1">TOTAL OMSET</div><div class="fw-bold text-dark fs-6">Rp ${d.omset.toLocaleString('id-ID')}</div></div><div class="col-4 border-end"><div class="text-xs text-muted fw-bold mb-1 text-uppercase">Setor Saudara</div><div class="fw-bold text-warning fs-6">Rp ${d.setor.toLocaleString('id-ID')}</div></div><div class="col-4"><div class="text-xs text-muted fw-bold mb-1">PROFIT BERSIH</div><div class="fw-bold text-success fs-6">Rp ${d.untung.toLocaleString('id-ID')}</div></div></div></div>`;
+                contentHtml += `</div>`; // Tutup div scroller-content
+
+                // 2. Footer Summary (3 Kolom sesuai gambar)
+                contentHtml += `
+                <div class="modal-summary-footer">
+                    <div class="row g-0">
+                        <div class="col-4 summary-box">
+                            <div class="summary-label">TOTAL OMSET</div>
+                            <div class="summary-val-dark">Rp ${d.omset.toLocaleString('id-ID')}</div>
+                        </div>
+                        <div class="col-4 summary-box">
+                            <div class="summary-label">SETOR SAUDARA</div>
+                            <div class="summary-val-warn">Rp ${d.setor.toLocaleString('id-ID')}</div>
+                        </div>
+                        <div class="col-4 summary-box">
+                            <div class="summary-label">PROFIT BERSIH</div>
+                            <div class="summary-val-success">Rp ${d.untung.toLocaleString('id-ID')}</div>
+                        </div>
+                    </div>
+                </div>`;
+
+                // 3. Tombol Tutup di paling bawah
+                contentHtml += closeBtnHtml;
+
                 body.innerHTML = contentHtml;
             }
             detailModal.show();
         }
-        window.editData = (d) => { dom.editId.value = d.id; dom.dateInput.value = d.date; orderList = d.detail_pelanggan || []; batalEditPesanan(); renderOrderList(); document.getElementById('btnCancelEdit').classList.remove('d-none'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        // --- PERBAIKAN FUNGSI EDIT DATA (FIX MOBILE) ---
+        window.editData = (d) => {
+            // 1. Masukkan data ke form
+            dom.editId.value = d.id;
+            dom.dateInput.value = d.date;
+            orderList = d.detail_pelanggan || [];
+
+            // 2. Reset status edit item detail
+            batalEditPesanan();
+
+            // 3. Render list (ini akan memicu History Trap/Pengunci tombol Back)
+            renderOrderList();
+
+            // 4. Tampilkan tombol Batal Edit
+            document.getElementById('btnCancelEdit').classList.remove('d-none');
+
+            // 5. SOLUSI: Paksa pindah tampilan ke Tab Input jika di HP
+            if (window.innerWidth < 768) {
+                // Cari tombol navigasi 'Input' di bawah
+                const navInput = document.querySelector(".nav-item-mobile.main-action");
+                // Panggil fungsi pindah menu
+                switchMobileMenu(navInput, 'input');
+            }
+
+            // 6. Scroll ke paling atas agar form terlihat
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         window.resetFormMode = () => { dom.editId.value = ''; document.getElementById('salesForm').reset(); orderList = []; batalEditPesanan(); renderOrderList(); dom.dateInput.valueAsDate = new Date(); document.getElementById('btnCancelEdit').classList.add('d-none'); }
         window.hapusData = async (id) => { if (confirm("Hapus?")) await deleteDoc(doc(db, "penjualan_detail", id)); }
 
