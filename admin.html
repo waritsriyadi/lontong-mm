@@ -25,8 +25,6 @@
             color: #374151;
             padding-bottom: 2rem;
             overflow-x: hidden;
-
-            /* FITUR MOBILE: MATIKAN PULL-TO-REFRESH */
             overscroll-behavior-y: contain;
             -webkit-overflow-scrolling: touch;
         }
@@ -133,6 +131,67 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
+        /* --- STYLE AUTOCOMPLETE & CHIPS --- */
+        .suggestion-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.active {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .chip-langganan {
+            background-color: #f0f9ff;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .chip-langganan:active {
+            background-color: #bae6fd;
+            transform: scale(0.95);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
         /* --- STYLE BARU: LIST COMPACT --- */
         .order-list-container {
             max-height: 350px;
@@ -144,13 +203,9 @@
             background-color: #ffffff;
             border: 1px solid #f3f4f6;
             border-left: 4px solid #3b82f6;
-            /* Aksen biru di kiri */
             border-radius: 6px;
-            /* Radius lebih kotak agar rapi */
             padding: 8px 12px;
-            /* Padding diperkecil (lebih tipis) */
             margin-bottom: 6px;
-            /* Jarak antar item dirapatkan */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -170,7 +225,6 @@
             font-weight: 700;
             color: #374151;
             font-size: 0.85rem;
-            /* Font nama sedikit diperkecil */
             margin-bottom: 2px;
             line-height: 1.2;
             white-space: nowrap;
@@ -186,7 +240,6 @@
 
         .badge-item {
             font-size: 0.65rem;
-            /* Badge lebih mungil */
             padding: 1px 6px;
             border-radius: 4px;
             font-weight: 600;
@@ -218,9 +271,9 @@
         }
 
         .price-tag {
-            font-weight: 700;
+            font-weight: 800;
             color: #059669;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             white-space: nowrap;
             letter-spacing: -0.5px;
         }
@@ -228,6 +281,10 @@
         .action-btn-group {
             display: flex;
             gap: 2px;
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 2px;
+            border: 1px solid #f3f4f6;
         }
 
         .btn-action-icon {
@@ -266,19 +323,6 @@
             gap: 4px;
         }
 
-        .price-tag {
-            font-weight: 800;
-            color: #059669;
-            font-size: 0.95rem;
-        }
-
-        .action-btn-group {
-            background: #f9fafb;
-            border-radius: 8px;
-            padding: 2px;
-            border: 1px solid #f3f4f6;
-        }
-
         .dashed-border {
             border: 2px dashed #e5e7eb;
         }
@@ -303,18 +347,15 @@
 
         /* RIWAYAT TRANSAKSI STYLES */
         .buyer-item {
-            /* Gunakan flexbox agar nama di kiri, harga di kanan */
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            /* Align top agar rapi jika badge banyak */
             padding: 12px 16px;
             border-bottom: 1px solid #f3f4f6;
         }
 
         .buyer-left {
             flex: 1;
-            /* Mengambil sisa ruang */
             padding-right: 10px;
         }
 
@@ -323,7 +364,88 @@
             color: #198754;
             font-size: 0.9rem;
             white-space: nowrap;
-            /* Agar harga tidak turun baris */
+        }
+
+        /* --- STYLE INPUT STEPPER --- */
+        .stepper-container {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .stepper-label {
+            font-weight: 700;
+            color: #374151;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stepper-sublabel {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .stepper-group {
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .btn-stepper {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .btn-minus {
+            background-color: #ffffff;
+            color: #ef4444;
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-plus {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-stepper:active {
+            transform: scale(0.9);
+        }
+
+        .input-stepper {
+            width: 45px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #111827;
+            margin: 0 4px;
+            padding: 0;
+        }
+
+        .input-stepper::-webkit-outer-spin-button,
+        .input-stepper::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .modal-summary-footer {
@@ -466,42 +588,96 @@
                             </div>
 
                             <div class="p-3 bg-light rounded-3 mb-3 border">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <label class="text-xs fw-bold text-muted">LIST PEMBELI</label>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <label class="text-xs fw-bold text-muted"><i class="bi bi-cart-fill me-1"></i>ITEM
+                                        PESANAN</label>
                                     <button type="button"
                                         class="btn btn-link p-0 text-decoration-none text-xs text-danger d-none"
                                         id="btnBatalEditDetail" onclick="batalEditPesanan()">Batal Ubah</button>
                                 </div>
 
-                                <input type="text" id="custName" class="form-control form-control-sm mb-2"
-                                    placeholder="Nama Pelanggan..." list="listPelanggan" autocomplete="off">
-                                <datalist id="listPelanggan">
-                                </datalist>
+                                <div class="mb-3 input-wrapper">
+                                    <label class="text-xs fw-bold text-muted ms-1 mb-1">NAMA PELANGGAN</label>
 
-                                <div class="row g-2 mb-2">
-                                    <div class="col-4"><input type="number" class="form-control form-control-sm"
-                                            id="custLontong" value="1" min="0" onfocus="this.select()"
-                                            placeholder="Lontong"></div>
-                                    <div class="col-4"><input type="number" class="form-control form-control-sm"
-                                            id="custTelur" value="0" min="0" onfocus="this.select()"
-                                            placeholder="Telur"></div>
-                                    <div class="col-4"><input type="number" class="form-control form-control-sm"
-                                            id="custBakwan" value="0" min="0" onfocus="this.select()"
-                                            placeholder="Bakwan"></div>
+                                    <input type="text" id="custName" class="form-control fw-bold border-0 shadow-sm"
+                                        style="padding: 12px;" placeholder="Ketik nama atau pilih langganan..."
+                                        autocomplete="off">
+
+                                    <div id="suggestionList" class="suggestion-box"></div>
+
+                                    <div id="chipsArea" class="chips-container">
+                                    </div>
                                 </div>
 
-                                <div class="d-flex justify-content-between mb-2 px-1">
-                                    <small class="text-muted fw-bold" style="font-size: 0.7rem;">Subtotal
-                                        Pesanan:</small>
-                                    <small class="fw-bold text-primary" id="previewSubtotal"
-                                        style="font-size: 0.7rem;">Rp 0</small>
+                                <div class="stepper-container">
+                                    <div class="stepper-label">
+                                        Lontong
+                                        <span class="stepper-sublabel">Menu Utama</span>
+                                    </div>
+                                    <div class="stepper-group">
+                                        <button type="button" class="btn-stepper btn-minus"
+                                            onclick="ubahJumlah('custLontong', -1)">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input type="number" id="custLontong" class="input-stepper" value="1" min="0"
+                                            readonly>
+                                        <button type="button" class="btn-stepper btn-plus"
+                                            onclick="ubahJumlah('custLontong', 1)">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <button type="button" id="btnAddDetail" class="btn btn-primary btn-sm w-100 fw-bold"
-                                    onclick="prosesPesanan()"><i class="bi bi-plus-lg"></i> Tambah</button>
-
-                                <div class="order-list-container mt-3" id="listPesananContainer">
+                                <div class="stepper-container">
+                                    <div class="stepper-label">
+                                        Telur
+                                        <span class="stepper-sublabel">Topping</span>
+                                    </div>
+                                    <div class="stepper-group">
+                                        <button type="button" class="btn-stepper btn-minus"
+                                            onclick="ubahJumlah('custTelur', -1)">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input type="number" id="custTelur" class="input-stepper" value="0" min="0"
+                                            readonly>
+                                        <button type="button" class="btn-stepper btn-plus"
+                                            onclick="ubahJumlah('custTelur', 1)">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
+
+                                <div class="stepper-container">
+                                    <div class="stepper-label">
+                                        Bakwan
+                                        <span class="stepper-sublabel">Gorengan</span>
+                                    </div>
+                                    <div class="stepper-group">
+                                        <button type="button" class="btn-stepper btn-minus"
+                                            onclick="ubahJumlah('custBakwan', -1)">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input type="number" id="custBakwan" class="input-stepper" value="0" min="0"
+                                            readonly>
+                                        <button type="button" class="btn-stepper btn-plus"
+                                            onclick="ubahJumlah('custBakwan', 1)">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mt-3 px-1 mb-2">
+                                    <small class="text-muted fw-bold">Total Harga Item:</small>
+                                    <span class="fw-bold text-primary fs-5" id="previewSubtotal">Rp 0</span>
+                                </div>
+
+                                <button type="button" id="btnAddDetail"
+                                    class="btn btn-primary w-100 py-2 fw-bold rounded-3 shadow-sm"
+                                    onclick="prosesPesanan()">
+                                    <i class="bi bi-plus-lg me-1"></i> MASUKKAN KE KERANJANG
+                                </button>
+
+                                <div class="order-list-container mt-3" id="listPesananContainer"></div>
                             </div>
 
                             <div class="mb-3">
@@ -780,7 +956,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // DEFAULT HARGA (Jika database kosong)
         let HARGA = { lontong_jual: 11000, lontong_setor: 10000, telur_jual: 3000, telur_modal: 1900, bakwan_jual: 1000, bakwan_setor: 0, kerupuk_jual: 1000 };
 
         const dom = {
@@ -807,17 +982,24 @@
             toast.show();
         }
 
-        // --- LOGIKA HARGA DATABASE & MODAL ---
+        // FUNGSI PENTING: Normalisasi Tanggal ke YYYY-MM-DD untuk perbandingan akurat
+        function normalizeDate(d) {
+            if (!d) return "";
+            if (typeof d === 'string') {
+                if (d.includes('T')) return d.split('T')[0];
+                return d;
+            }
+            if (d.toDate) { // Firestore Timestamp
+                return d.toDate().toISOString().split('T')[0];
+            }
+            return new Date(d).toISOString().split('T')[0];
+        }
+
         async function setupHarga() {
             try {
                 const docRef = doc(db, "settings", "harga_terkini");
                 const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    HARGA = docSnap.data();
-                } else {
-                    await setDoc(docRef, HARGA);
-                }
+                if (docSnap.exists()) { HARGA = docSnap.data(); } else { await setDoc(docRef, HARGA); }
                 updateSubtotalPreview();
             } catch (e) {
                 console.error("Gagal memuat harga:", e);
@@ -839,11 +1021,9 @@
 
         window.simpanHarga = async () => {
             if (!confirm("Simpan perubahan harga ini?")) return;
-
             const btn = document.querySelector('#modalHarga .btn-primary');
             const originalText = btn.innerHTML;
             btn.disabled = true; btn.innerHTML = 'Menyimpan...';
-
             const newHarga = {
                 lontong_jual: parseInt(document.getElementById('set_lontong_jual').value) || 0,
                 lontong_setor: parseInt(document.getElementById('set_lontong_setor').value) || 0,
@@ -853,7 +1033,6 @@
                 bakwan_setor: parseInt(document.getElementById('set_bakwan_setor').value) || 0,
                 kerupuk_jual: parseInt(document.getElementById('set_kerupuk_jual').value) || 0
             };
-
             try {
                 await setDoc(doc(db, "settings", "harga_terkini"), newHarga);
                 HARGA = newHarga;
@@ -867,22 +1046,81 @@
             }
         }
 
-        // --- AUTOCOMPLETE ---
+        // 1. Generate Chips & Data Pelanggan
         function updateCustomerList() {
-            const names = new Set();
+            const counts = {};
             globalData.forEach(trx => {
                 if (trx.detail_pelanggan && Array.isArray(trx.detail_pelanggan)) {
                     trx.detail_pelanggan.forEach(p => {
-                        if (p.nama) names.add(p.nama.trim());
+                        if (p.nama) {
+                            const n = p.nama.trim().toLowerCase();
+                            counts[n] = (counts[n] || 0) + 1;
+                        }
                     });
                 }
             });
-            dom.datalistPelanggan.innerHTML = '';
-            names.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                dom.datalistPelanggan.appendChild(option);
-            });
+            window.customerCounts = counts;
+            const sortedNames = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+            const chipsArea = document.getElementById('chipsArea');
+            chipsArea.innerHTML = '';
+            const top5 = sortedNames.slice(0, 5);
+            if (top5.length > 0) {
+                chipsArea.innerHTML = '<small class="w-100 text-muted fst-italic" style="font-size:0.65rem">Sering membeli:</small>';
+                top5.forEach(nameKey => {
+                    let displayName = nameKey;
+                    displayName = displayName.replace(/\b\w/g, l => l.toUpperCase());
+                    const chip = document.createElement('div');
+                    chip.className = 'chip-langganan';
+                    chip.innerHTML = `<i class="bi bi-person-fill me-1"></i>${displayName}`;
+                    chip.onclick = () => pilihNama(displayName);
+                    chipsArea.appendChild(chip);
+                });
+            }
+            window.allCustomerNames = sortedNames;
+        }
+
+        const inputNama = document.getElementById('custName');
+        const suggestBox = document.getElementById('suggestionList');
+
+        inputNama.addEventListener('input', function () {
+            const val = this.value.toLowerCase();
+            suggestBox.innerHTML = '';
+            if (!val) { suggestBox.style.display = 'none'; return; }
+            const matches = (window.allCustomerNames || []).filter(n => n.toLowerCase().includes(val));
+            if (matches.length > 0) {
+                suggestBox.style.display = 'block';
+                matches.slice(0, 5).forEach(name => {
+                    const item = document.createElement('div');
+                    item.className = 'suggestion-item';
+                    item.innerHTML = name.replace(new RegExp(val, "gi"), (match) => `<b>${match}</b>`);
+                    item.onclick = () => pilihNama(name);
+                    suggestBox.appendChild(item);
+                });
+            } else { suggestBox.style.display = 'none'; }
+
+            // Indikator Real-time Warna
+            // (Hanya cek di cache lokal untuk kecepatan UI, validasi asli saat tombol Tambah)
+            if (val.length > 2) {
+                if (window.cekStatusPelangganLokal(val)) {
+                    inputNama.classList.add('border-success');
+                    inputNama.classList.remove('border-0');
+                } else {
+                    inputNama.classList.remove('border-success');
+                    inputNama.classList.add('border-0');
+                }
+            } else {
+                inputNama.classList.remove('border-success');
+                inputNama.classList.add('border-0');
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target !== inputNama && e.target !== suggestBox) { suggestBox.style.display = 'none'; }
+        });
+
+        window.pilihNama = (nama) => {
+            inputNama.value = nama;
+            suggestBox.style.display = 'none';
         }
 
         function updateChart(labels, untung, setor) {
@@ -906,45 +1144,154 @@
             document.getElementById('previewSubtotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
         }
 
-        // --- FITUR MOBILE 2: ANTI REFRESH (UPDATE AGRESIF) ---
         window.addEventListener('beforeunload', function (e) {
-            if (orderList.length > 0) {
-                e.preventDefault();
-                e.returnValue = 'Data transaksi belum disimpan. Yakin ingin keluar?';
-                return 'Data transaksi belum disimpan. Yakin ingin keluar?';
-            }
+            if (orderList.length > 0) { e.preventDefault(); e.returnValue = ''; return ''; }
         });
 
-        // --- FITUR MOBILE 3: ANTI BACK BUTTON (HISTORY TRAP) ---
         function updateHistoryTrap() {
             if (orderList.length > 0) {
-                if (!history.state || history.state.status !== 'editing') {
-                    history.pushState({ status: 'editing' }, null, '');
-                }
+                if (!history.state || history.state.status !== 'editing') { history.pushState({ status: 'editing' }, null, ''); }
             }
         }
 
         window.addEventListener('popstate', function (event) {
             if (orderList.length > 0) {
-                if (confirm("Data transaksi belum disimpan dan akan hilang. Yakin ingin kembali?")) {
-                    history.back();
-                } else {
-                    history.pushState({ status: 'editing' }, null, '');
-                }
+                if (confirm("Data transaksi belum disimpan dan akan hilang. Yakin ingin kembali?")) { history.back(); }
+                else { history.pushState({ status: 'editing' }, null, ''); }
             }
         });
 
-        window.prosesPesanan = () => {
+        window.ubahJumlah = (inputId, change) => {
+            const input = document.getElementById(inputId);
+            let val = parseInt(input.value) || 0;
+            let newVal = val + change;
+            if (newVal < 0) newVal = 0;
+            input.value = newVal;
+            if (navigator.vibrate) navigator.vibrate(40);
+            updateSubtotalPreview();
+        }
+
+        // Cek Status Lokal (Hanya untuk UI Border Hijau)
+        window.cekStatusPelangganLokal = (namaInput) => {
+            if (!namaInput) return false;
+            const cleanInput = namaInput.trim().toLowerCase();
+            const count = (window.customerCounts && window.customerCounts[cleanInput]) || 0;
+            return count <= 1;
+        }
+
+        // --- FUNGSI UTAMA: CEK KRONOLOGI + REALTIME FIREBASE ---
+        async function cekStatusRealtime(namaInput, tanggalInputStr) {
+            const cleanName = namaInput.trim().toLowerCase();
+            const inputDateStr = normalizeDate(tanggalInputStr);
+
+            // 1. Cek dulu di Global Data (Lokal 14 Hari)
+            // Cari tanggal paling awal yang tercatat di view
+            let minDateLocal = null;
+            let foundInLocal = false;
+
+            globalData.forEach(doc => {
+                if (doc.detail_pelanggan) {
+                    const isExist = doc.detail_pelanggan.some(p => p.nama.trim().toLowerCase() === cleanName);
+                    if (isExist) {
+                        foundInLocal = true;
+                        const dStr = normalizeDate(doc.date);
+                        if (!minDateLocal || dStr < minDateLocal) {
+                            minDateLocal = dStr;
+                        }
+                    }
+                }
+            });
+
+            // Jika di lokal sudah ada data yang LEBIH TUA dari input, pasti BUKAN BARU
+            if (foundInLocal && minDateLocal < inputDateStr) {
+                return false;
+            }
+
+            // 2. Jika di lokal tidak ada yang lebih tua (atau tidak ada sama sekali),
+            // Kita WAJIB cek ke Database (untuk menangani kasus pelanggan lama > 14 hari)
+            // Query: Cari dokumen dimana tanggal < inputDateStr. 
+            // Note: Firestore tidak bisa query array contains object property dengan mudah tanpa index composite.
+            // Solusi Efisien: Query berdasarkan tanggal (mundur), lalu filter manual di client.
+            // Kita batasi limit agar tidak berat.
+            
+            try {
+                const q = query(
+                    collection(db, "penjualan_detail"), 
+                    where("date", "<", inputDateStr), // Cari transaksi MASA LALU
+                    orderBy("date", "desc"), 
+                    limit(50) // Cek 50 transaksi terakhir sebelum tanggal ini
+                );
+                
+                const snapshot = await getDocs(q);
+                let foundInDb = false;
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.detail_pelanggan) {
+                        if (data.detail_pelanggan.some(p => p.nama.trim().toLowerCase() === cleanName)) {
+                            foundInDb = true;
+                        }
+                    }
+                });
+
+                if (foundInDb) return false; // Ketemu di masa lalu DB -> Bukan Baru
+
+            } catch(e) {
+                console.warn("Gagal cek DB realtime, fallback ke lokal:", e);
+                // Jika gagal koneksi, anggap baru (atau sesuai lokal)
+                return true; 
+            }
+
+            return true; // Tidak ketemu di masa lalu (Lokal & DB) -> BARU
+        }
+
+        window.prosesPesanan = async () => {
+            const btn = document.getElementById('btnAddDetail');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cek...';
+            btn.disabled = true;
+
             const nama = document.getElementById('custName').value;
+            const tgl = document.getElementById('dateInput').value;
             const cL = Math.max(0, parseInt(document.getElementById('custLontong').value) || 0);
             const cT = Math.max(0, parseInt(document.getElementById('custTelur').value) || 0);
             const cB = Math.max(0, parseInt(document.getElementById('custBakwan').value) || 0);
-            if (!nama) { showToast("Nama pembeli wajib diisi!", "warning"); return; }
-            const payload = { nama, cL, cT, cB };
-            if (detailEditingIndex === -1) orderList.push(payload); else { orderList[detailEditingIndex] = payload; batalEditPesanan(); }
+
+            if (!nama) { 
+                showToast("Nama pembeli wajib diisi!", "warning"); 
+                btn.innerHTML = originalText; btn.disabled = false;
+                return; 
+            }
+
+            let statusBaru = false;
+            const cleanName = nama.trim().toLowerCase();
+
+            // Cek duplikat di keranjang saat ini
+            const existsInCart = orderList.some(item => item.nama.toLowerCase() === cleanName);
+
+            if (existsInCart && detailEditingIndex === -1) {
+                statusBaru = false;
+            } else {
+                // CEK ASYNC KE FIREBASE
+                statusBaru = await cekStatusRealtime(nama, tgl);
+            }
+
+            const payload = { nama, cL, cT, cB, is_new: statusBaru };
+
+            if (detailEditingIndex === -1) {
+                orderList.push(payload);
+            } else {
+                // Saat edit, cek ulang
+                payload.is_new = await cekStatusRealtime(nama, tgl);
+                orderList[detailEditingIndex] = payload;
+                batalEditPesanan();
+            }
+
             resetInputDetail();
             renderOrderList();
-            updateHistoryTrap(); // Panggil History Trap
+            updateHistoryTrap();
+            
+            btn.innerHTML = originalText; btn.disabled = false;
         }
 
         window.editPesananDetail = (idx) => {
@@ -965,7 +1312,7 @@
 
         window.batalEditPesanan = () => {
             detailEditingIndex = -1; resetInputDetail();
-            document.getElementById('btnAddDetail').innerHTML = '<i class="bi bi-plus-lg"></i> Tambah';
+            document.getElementById('btnAddDetail').innerHTML = '<i class="bi bi-plus-lg"></i> MASUKKAN KE KERANJANG';
             document.getElementById('btnAddDetail').classList.replace('btn-warning', 'btn-primary');
             document.getElementById('btnBatalEditDetail').classList.add('d-none');
         }
@@ -985,15 +1332,10 @@
         function renderOrderList() {
             const container = document.getElementById('listPesananContainer');
             container.innerHTML = '';
-
             let tL = 0, tT = 0, tB = 0;
 
             if (orderList.length === 0) {
-                container.innerHTML = `
-            <div class="text-center py-3 text-muted border rounded-3 bg-light dashed-border" style="opacity:0.7">
-                <i class="bi bi-basket3 fs-4"></i>
-                <p class="small mb-0 mt-1" style="font-size:0.75rem">List Kosong</p>
-            </div>`;
+                container.innerHTML = `<div class="text-center py-3 text-muted border rounded-3 bg-light dashed-border" style="opacity:0.7"><i class="bi bi-basket3 fs-4"></i><p class="small mb-0 mt-1" style="font-size:0.75rem">List Kosong</p></div>`;
                 dom.qtyL.value = 0; dom.qtyT.value = 0; dom.qtyB.value = 0;
                 hitungEstimasi();
                 return;
@@ -1001,41 +1343,37 @@
 
             orderList.forEach((i, idx) => {
                 tL += i.cL; tT += i.cT; tB += i.cB;
-
                 const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual);
-
-                // Badge Singkatan (L:1, T:2) agar hemat tempat atau Teks pendek
                 let badgesHtml = '';
                 if (i.cL > 0) badgesHtml += `<span class="badge-item bg-lontong">Lontong ${i.cL}</span>`;
                 if (i.cT > 0) badgesHtml += `<span class="badge-item bg-telur">Telur ${i.cT}</span>`;
                 if (i.cB > 0) badgesHtml += `<span class="badge-item bg-bakwan">Bakwan ${i.cB}</span>`;
-
                 if (badgesHtml === '') badgesHtml = `<span class="badge-item bg-light text-muted" style="font-size:0.6rem">Tanpa Item</span>`;
 
-                // Render HTML Compact
-                const cardItem = `
-        <div class="order-card">
-            <div class="order-info">
-                <div class="order-name">${i.nama}</div>
-                <div class="order-badges">${badgesHtml}</div>
-            </div>
-            
-            <div class="order-right">
-                <div class="price-tag">Rp ${subtotal.toLocaleString('id-ID')}</div>
-                <div class="action-btn-group">
-                    <button type="button" class="btn-action-icon text-warning" onclick="editPesananDetail(${idx})" title="Edit">
-                        <i class="bi bi-pencil-square" style="font-size: 0.9rem;"></i>
-                    </button>
-                    <button type="button" class="btn-action-icon text-danger" onclick="hapusPesanan(${idx})" title="Hapus">
-                        <i class="bi bi-trash" style="font-size: 0.9rem;"></i>
-                    </button>
-                </div>
-            </div>
-        </div>`;
+                let badgeBaruHtml = '';
+                if (i.is_new === true) {
+                    badgeBaruHtml = `<span class="badge bg-success bg-opacity-10 text-success border border-success px-2 ms-1" style="font-size:0.6rem; vertical-align: text-top;">BARU</span>`;
+                }
 
+                const cardItem = `
+                <div class="order-card">
+                    <div class="order-info">
+                        <div class="d-flex align-items-center">
+                            <div class="order-name">${i.nama}</div>
+                            ${badgeBaruHtml} 
+                        </div>
+                        <div class="order-badges">${badgesHtml}</div>
+                    </div>
+                    <div class="order-right">
+                        <div class="price-tag">Rp ${subtotal.toLocaleString('id-ID')}</div>
+                        <div class="action-btn-group">
+                            <button type="button" class="btn-action-icon text-warning" onclick="editPesananDetail(${idx})" title="Edit"><i class="bi bi-pencil-square" style="font-size: 0.9rem;"></i></button>
+                            <button type="button" class="btn-action-icon text-danger" onclick="hapusPesanan(${idx})" title="Hapus"><i class="bi bi-trash" style="font-size: 0.9rem;"></i></button>
+                        </div>
+                    </div>
+                </div>`;
                 container.innerHTML += cardItem;
             });
-
             dom.qtyL.value = tL; dom.qtyT.value = tT; dom.qtyB.value = tB;
             hitungEstimasi();
         }
@@ -1204,70 +1542,84 @@
         dom.filterEnd.addEventListener('change', window.cariDataTanggal);
         window.resetFilter = () => { dom.filterStart.value = ''; dom.filterEnd.value = ''; document.getElementById('filterMsg').classList.add('d-none'); loadLatestData(); }
 
+        // --- VISUAL LOGIC: Tentukan Tanggal Paling Awal di List (Overrule) ---
+        // Fungsi ini mencari tanggal paling awal untuk seorang pelanggan DARI DATA YANG TERMUAT SAJA
+        function getEarliestDateInView(customerName) {
+            const cleanName = customerName.trim().toLowerCase();
+            let earliestDate = null;
+            
+            globalData.forEach(doc => {
+                if (doc.detail_pelanggan && doc.detail_pelanggan.some(p => p.nama.trim().toLowerCase() === cleanName)) {
+                    const dStr = normalizeDate(doc.date);
+                    if(!earliestDate || dStr < earliestDate) {
+                        earliestDate = dStr;
+                    }
+                }
+            });
+            return earliestDate;
+        }
+
         window.lihatDetail = (d) => {
             const body = document.getElementById('detailModalBody');
             document.getElementById('modalDateDisplay').innerText = formatDate(d.date);
             body.innerHTML = '';
 
-            // 1. Render List Pembeli
             if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) {
                 body.innerHTML = `<div class="text-center py-4 text-muted fst-italic">Tidak ada rincian pembeli.</div>`;
             } else {
-                // Wrapper untuk list agar bisa di-scroll jika panjang
                 let contentHtml = `<div style="max-height: 50vh; overflow-y: auto;">`;
 
                 d.detail_pelanggan.forEach(i => {
-                    // Cek properti kerupuk (jaga-jaga data lama belum ada cK)
                     let cK = i.cK || 0;
+                    const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual) + (cK * HARGA.kerupuk_jual);
 
-                    // Hitung Subtotal per Orang (Berdasarkan harga saat ini)
-                    const subtotal = (i.cL * HARGA.lontong_jual) +
-                        (i.cT * HARGA.telur_jual) +
-                        (i.cB * HARGA.bakwan_jual) +
-                        (cK * HARGA.kerupuk_jual);
+                    // --- LOGIKA TAMPILAN BADGE "BARU" (VISUAL) ---
+                    // 1. Ambil tanggal transaksi ini
+                    const currentDateStr = normalizeDate(d.date);
+                    // 2. Ambil tanggal paling awal yang diketahui sistem dari data yang sedang dilihat
+                    const earliestKnownDate = getEarliestDateInView(i.nama);
+                    
+                    let showBadge = false;
 
-                    // Generate Badges
+                    // Logika: 
+                    // Jika transaksi ini adalah yang paling awal di list -> Tampilkan Badge (sementara)
+                    // Jika transaksi ini BUKAN paling awal (ada tanggal lebih tua) -> Pasti BUKAN Badge
+                    
+                    if (currentDateStr === earliestKnownDate) {
+                        // Ini adalah transaksi paling tua di list.
+                        // Apakah ini benar-benar baru? Cek flag dari DB (is_new)
+                        // Jika is_new == true, maka tampilkan.
+                        // Jika is_new tidak ada (data lama), kita asumsikan True karena ini earliest di view.
+                        if (i.hasOwnProperty('is_new')) {
+                            showBadge = i.is_new;
+                        } else {
+                            showBadge = true; 
+                        }
+                    } else {
+                        // Ada transaksi lebih tua di tanggal lain -> Hapus Badge
+                        showBadge = false;
+                    }
+
+                    let htmlNama = `<div class="buyer-name mb-1">${i.nama}</div>`;
+                    if (showBadge) {
+                        htmlNama = `<div class="buyer-name mb-1 d-flex align-items-center">${i.nama}<span class="badge bg-success bg-opacity-10 text-success border border-success px-2 ms-2" style="font-size:0.6rem;">BARU</span></div>`;
+                    }
+
                     let badges = '';
                     if (i.cL > 0) badges += `<span class="badge-pill-custom badge-l">Lontong ${i.cL}</span>`;
                     if (i.cT > 0) badges += `<span class="badge-pill-custom badge-t">Telur ${i.cT}</span>`;
                     if (i.cB > 0) badges += `<span class="badge-pill-custom badge-b">Bakwan ${i.cB}</span>`;
                     if (cK > 0) badges += `<span class="badge-pill-custom bg-danger bg-opacity-10 text-danger">Krupuk ${cK}</span>`;
 
-                    // HTML Item
                     contentHtml += `
-            <div class="buyer-item">
-                <div class="buyer-left">
-                    <div class="buyer-name mb-1">${i.nama}</div>
-                    <div class="buyer-badges justify-content-start">${badges}</div>
-                </div>
-                <div class="buyer-price">
-                    Rp ${subtotal.toLocaleString('id-ID')}
-                </div>
-            </div>`;
+                <div class="buyer-item">
+                    <div class="buyer-left">${htmlNama} <div class="buyer-badges justify-content-start">${badges}</div></div>
+                    <div class="buyer-price">Rp ${subtotal.toLocaleString('id-ID')}</div>
+                </div>`;
                 });
 
-                contentHtml += `</div>`; // Tutup wrapper scroll
-
-                // 2. Render Summary Footer (Omset, Setor, Profit)
-                // Kita gunakan data total (d.omset, dll) yang tersimpan di DB agar akurat
-                contentHtml += `
-        <div class="modal-summary-footer">
-            <div class="row text-center g-2">
-                <div class="col-4 border-end">
-                    <div class="text-xs text-muted fw-bold mb-1">TOTAL OMSET</div>
-                    <div class="fw-bold text-dark fs-6">Rp ${d.omset.toLocaleString('id-ID')}</div>
-                </div>
-                <div class="col-4 border-end">
-                    <div class="text-xs text-muted fw-bold mb-1 text-uppercase">Setor Saudara</div>
-                    <div class="fw-bold text-warning fs-6">Rp ${d.setor.toLocaleString('id-ID')}</div>
-                </div>
-                <div class="col-4">
-                    <div class="text-xs text-muted fw-bold mb-1">PROFIT BERSIH</div>
-                    <div class="fw-bold text-success fs-6">Rp ${d.untung.toLocaleString('id-ID')}</div>
-                </div>
-            </div>
-        </div>`;
-
+                contentHtml += `</div>`;
+                contentHtml += `<div class="modal-summary-footer"><div class="row text-center g-2"><div class="col-4 border-end"><div class="text-xs text-muted fw-bold mb-1">TOTAL OMSET</div><div class="fw-bold text-dark fs-6">Rp ${d.omset.toLocaleString('id-ID')}</div></div><div class="col-4 border-end"><div class="text-xs text-muted fw-bold mb-1 text-uppercase">Setor Saudara</div><div class="fw-bold text-warning fs-6">Rp ${d.setor.toLocaleString('id-ID')}</div></div><div class="col-4"><div class="text-xs text-muted fw-bold mb-1">PROFIT BERSIH</div><div class="fw-bold text-success fs-6">Rp ${d.untung.toLocaleString('id-ID')}</div></div></div></div>`;
                 body.innerHTML = contentHtml;
             }
             detailModal.show();
