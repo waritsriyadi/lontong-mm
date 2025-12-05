@@ -5,8 +5,10 @@
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
     <title>Admin Lontong MM</title>
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="manifest" href="manifest.json">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -24,14 +26,13 @@
             background-color: var(--primary-bg);
             font-family: 'Inter', sans-serif;
             color: #374151;
-            /* Padding bawah untuk HP agar tidak ketutup navbar */
             padding-bottom: calc(var(--nav-height) + 20px);
             overflow-x: hidden;
             overscroll-behavior-y: contain;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* --- LOGIKA TAMPILAN MOBILE (TAB MODE) --- */
+        /* --- LOGIKA TAMPILAN MOBILE --- */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -313,7 +314,7 @@
             padding: 0;
         }
 
-        /* --- ORDER LIST COMPACT (INPUT PAGE) --- */
+        /* --- ORDER LIST --- */
         .order-list-container {
             max-height: 350px;
             overflow-y: auto;
@@ -419,18 +420,15 @@
             border: none;
         }
 
-        /* --- MODAL STYLES (DIPERBARUI SESUAI GAMBAR) --- */
+        /* --- MODAL & TOP CUSTOMER --- */
         .modal-content {
             border: none;
             border-radius: 12px;
-            /* Sedikit lebih kotak sesuai gambar */
             overflow: hidden;
         }
 
-        /* Header Biru Royal */
         .modal-header-custom {
             background-color: #2563eb;
-            /* Biru terang seperti di gambar */
             color: white;
             padding: 1rem 1.25rem;
             border-bottom: none;
@@ -441,21 +439,17 @@
             opacity: 0.8;
         }
 
-        /* Body Modal Putih Bersih */
         .modal-body-custom {
             padding: 0;
             background-color: #ffffff;
         }
 
-        /* Scroll Area */
         .scroller-content {
             max-height: 55vh;
             overflow-y: auto;
             padding: 0 1.25rem;
-            /* Padding kiri kanan untuk list */
         }
 
-        /* Scrollbar Custom (Agar terlihat rapi) */
         .scroller-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -469,18 +463,15 @@
             border-radius: 3px;
         }
 
-        /* ITEM PEMBELI (LIST STYLE) */
         .buyer-item {
             padding: 12px 0;
             border-bottom: 1px solid #f3f4f6;
-            /* Garis tipis pemisah antar item */
         }
 
         .buyer-item:last-child {
             border-bottom: none;
         }
 
-        /* Layout Baris Nama & Harga */
         .buyer-top-row {
             display: flex;
             justify-content: space-between;
@@ -498,12 +489,10 @@
         .buyer-price {
             font-weight: 700;
             color: #10b981;
-            /* Hijau sesuai gambar */
             font-size: 0.95rem;
             white-space: nowrap;
         }
 
-        /* Badge BARU (Outline Style) */
         .badge-baru-visual {
             background-color: transparent;
             color: #10b981;
@@ -517,14 +506,12 @@
             line-height: 1.2;
         }
 
-        /* Item Pills Container */
         .item-badges-container {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
         }
 
-        /* Pill Item Style */
         .item-pill {
             font-size: 0.75rem;
             padding: 4px 10px;
@@ -533,36 +520,28 @@
             display: inline-block;
         }
 
-        /* Warna Pill (Disesuaikan dengan Gambar) */
         .pill-l {
             background-color: #e0f2fe;
             color: #0284c7;
         }
 
-        /* Lontong: Biru muda */
         .pill-t {
             background-color: #fef3c7;
             color: #b45309;
         }
 
-        /* Telur: Kuning/Oranye muda */
         .pill-b {
             background-color: #f3f4f6;
             color: #4b5563;
         }
 
-        /* Bakwan: Abu muda */
         .pill-k {
             background-color: #fef2f2;
             color: #dc2626;
         }
 
-        /* Kerupuk: Merah muda */
-
-        /* FOOTER SUMMARY (3 KOLOM DENGAN DIVIDER) */
         .modal-summary-footer {
             background-color: #f9fafb;
-            /* Abu sangat muda untuk footer */
             border-top: 1px solid #e5e7eb;
             padding: 15px 0;
         }
@@ -573,7 +552,6 @@
             padding: 0 5px;
         }
 
-        /* Garis vertikal pemisah */
         .summary-box:not(:last-child)::after {
             content: "";
             position: absolute;
@@ -622,6 +600,49 @@
             padding: 12px;
             font-weight: 500;
             border-top: 1px solid #e5e7eb;
+        }
+
+        /* LIST TOP PELANGGAN STYLE */
+        .list-group-item-custom {
+            border: none;
+            border-bottom: 1px solid #f3f4f6;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-group-item-custom:last-child {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            width: 24px;
+            height: 24px;
+            background: #e5e7eb;
+            color: #4b5563;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-right: 10px;
+        }
+
+        .rank-1 {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .rank-2 {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .rank-3 {
+            background: #ffedd5;
+            color: #c2410c;
         }
 
         @media (max-width: 768px) {
@@ -689,7 +710,6 @@
 
     <div class="container-fluid px-4 mt-3 mt-md-0">
         <div class="row g-4">
-
             <div class="col-lg-4" id="section-form">
                 <div class="card h-100">
                     <div class="card-header bg-white py-3 border-bottom-0">
@@ -837,6 +857,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="card mb-3">
                         <div
                             class="card-header bg-white py-3 border-bottom-0 d-flex flex-wrap justify-content-between align-items-center">
@@ -858,6 +879,17 @@
                                 Filter Terbalik!</div>
                         </div>
                     </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-white py-3 border-bottom d-flex align-items-center">
+                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>Top 5
+                                Pelanggan Setia</h6>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="topCustomersList" class="list-group list-group-flush rounded-bottom">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card" id="section-history">
@@ -874,8 +906,7 @@
                                                 id="icon-date" class="bi bi-caret-down-fill text-muted"></i></th>
                                         <th>Rincian (L/T/B)</th>
                                         <th class="text-end" style="cursor: pointer;" onclick="sortData('omset')">Omset
-                                            <i id="icon-omset" class="bi bi-filter text-muted"></i>
-                                        </th>
+                                            <i id="icon-omset" class="bi bi-filter text-muted"></i></th>
                                         <th class="text-end text-warning" style="cursor: pointer;"
                                             onclick="sortData('setor')">Setor <i id="icon-setor"
                                                 class="bi bi-filter text-muted"></i></th>
@@ -1027,11 +1058,20 @@
         window.logoutAdmin = () => { if (confirm("Keluar dari panel admin?")) { sessionStorage.removeItem("isLoggedIn"); window.location.reload(); } }
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs, getDoc, setDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyCamv42dxGHJEqXMqVIPcOeWGNdM5p7X2E", authDomain: "lontong-mm.firebaseapp.com", projectId: "lontong-mm", storageBucket: "lontong-mm.firebasestorage.app", messagingSenderId: "628261457290", appId: "1:628261457290:web:8cbd5262f3cc3deb30cc73", measurementId: "G-GBN3GE3QKN" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // --- FITUR #3: OFFLINE PERSISTENCE ---
+        enableIndexedDbPersistence(db).catch((err) => {
+            if (err.code == 'failed-precondition') {
+                console.log('Persistence failed: Multiple tabs open');
+            } else if (err.code == 'unimplemented') {
+                console.log('Persistence failed: Browser not supported');
+            }
+        });
 
         let HARGA = { lontong_jual: 11000, lontong_setor: 10000, telur_jual: 3000, telur_modal: 1900, bakwan_jual: 1000, bakwan_setor: 0, kerupuk_jual: 1000 };
 
@@ -1068,38 +1108,29 @@
             return new Date(d).toISOString().split('T')[0];
         }
 
-        // --- PERBAIKAN LOGIKA MENU TABS MOBILE (ANTI DOUBLE WARNING) ---
         window.switchMobileMenu = (e, el, targetId) => {
-            // 1. MATIKAN AKSI BAWAAN LINK (PENTING AGAR TIDAK DOUBLE)
-            if (e) e.preventDefault(); 
-
-            // 2. CEK DATA MENGGANTUNG
-            // Jika pindah dari Input ke menu lain, dan ada data belum disimpan
+            if (e) e.preventDefault();
             if (targetId !== 'input' && typeof orderList !== 'undefined' && orderList.length > 0) {
                 const konfirmasi = confirm("Data perubahan belum disimpan. Pindah menu akan membatalkan edit. Lanjutkan?");
-                
                 if (konfirmasi) {
-                    resetFormMode(); // Hapus data & matikan trap history
+                    resetFormMode();
                 } else {
-                    return; // Batal pindah (Tetap di Input)
+                    return;
                 }
             }
 
-            // 3. LOGIKA PINDAH TAMPILAN
             document.querySelectorAll('.nav-item-mobile').forEach(item => item.classList.remove('active'));
             if (el) el.classList.add('active');
 
-            // Sembunyikan semua section
             document.getElementById('section-form').classList.remove('mobile-active-view');
             document.getElementById('section-form').classList.add('mobile-hidden-view');
-            
+
             document.getElementById('section-stats').classList.remove('mobile-active-view');
             document.getElementById('section-stats').classList.add('mobile-hidden-view');
-            
+
             document.getElementById('section-history').classList.remove('mobile-active-view');
             document.getElementById('section-history').classList.add('mobile-hidden-view');
 
-            // Tampilkan target
             let target;
             if (targetId === 'input') target = document.getElementById('section-form');
             else if (targetId === 'stats') target = document.getElementById('section-stats');
@@ -1109,7 +1140,6 @@
                 target.classList.remove('mobile-hidden-view');
                 target.classList.add('mobile-active-view');
             }
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1176,14 +1206,15 @@
             });
             window.customerCounts = counts;
             const sortedNames = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+
+            // Render Chips
             const chipsArea = document.getElementById('chipsArea');
             chipsArea.innerHTML = '';
-            const top5 = sortedNames.slice(0, 5);
-            if (top5.length > 0) {
+            const topChips = sortedNames.slice(0, 5);
+            if (topChips.length > 0) {
                 chipsArea.innerHTML = '<small class="w-100 text-muted fst-italic" style="font-size:0.65rem">Sering membeli:</small>';
-                top5.forEach(nameKey => {
-                    let displayName = nameKey;
-                    displayName = displayName.replace(/\b\w/g, l => l.toUpperCase());
+                topChips.forEach(nameKey => {
+                    let displayName = nameKey.replace(/\b\w/g, l => l.toUpperCase());
                     const chip = document.createElement('div');
                     chip.className = 'chip-langganan';
                     chip.innerHTML = `<i class="bi bi-person-fill me-1"></i>${displayName}`;
@@ -1192,6 +1223,33 @@
                 });
             }
             window.allCustomerNames = sortedNames;
+
+            // --- FITUR #6: RENDER TOP PELANGGAN CARD ---
+            const topListContainer = document.getElementById('topCustomersList');
+            topListContainer.innerHTML = '';
+
+            if (sortedNames.length === 0) {
+                topListContainer.innerHTML = '<div class="text-center py-4 text-muted small">Belum ada data pelanggan</div>';
+            } else {
+                const top5 = sortedNames.slice(0, 5);
+                top5.forEach((key, index) => {
+                    let displayName = key.replace(/\b\w/g, l => l.toUpperCase());
+                    let count = counts[key];
+                    let rankClass = index === 0 ? 'rank-1' : (index === 1 ? 'rank-2' : (index === 2 ? 'rank-3' : 'bg-light text-muted'));
+
+                    const item = `
+                    <div class="list-group-item-custom">
+                        <div class="d-flex align-items-center">
+                            <div class="rank-badge ${rankClass}">${index + 1}</div>
+                            <div class="fw-bold text-dark" style="font-size:0.9rem;">${displayName}</div>
+                        </div>
+                        <div class="badge bg-light text-primary border border-primary-subtle rounded-pill px-3">
+                            ${count}x Order
+                        </div>
+                    </div>`;
+                    topListContainer.innerHTML += item;
+                });
+            }
         }
 
         const inputNama = document.getElementById('custName');
@@ -1642,17 +1700,15 @@
             return earliestDate;
         }
 
-        // --- UPDATE FUNGSI LIHAT DETAIL (SESUAI GAMBAR) ---
+        // --- UPDATE FUNGSI LIHAT DETAIL ---
         window.lihatDetail = (d) => {
             const body = document.getElementById('detailModalBody');
-            // Format Tanggal Header: "3 Desember 2025"
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = new Date(d.date).toLocaleDateString('id-ID', options);
 
             document.getElementById('modalDateDisplay').innerText = formattedDate;
             body.innerHTML = '';
 
-            // Footer Button (Tutup)
             const closeBtnHtml = `
             <div class="modal-footer-close">
                 <button type="button" class="btn btn-light btn-close-bottom" data-bs-dismiss="modal">Tutup</button>
@@ -1665,15 +1721,12 @@
                     <p class="small mt-2">Tidak ada data pembeli.</p>
                 </div>` + closeBtnHtml;
             } else {
-                // 1. Wrapper Scroll Content
                 let contentHtml = `<div class="scroller-content pt-2">`;
 
                 d.detail_pelanggan.forEach(i => {
-                    let cK = i.cK || 0; // Kerupuk handling
-                    // Hitung subtotal per item
+                    let cK = i.cK || 0;
                     const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual) + (cK * HARGA.kerupuk_jual);
 
-                    // --- LOGIKA BADGE "BARU" ---
                     const currentDateStr = normalizeDate(d.date);
                     const earliestKnownDate = getEarliestDateInView(i.nama);
 
@@ -1684,17 +1737,14 @@
 
                     let badgeHtml = showBadge ? `<span class="badge-baru-visual ms-2">BARU</span>` : '';
 
-                    // --- ITEM PILLS ---
                     let itemBadges = '';
                     if (i.cL > 0) itemBadges += `<span class="item-pill pill-l">Lontong ${i.cL}</span>`;
                     if (i.cT > 0) itemBadges += `<span class="item-pill pill-t">Telur ${i.cT}</span>`;
                     if (i.cB > 0) itemBadges += `<span class="item-pill pill-b">Bakwan ${i.cB}</span>`;
                     if (cK > 0) itemBadges += `<span class="item-pill pill-k">Krupuk ${cK}</span>`;
 
-                    // Fallback jika kosong
                     if (itemBadges === '') itemBadges = `<span class="text-muted small fst-italic" style="font-size:0.7rem">Item Lainnya</span>`;
 
-                    // --- RENDER PER ITEM (CLEAN LIST STYLE) ---
                     contentHtml += `
                     <div class="buyer-item">
                         <div class="buyer-top-row">
@@ -1710,9 +1760,8 @@
                     </div>`;
                 });
 
-                contentHtml += `</div>`; // Tutup div scroller-content
+                contentHtml += `</div>`;
 
-                // 2. Footer Summary (3 Kolom sesuai gambar)
                 contentHtml += `
                 <div class="modal-summary-footer">
                     <div class="row g-0">
@@ -1731,7 +1780,6 @@
                     </div>
                 </div>`;
 
-                // 3. Tombol Tutup di paling bawah
                 contentHtml += closeBtnHtml;
 
                 body.innerHTML = contentHtml;
@@ -1739,31 +1787,19 @@
             detailModal.show();
         }
 
-        // --- PERBAIKAN FUNGSI EDIT DATA (FIX MOBILE) ---
+        // --- PERBAIKAN FUNGSI EDIT DATA ---
         window.editData = (d) => {
-            // 1. Masukkan data ke form
             dom.editId.value = d.id;
             dom.dateInput.value = d.date;
             orderList = d.detail_pelanggan || [];
-
-            // 2. Reset status edit item detail
             batalEditPesanan();
-
-            // 3. Render list (ini akan memicu History Trap/Pengunci tombol Back)
             renderOrderList();
-
-            // 4. Tampilkan tombol Batal Edit
             document.getElementById('btnCancelEdit').classList.remove('d-none');
 
-            // 5. SOLUSI: Paksa pindah tampilan ke Tab Input jika di HP
             if (window.innerWidth < 768) {
-                // Cari tombol navigasi 'Input' di bawah
                 const navInput = document.querySelector(".nav-item-mobile.main-action");
-                // Panggil fungsi pindah menu dengan parameter null untuk event
                 switchMobileMenu(null, navInput, 'input');
             }
-
-            // 6. Scroll ke paling atas agar form terlihat
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         window.resetFormMode = () => { dom.editId.value = ''; document.getElementById('salesForm').reset(); orderList = []; batalEditPesanan(); renderOrderList(); dom.dateInput.valueAsDate = new Date(); document.getElementById('btnCancelEdit').classList.add('d-none'); }
