@@ -896,15 +896,15 @@
     </div>
 
     <div class="bottom-nav d-md-none">
-        <a href="#" class="nav-item-mobile main-action active" onclick="switchMobileMenu(this, 'input')">
+        <a href="#" class="nav-item-mobile main-action active" onclick="switchMobileMenu(event, this, 'input')">
             <i class="bi bi-plus-lg"></i>
             <span>Input</span>
         </a>
-        <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(this, 'stats')">
+        <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(event, this, 'stats')">
             <i class="bi bi-bar-chart-line-fill"></i>
             <span>Laporan</span>
         </a>
-        <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(this, 'history')">
+        <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(event, this, 'history')">
             <i class="bi bi-clock-history"></i>
             <span>Riwayat</span>
         </a>
@@ -1068,18 +1068,38 @@
             return new Date(d).toISOString().split('T')[0];
         }
 
-        // --- LOGIKA MENU TABS MOBILE ---
-        window.switchMobileMenu = (el, targetId) => {
+        // --- PERBAIKAN LOGIKA MENU TABS MOBILE (ANTI DOUBLE WARNING) ---
+        window.switchMobileMenu = (e, el, targetId) => {
+            // 1. MATIKAN AKSI BAWAAN LINK (PENTING AGAR TIDAK DOUBLE)
+            if (e) e.preventDefault(); 
+
+            // 2. CEK DATA MENGGANTUNG
+            // Jika pindah dari Input ke menu lain, dan ada data belum disimpan
+            if (targetId !== 'input' && typeof orderList !== 'undefined' && orderList.length > 0) {
+                const konfirmasi = confirm("Data perubahan belum disimpan. Pindah menu akan membatalkan edit. Lanjutkan?");
+                
+                if (konfirmasi) {
+                    resetFormMode(); // Hapus data & matikan trap history
+                } else {
+                    return; // Batal pindah (Tetap di Input)
+                }
+            }
+
+            // 3. LOGIKA PINDAH TAMPILAN
             document.querySelectorAll('.nav-item-mobile').forEach(item => item.classList.remove('active'));
             if (el) el.classList.add('active');
 
+            // Sembunyikan semua section
             document.getElementById('section-form').classList.remove('mobile-active-view');
             document.getElementById('section-form').classList.add('mobile-hidden-view');
+            
             document.getElementById('section-stats').classList.remove('mobile-active-view');
             document.getElementById('section-stats').classList.add('mobile-hidden-view');
+            
             document.getElementById('section-history').classList.remove('mobile-active-view');
             document.getElementById('section-history').classList.add('mobile-hidden-view');
 
+            // Tampilkan target
             let target;
             if (targetId === 'input') target = document.getElementById('section-form');
             else if (targetId === 'stats') target = document.getElementById('section-stats');
@@ -1089,11 +1109,12 @@
                 target.classList.remove('mobile-hidden-view');
                 target.classList.add('mobile-active-view');
             }
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         if (window.innerWidth < 768) {
-            window.switchMobileMenu(null, 'input');
+            window.switchMobileMenu(null, null, 'input');
         }
 
         async function setupHarga() {
@@ -1738,8 +1759,8 @@
             if (window.innerWidth < 768) {
                 // Cari tombol navigasi 'Input' di bawah
                 const navInput = document.querySelector(".nav-item-mobile.main-action");
-                // Panggil fungsi pindah menu
-                switchMobileMenu(navInput, 'input');
+                // Panggil fungsi pindah menu dengan parameter null untuk event
+                switchMobileMenu(null, navInput, 'input');
             }
 
             // 6. Scroll ke paling atas agar form terlihat
