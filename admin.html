@@ -420,7 +420,7 @@
             border: none;
         }
 
-        /* --- MODAL & TOP CUSTOMER --- */
+        /* --- MODAL & VISUALS --- */
         .modal-content {
             border: none;
             border-radius: 12px;
@@ -645,6 +645,63 @@
             color: #c2410c;
         }
 
+        /* NEW: MOBILE SORTING PILLS & FILTER STYLES */
+        .sort-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+            gap: 8px;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .sort-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .btn-sort-pill {
+            border-radius: 50rem;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-sort-pill.active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .btn-sort-pill i {
+            font-size: 0.8rem;
+            margin-left: 4px;
+        }
+
+        .btn-export-custom {
+            width: 100%;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-export-custom:hover {
+            background-color: #059669;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .chart-container {
                 height: 250px;
@@ -673,16 +730,17 @@
         style="z-index: 10000;">
         <div class="card border-0 shadow-lg p-4" style="max-width: 400px; width: 90%; border-radius: 16px;">
             <div class="text-center mb-4">
-                <img src="logo.png" alt="Logo" style="width: 60px; height: 60px; object-fit: contain;" class="mb-2">
+                <img src="logonobg.png" alt="Logo" style="width: 120px; height: auto; object-fit: contain;"
+                    class="mb-2">
                 <h4 class="fw-bold text-primary">Admin Lontong MM</h4>
-                <p class="text-muted small">Silakan masukkan kode akses untuk masuk.</p>
+                <p class="text-muted small" data-i18n="login_desc">Silakan masukkan kode akses untuk masuk.</p>
             </div>
             <div class="mb-3"><input type="password" id="passcodeInput"
                     class="form-control form-control-lg text-center fw-bold" placeholder="Kode Akses" autofocus></div>
-            <button class="btn btn-primary w-100 py-2 fw-bold rounded-3" onclick="checkLogin()">MASUK <i
-                    class="bi bi-arrow-right-short"></i></button>
+            <button class="btn btn-primary w-100 py-2 fw-bold rounded-3" onclick="checkLogin()"><span
+                    data-i18n="btn_login">MASUK</span> <i class="bi bi-arrow-right-short"></i></button>
             <p id="loginError" class="text-danger text-center small mt-3 fw-bold d-none"><i
-                    class="bi bi-x-circle-fill"></i> Kode Salah!</p>
+                    class="bi bi-x-circle-fill"></i> <span data-i18n="err_login">Kode Salah!</span></p>
         </div>
     </div>
 
@@ -693,10 +751,16 @@
                 <span class="badge bg-primary bg-opacity-10 text-primary ms-2">Admin Panel</span>
             </div>
             <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-light border-0 text-muted" onclick="toggleLanguage()"
+                    title="Ganti Bahasa">
+                    <i class="bi bi-globe-asia-australia me-1"></i> <span id="desktopLangLabel"
+                        class="fw-bold small">ID</span>
+                </button>
+                <div class="vr mx-1"></div>
                 <button class="btn btn-sm btn-outline-secondary border-0 fw-bold" onclick="bukaModalHarga()"
                     title="Atur Harga"><i class="bi bi-gear-fill"></i></button>
                 <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="logoutAdmin()"><i
-                        class="bi bi-box-arrow-right me-1"></i> Keluar</button>
+                        class="bi bi-box-arrow-right me-1"></i> <span data-i18n="nav_logout">Keluar</span></button>
             </div>
         </div>
     </nav>
@@ -704,8 +768,15 @@
     <div class="d-md-none sticky-top bg-white border-bottom py-2 px-3 d-flex justify-content-between align-items-center shadow-sm"
         style="z-index: 900;">
         <div class="fw-bold text-dark"><i class="bi bi-shop-window me-2 text-primary"></i>Lontong MM</div>
-        <button class="btn btn-sm btn-light border-0" onclick="bukaModalHarga()"><i
-                class="bi bi-gear-fill text-muted"></i></button>
+        <div class="d-flex gap-3 align-items-center">
+            <button class="btn btn-sm btn-light border-0 p-0 text-muted d-flex align-items-center gap-1"
+                onclick="toggleLanguage()">
+                <i class="bi bi-globe-asia-australia fs-5"></i>
+                <span id="mobileLangLabel" class="small fw-bold">ID</span>
+            </button>
+            <button class="btn btn-sm btn-light border-0 p-0" onclick="bukaModalHarga()"><i
+                    class="bi bi-gear-fill text-muted fs-5"></i></button>
+        </div>
     </div>
 
     <div class="container-fluid px-4 mt-3 mt-md-0">
@@ -714,39 +785,42 @@
                 <div class="card h-100">
                     <div class="card-header bg-white py-3 border-bottom-0">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2"></i>Form Transaksi
-                            </h6>
+                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2"></i><span
+                                    data-i18n="title_form">Form Transaksi</span></h6>
                             <button id="btnCancelEdit" class="btn btn-sm btn-light text-danger d-none fw-bold text-xs"
-                                onclick="resetFormMode()">Batal Edit</button>
+                                onclick="resetFormMode()" data-i18n="btn_cancel_edit">Batal Edit</button>
                         </div>
                     </div>
                     <div class="card-body pt-0">
                         <form id="salesForm">
                             <input type="hidden" id="editId">
                             <div class="mb-3">
-                                <label class="form-label text-xs fw-bold text-muted mb-1">TANGGAL</label>
+                                <label class="form-label text-xs fw-bold text-muted mb-1"
+                                    data-i18n="lbl_date">TANGGAL</label>
                                 <input type="date" class="form-control bg-light border-0 fw-bold" id="dateInput"
                                     required>
                             </div>
                             <div class="p-3 bg-light rounded-3 mb-3 border">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <label class="text-xs fw-bold text-muted"><i class="bi bi-cart-fill me-1"></i>ITEM
-                                        PESANAN</label>
+                                    <label class="text-xs fw-bold text-muted"><i class="bi bi-cart-fill me-1"></i><span
+                                            data-i18n="lbl_item_order">ITEM PESANAN</span></label>
                                     <button type="button"
                                         class="btn btn-link p-0 text-decoration-none text-xs text-danger d-none"
-                                        id="btnBatalEditDetail" onclick="batalEditPesanan()">Batal Ubah</button>
+                                        id="btnBatalEditDetail" onclick="batalEditPesanan()"
+                                        data-i18n="btn_cancel_change">Batal Ubah</button>
                                 </div>
                                 <div class="mb-3 input-wrapper">
-                                    <label class="text-xs fw-bold text-muted ms-1 mb-1">NAMA PELANGGAN</label>
+                                    <label class="text-xs fw-bold text-muted ms-1 mb-1"
+                                        data-i18n="lbl_customer_name">NAMA PELANGGAN</label>
                                     <input type="text" id="custName" class="form-control fw-bold border-0 shadow-sm"
                                         style="padding: 12px;" placeholder="Ketik nama atau pilih langganan..."
-                                        autocomplete="off">
+                                        data-i18n-placeholder="ph_customer_name" autocomplete="off">
                                     <div id="suggestionList" class="suggestion-box"></div>
                                     <div id="chipsArea" class="chips-container"></div>
                                 </div>
                                 <div class="stepper-container">
-                                    <div class="stepper-label">Lontong<span class="stepper-sublabel">Menu Utama</span>
-                                    </div>
+                                    <div class="stepper-label">Lontong<span class="stepper-sublabel"
+                                            data-i18n="lbl_main_menu">Menu Utama</span></div>
                                     <div class="stepper-group">
                                         <button type="button" class="btn-stepper btn-minus"
                                             onclick="ubahJumlah('custLontong', -1)"><i class="bi bi-dash"></i></button>
@@ -757,7 +831,8 @@
                                     </div>
                                 </div>
                                 <div class="stepper-container">
-                                    <div class="stepper-label">Telur<span class="stepper-sublabel">Topping</span></div>
+                                    <div class="stepper-label">Telur<span class="stepper-sublabel"
+                                            data-i18n="lbl_topping">Topping</span></div>
                                     <div class="stepper-group">
                                         <button type="button" class="btn-stepper btn-minus"
                                             onclick="ubahJumlah('custTelur', -1)"><i class="bi bi-dash"></i></button>
@@ -768,8 +843,8 @@
                                     </div>
                                 </div>
                                 <div class="stepper-container">
-                                    <div class="stepper-label">Bakwan<span class="stepper-sublabel">Gorengan</span>
-                                    </div>
+                                    <div class="stepper-label">Bakwan<span class="stepper-sublabel"
+                                            data-i18n="lbl_fried">Gorengan</span></div>
                                     <div class="stepper-group">
                                         <button type="button" class="btn-stepper btn-minus"
                                             onclick="ubahJumlah('custBakwan', -1)"><i class="bi bi-dash"></i></button>
@@ -780,13 +855,14 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3 px-1 mb-2">
-                                    <small class="text-muted fw-bold">Total Harga Item:</small>
+                                    <small class="text-muted fw-bold" data-i18n="lbl_total_item">Total Harga
+                                        Item:</small>
                                     <span class="fw-bold text-primary fs-5" id="previewSubtotal">Rp 0</span>
                                 </div>
                                 <button type="button" id="btnAddDetail"
                                     class="btn btn-primary w-100 py-2 fw-bold rounded-3 shadow-sm"
-                                    onclick="prosesPesanan()"><i class="bi bi-plus-lg me-1"></i> MASUKKAN KE
-                                    KERANJANG</button>
+                                    onclick="prosesPesanan()"><i class="bi bi-plus-lg me-1"></i> <span
+                                        data-i18n="btn_add_cart">MASUKKAN KE KERANJANG</span></button>
                                 <div class="order-list-container mt-3" id="listPesananContainer"></div>
                             </div>
                             <div class="mb-3">
@@ -816,17 +892,21 @@
                                     </div>
                                 </div>
                                 <div class="p-3 bg-dark text-white rounded-3">
-                                    <div class="d-flex justify-content-between text-xs text-white-50"><span>Setor
-                                            Saudara</span><span id="previewSetor">Rp 0</span></div>
-                                    <div class="d-flex justify-content-between fw-bold fs-5 mt-1"><span>Profit
-                                            Bersih</span><span id="previewUntung" class="text-success">Rp 0</span></div>
+                                    <div class="d-flex justify-content-between text-xs text-white-50"><span
+                                            data-i18n="lbl_sibling_share">Setor Saudara</span><span id="previewSetor">Rp
+                                            0</span></div>
+                                    <div class="d-flex justify-content-between fw-bold fs-5 mt-1"><span
+                                            data-i18n="lbl_net_profit">Profit Bersih</span><span id="previewUntung"
+                                            class="text-success">Rp 0</span></div>
                                     <div class="d-none" id="previewOmset">Rp 0</div>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-success w-100 py-2 fw-bold" id="btnSave"><i
-                                    class="bi bi-check-lg me-2"></i>SIMPAN DATA</button>
+                                    class="bi bi-check-lg me-2"></i><span data-i18n="btn_save_data">SIMPAN
+                                    DATA</span></button>
                             <button type="button" class="btn btn-outline-primary w-100 py-2 fw-bold mt-2"
-                                onclick="copyReport()"><i class="bi bi-whatsapp me-2"></i>Salin Laporan Harian</button>
+                                onclick="copyReport()"><i class="bi bi-whatsapp me-2"></i><span
+                                    data-i18n="btn_copy_report">Salin Laporan Harian</span></button>
                         </form>
                     </div>
                 </div>
@@ -838,52 +918,61 @@
                         <div class="col-md-4">
                             <div
                                 class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-primary">
-                                <div class="stat-label">Total Omset</div>
+                                <div class="stat-label" data-i18n="lbl_total_omset">Total Omset</div>
                                 <div class="stat-value" id="grandOmset">Rp 0</div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
                                 class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-warning">
-                                <div class="stat-label">Setor Saudara</div>
+                                <div class="stat-label" data-i18n="lbl_sibling_share">Setor Saudara</div>
                                 <div class="stat-value text-warning" id="grandSetor">Rp 0</div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
                                 class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-success">
-                                <div class="stat-label">Profit Saya</div>
+                                <div class="stat-label" data-i18n="lbl_my_profit">Profit Saya</div>
                                 <div class="stat-value text-success" id="grandProfit">Rp 0</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="card mb-3">
-                        <div
-                            class="card-header bg-white py-3 border-bottom-0 d-flex flex-wrap justify-content-between align-items-center">
-                            <h6 class="m-0 fw-bold text-dark">Grafik Performa</h6>
-                            <div class="d-flex gap-2 header-filter-group">
-                                <input type="date" id="filterStartDate"
-                                    class="form-control form-control-sm header-filter-input">
-                                <input type="date" id="filterEndDate"
-                                    class="form-control form-control-sm header-filter-input">
-                                <button class="btn btn-sm btn-light border" onclick="resetFilter()"
-                                    title="Reset Filter"><i class="bi bi-arrow-clockwise"></i></button>
-                                <button class="btn btn-sm btn-success text-white" onclick="downloadCSV()"
-                                    title="Download Excel"><i class="bi bi-file-earmark-spreadsheet"></i></button>
+                        <div class="card-header bg-white py-3 border-bottom-0">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="m-0 fw-bold text-dark" data-i18n="title_chart">Grafik Performa</h6>
+                            </div>
+                            <div class="row g-2 align-items-center">
+                                <div class="col-6 col-md-4">
+                                    <input type="date" id="filterStartDate" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <input type="date" id="filterEndDate" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-sm btn-light border" onclick="resetFilter()"
+                                        title="Reset Filter"><i class="bi bi-arrow-clockwise"></i></button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-sm btn-export-custom shadow-sm" onclick="downloadCSV()"
+                                        title="Download Excel">
+                                        <i class="bi bi-file-earmark-excel-fill"></i> Export
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body px-3 pb-3 pt-0">
                             <div class="chart-container"><canvas id="salesChart"></canvas></div>
-                            <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold">Tanggal
-                                Filter Terbalik!</div>
+                            <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold"
+                                data-i18n="msg_date_error">Tanggal Filter Terbalik!</div>
                         </div>
                     </div>
 
                     <div class="card mb-3">
                         <div class="card-header bg-white py-3 border-bottom d-flex align-items-center">
-                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>Top 5
-                                Pelanggan Setia</h6>
+                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i><span
+                                    data-i18n="title_top_customer">Top 5 Pelanggan Setia</span></h6>
                         </div>
                         <div class="card-body p-0">
                             <div id="topCustomersList" class="list-group list-group-flush rounded-bottom">
@@ -895,25 +984,48 @@
                 <div class="card" id="section-history">
                     <div
                         class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 fw-bold text-dark">Riwayat Transaksi (14 Hari Terakhir)</h6>
+                        <h6 class="m-0 fw-bold text-dark" data-i18n="title_history">Riwayat Transaksi (100 Hari Terakhir)
+                        </h6>
                     </div>
+
+                    <div class="d-md-none px-3 pt-3 pb-2 bg-white border-bottom">
+                        <small class="text-muted fw-bold d-block mb-2" style="font-size: 0.7rem;">URUTKAN
+                            BERDASARKAN:</small>
+                        <div class="sort-scroll-container">
+                            <button class="btn-sort-pill active" onclick="sortData('date')" id="pill-date">
+                                Tanggal <i class="bi bi-arrow-down"></i>
+                            </button>
+                            <button class="btn-sort-pill" onclick="sortData('omset')" id="pill-omset">
+                                Omset
+                            </button>
+                            <button class="btn-sort-pill" onclick="sortData('untung')" id="pill-untung">
+                                Profit
+                            </button>
+                            <button class="btn-sort-pill" onclick="sortData('setor')" id="pill-setor">
+                                Setor
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="card-body p-0">
                         <div class="table-responsive d-none d-md-block">
                             <table class="table table-hover align-middle mb-0 table-main">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="ps-3" style="cursor: pointer;" onclick="sortData('date')">Tanggal <i
-                                                id="icon-date" class="bi bi-caret-down-fill text-muted"></i></th>
-                                        <th>Rincian (L/T/B)</th>
-                                        <th class="text-end" style="cursor: pointer;" onclick="sortData('omset')">Omset
-                                            <i id="icon-omset" class="bi bi-filter text-muted"></i></th>
+                                        <th class="ps-3" style="cursor: pointer;" onclick="sortData('date')"><span
+                                                data-i18n="th_date">Tanggal</span> <i id="icon-date"
+                                                class="bi bi-caret-down-fill text-muted"></i></th>
+                                        <th data-i18n="th_details">Rincian (L/T/B)</th>
+                                        <th class="text-end" style="cursor: pointer;" onclick="sortData('omset')"><span
+                                                data-i18n="th_omset">Omset</span> <i id="icon-omset"
+                                                class="bi bi-filter text-muted"></i></th>
                                         <th class="text-end text-warning" style="cursor: pointer;"
-                                            onclick="sortData('setor')">Setor <i id="icon-setor"
-                                                class="bi bi-filter text-muted"></i></th>
+                                            onclick="sortData('setor')"><span data-i18n="th_share">Setor</span> <i
+                                                id="icon-setor" class="bi bi-filter text-muted"></i></th>
                                         <th class="text-end text-success" style="cursor: pointer;"
-                                            onclick="sortData('untung')">Profit <i id="icon-untung"
-                                                class="bi bi-filter text-muted"></i></th>
-                                        <th class="text-center pe-3">Aksi</th>
+                                            onclick="sortData('untung')"><span data-i18n="th_profit">Profit</span> <i
+                                                id="icon-untung" class="bi bi-filter text-muted"></i></th>
+                                        <th class="text-center pe-3" data-i18n="th_action">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBodyDesktop"></tbody>
@@ -929,19 +1041,19 @@
     <div class="bottom-nav d-md-none">
         <a href="#" class="nav-item-mobile main-action active" onclick="switchMobileMenu(event, this, 'input')">
             <i class="bi bi-plus-lg"></i>
-            <span>Input</span>
+            <span data-i18n="nav_input">Input</span>
         </a>
         <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(event, this, 'stats')">
             <i class="bi bi-bar-chart-line-fill"></i>
-            <span>Laporan</span>
+            <span data-i18n="nav_report">Laporan</span>
         </a>
         <a href="#" class="nav-item-mobile" onclick="switchMobileMenu(event, this, 'history')">
             <i class="bi bi-clock-history"></i>
-            <span>Riwayat</span>
+            <span data-i18n="nav_history">Riwayat</span>
         </a>
         <a href="#" class="nav-item-mobile" onclick="logoutAdmin()">
             <i class="bi bi-box-arrow-right text-danger"></i>
-            <span class="text-danger">Keluar</span>
+            <span class="text-danger" data-i18n="nav_logout">Keluar</span>
         </a>
     </div>
 
@@ -960,8 +1072,8 @@
             <div class="modal-content shadow-lg">
                 <div class="modal-header-custom d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="m-0 fw-bold mb-1">Rincian Pembeli</h5><small class="opacity-75"
-                            id="modalDateDisplay">Tanggal Transaksi</small>
+                        <h5 class="m-0 fw-bold mb-1" data-i18n="modal_detail_title">Rincian Pembeli</h5><small
+                            class="opacity-75" id="modalDateDisplay">Tanggal Transaksi</small>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -975,31 +1087,34 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-white border-bottom">
-                    <h5 class="modal-title fw-bold text-dark"><i
-                            class="bi bi-gear-fill me-2 text-primary"></i>Pengaturan Harga</h5><button type="button"
+                    <h5 class="modal-title fw-bold text-dark"><i class="bi bi-gear-fill me-2 text-primary"></i><span
+                            data-i18n="modal_price_title">Pengaturan Harga</span></h5><button type="button"
                         class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body bg-light">
-                    <div class="alert alert-info py-2 px-3 small mb-3"><i class="bi bi-info-circle me-1"></i> Perubahan
-                        harga akan berlaku untuk transaksi baru.</div>
+                    <div class="alert alert-info py-2 px-3 small mb-3"><i class="bi bi-info-circle me-1"></i> <span
+                            data-i18n="msg_price_info">Perubahan harga akan berlaku untuk transaksi baru.</span></div>
                     <form id="formHarga">
                         <div class="card mb-3 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Lontong</h6>
                             <div class="row g-2">
-                                <div class="col-6"><label class="small text-muted fw-bold">Harga Jual</label><input
-                                        type="number" id="set_lontong_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-6"><label class="small text-muted fw-bold">Setor Saudara</label><input
-                                        type="number" id="set_lontong_setor" class="form-control" placeholder="Rp">
-                                </div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_sell">Harga Jual</label><input type="number"
+                                        id="set_lontong_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_share">Setor Saudara</label><input type="number"
+                                        id="set_lontong_setor" class="form-control" placeholder="Rp"></div>
                             </div>
                         </div>
                         <div class="card mb-3 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-warning mb-2 border-bottom pb-2">Telur</h6>
                             <div class="row g-2">
-                                <div class="col-4"><label class="small text-muted fw-bold">Jual</label><input
-                                        type="number" id="set_telur_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-4"><label class="small text-muted fw-bold">Modal</label><input
-                                        type="number" id="set_telur_modal" class="form-control" placeholder="Rp"></div>
+                                <div class="col-4"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_sell">Jual</label><input type="number" id="set_telur_jual"
+                                        class="form-control" placeholder="Rp"></div>
+                                <div class="col-4"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_capital">Modal</label><input type="number"
+                                        id="set_telur_modal" class="form-control" placeholder="Rp"></div>
                                 <div class="col-4 d-flex align-items-end"><small class="text-muted"
                                         style="font-size:0.65rem">Setor = 0 (Otomatis)</small></div>
                             </div>
@@ -1007,24 +1122,28 @@
                         <div class="card mb-2 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-secondary mb-2 border-bottom pb-2">Bakwan</h6>
                             <div class="row g-2">
-                                <div class="col-6"><label class="small text-muted fw-bold">Harga Jual</label><input
-                                        type="number" id="set_bakwan_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-6"><label class="small text-muted fw-bold">Setor Saudara</label><input
-                                        type="number" id="set_bakwan_setor" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_sell">Harga Jual</label><input type="number"
+                                        id="set_bakwan_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_share">Setor Saudara</label><input type="number"
+                                        id="set_bakwan_setor" class="form-control" placeholder="Rp"></div>
                             </div>
                         </div>
                         <div class="card mb-2 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-danger mb-2 border-bottom pb-2">Kerupuk Tambahan</h6>
                             <div class="row g-2">
-                                <div class="col-12"><label class="small fw-bold">Harga Jual</label><input type="number"
-                                        id="set_kerupuk_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-12"><label class="small fw-bold" data-i18n="lbl_price_sell">Harga
+                                        Jual</label><input type="number" id="set_kerupuk_jual" class="form-control"
+                                        placeholder="Rp"></div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer bg-white"><button type="button" class="btn btn-light text-muted fw-bold"
-                        data-bs-dismiss="modal">Batal</button><button type="button" class="btn btn-primary fw-bold"
-                        onclick="simpanHarga()"><i class="bi bi-save me-1"></i> Simpan Perubahan</button></div>
+                        data-bs-dismiss="modal" data-i18n="btn_cancel">Batal</button><button type="button"
+                        class="btn btn-primary fw-bold" onclick="simpanHarga()"><i class="bi bi-save me-1"></i> <span
+                            data-i18n="btn_save_changes">Simpan Perubahan</span></button></div>
             </div>
         </div>
     </div>
@@ -1036,6 +1155,159 @@
         const overlay = document.getElementById('loginOverlay');
         const passInput = document.getElementById('passcodeInput');
         const errorMsg = document.getElementById('loginError');
+
+        // --- TRANSLATION DATA ---
+        const translations = {
+            id: {
+                login_desc: "Silakan masukkan kode akses untuk masuk.",
+                btn_login: "MASUK",
+                err_login: "Kode Salah!",
+                nav_logout: "Keluar",
+                nav_input: "Input",
+                nav_report: "Laporan",
+                nav_history: "Riwayat",
+                title_form: "Form Transaksi",
+                btn_cancel_edit: "Batal Edit",
+                lbl_date: "TANGGAL",
+                lbl_item_order: "ITEM PESANAN",
+                btn_cancel_change: "Batal Ubah",
+                lbl_customer_name: "NAMA PELANGGAN",
+                ph_customer_name: "Ketik nama atau pilih langganan...",
+                lbl_main_menu: "Menu Utama",
+                lbl_topping: "Topping",
+                lbl_fried: "Gorengan",
+                lbl_total_item: "Total Harga Item:",
+                btn_add_cart: "MASUKKAN KE KERANJANG",
+                lbl_sibling_share: "Setor Saudara",
+                lbl_net_profit: "Profit Bersih",
+                btn_save_data: "SIMPAN DATA",
+                btn_copy_report: "Salin Laporan Harian",
+                lbl_total_omset: "Total Omset",
+                lbl_my_profit: "Profit Saya",
+                title_chart: "Grafik Performa",
+                msg_date_error: "Tanggal Filter Terbalik!",
+                title_top_customer: "Top 5 Pelanggan Setia",
+                title_history: "Riwayat Transaksi (100 Hari Terakhir)",
+                th_date: "Tanggal",
+                th_details: "Rincian (L/T/B)",
+                th_omset: "Omset",
+                th_share: "Setor",
+                th_profit: "Profit",
+                th_action: "Aksi",
+                modal_detail_title: "Rincian Pembeli",
+                modal_price_title: "Pengaturan Harga",
+                msg_price_info: "Perubahan harga akan berlaku untuk transaksi baru.",
+                lbl_price_sell: "Harga Jual",
+                lbl_price_share: "Setor Saudara",
+                lbl_price_capital: "Modal",
+                btn_cancel: "Batal",
+                btn_save_changes: "Simpan Perubahan",
+                toast_saved: "Berhasil disimpan!",
+                msg_confirm_logout: "Keluar dari panel admin?",
+                msg_confirm_delete: "Hapus?",
+                msg_data_empty: "Data Kosong! Isi minimal 1 penjualan.",
+                msg_name_required: "Nama pembeli wajib diisi!",
+                msg_confirm_nav: "Data perubahan belum disimpan. Pindah menu akan membatalkan edit. Lanjutkan?",
+                msg_edit_first: "Selesaikan edit dulu!",
+                msg_data_saved: "Data transaksi berhasil disimpan!",
+                msg_report_copied: "Laporan disalin! Silakan paste di WA.",
+                msg_copy_failed: "Gagal menyalin text.",
+                msg_no_data_download: "Tidak ada data untuk diunduh.",
+                msg_data_not_found: "Data tidak ditemukan pada tanggal tersebut."
+            },
+            en: {
+                login_desc: "Please enter access code to login.",
+                btn_login: "LOGIN",
+                err_login: "Wrong Code!",
+                nav_logout: "Logout",
+                nav_input: "Input",
+                nav_report: "Report",
+                nav_history: "History",
+                title_form: "Transaction Form",
+                btn_cancel_edit: "Cancel Edit",
+                lbl_date: "DATE",
+                lbl_item_order: "ORDER ITEMS",
+                btn_cancel_change: "Cancel Change",
+                lbl_customer_name: "CUSTOMER NAME",
+                ph_customer_name: "Type name or select...",
+                lbl_main_menu: "Main Menu",
+                lbl_topping: "Topping",
+                lbl_fried: "Fried Sides",
+                lbl_total_item: "Item Subtotal:",
+                btn_add_cart: "ADD TO CART",
+                lbl_sibling_share: "Sibling Share",
+                lbl_net_profit: "Net Profit",
+                btn_save_data: "SAVE DATA",
+                btn_copy_report: "Copy Daily Report",
+                lbl_total_omset: "Total Revenue",
+                lbl_my_profit: "My Profit",
+                title_chart: "Performance Chart",
+                msg_date_error: "Invalid Date Range!",
+                title_top_customer: "Top 5 Loyal Customers",
+                title_history: "Transaction History (Last 100 Days)",
+                th_date: "Date",
+                th_details: "Details (L/E/B)",
+                th_omset: "Revenue",
+                th_share: "Share",
+                th_profit: "Profit",
+                th_action: "Action",
+                modal_detail_title: "Buyer Details",
+                modal_price_title: "Price Settings",
+                msg_price_info: "Price changes will apply to new transactions.",
+                lbl_price_sell: "Selling Price",
+                lbl_price_share: "Sibling Share",
+                lbl_price_capital: "Cost (Modal)",
+                btn_cancel: "Cancel",
+                btn_save_changes: "Save Changes",
+                toast_saved: "Saved successfully!",
+                msg_confirm_logout: "Logout from admin panel?",
+                msg_confirm_delete: "Delete?",
+                msg_data_empty: "Empty Data! Add at least 1 sale.",
+                msg_name_required: "Customer name is required!",
+                msg_confirm_nav: "Unsaved changes. Switching menu will cancel edit. Continue?",
+                msg_edit_first: "Finish editing first!",
+                msg_data_saved: "Transaction data saved successfully!",
+                msg_report_copied: "Report copied! Please paste in WA.",
+                msg_copy_failed: "Failed to copy text.",
+                msg_no_data_download: "No data to download.",
+                msg_data_not_found: "No data found on selected dates."
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'id';
+
+        window.updateLanguageUI = () => {
+            const t = translations[currentLang];
+            // Update Text Elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.innerText = t[key];
+            });
+            // Update Placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+
+            // Update Toggle Button Labels (Both Desktop and Mobile)
+            const labelText = currentLang.toUpperCase();
+            const desktopLabel = document.getElementById('desktopLangLabel');
+            const mobileLabel = document.getElementById('mobileLangLabel');
+
+            if (desktopLabel) desktopLabel.innerText = labelText;
+            if (mobileLabel) mobileLabel.innerText = labelText;
+        }
+
+        window.toggleLanguage = () => {
+            currentLang = currentLang === 'id' ? 'en' : 'id';
+            localStorage.setItem('appLang', currentLang);
+            window.updateLanguageUI();
+        }
+
+        // Helper to get translated string for alerts/js
+        function getTrans(key) {
+            return translations[currentLang][key] || key;
+        }
 
         window.checkLogin = () => {
             const input = passInput.value;
@@ -1055,7 +1327,7 @@
         if (sessionStorage.getItem("isLoggedIn")) { overlay.remove(); }
         if (passInput) { passInput.addEventListener("keypress", function (event) { if (event.key === "Enter") { window.checkLogin(); } }); }
 
-        window.logoutAdmin = () => { if (confirm("Keluar dari panel admin?")) { sessionStorage.removeItem("isLoggedIn"); window.location.reload(); } }
+        window.logoutAdmin = () => { if (confirm(getTrans('msg_confirm_logout'))) { sessionStorage.removeItem("isLoggedIn"); window.location.reload(); } }
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs, getDoc, setDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -1064,7 +1336,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- FITUR #3: OFFLINE PERSISTENCE ---
         enableIndexedDbPersistence(db).catch((err) => {
             if (err.code == 'failed-precondition') {
                 console.log('Persistence failed: Multiple tabs open');
@@ -1098,6 +1369,14 @@
             toast.show();
         }
 
+        function setFormDateToToday() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            dom.dateInput.value = `${year}-${month}-${day}`;
+        }
+
         function normalizeDate(d) {
             if (!d) return "";
             if (typeof d === 'string') {
@@ -1111,7 +1390,7 @@
         window.switchMobileMenu = (e, el, targetId) => {
             if (e) e.preventDefault();
             if (targetId !== 'input' && typeof orderList !== 'undefined' && orderList.length > 0) {
-                const konfirmasi = confirm("Data perubahan belum disimpan. Pindah menu akan membatalkan edit. Lanjutkan?");
+                const konfirmasi = confirm(getTrans('msg_confirm_nav'));
                 if (konfirmasi) {
                     resetFormMode();
                 } else {
@@ -1140,6 +1419,11 @@
                 target.classList.remove('mobile-hidden-view');
                 target.classList.add('mobile-active-view');
             }
+
+            if (targetId === 'input') {
+                if (!dom.editId.value) { setFormDateToToday(); }
+            }
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1169,10 +1453,10 @@
         }
 
         window.simpanHarga = async () => {
-            if (!confirm("Simpan perubahan harga ini?")) return;
+            if (!confirm(getTrans('msg_price_info'))) return;
             const btn = document.querySelector('#modalHarga .btn-primary');
             const originalText = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = 'Menyimpan...';
+            btn.disabled = true; btn.innerHTML = '...';
             const newHarga = {
                 lontong_jual: parseInt(document.getElementById('set_lontong_jual').value) || 0,
                 lontong_setor: parseInt(document.getElementById('set_lontong_setor').value) || 0,
@@ -1186,7 +1470,7 @@
                 await setDoc(doc(db, "settings", "harga_terkini"), newHarga);
                 HARGA = newHarga;
                 updateSubtotalPreview();
-                showToast("Harga berhasil diperbarui!", "success");
+                showToast(getTrans('toast_saved'), "success");
                 modalHarga.hide();
             } catch (error) { showToast("Gagal menyimpan: " + error.message, "danger"); }
             finally { btn.disabled = false; btn.innerHTML = originalText; }
@@ -1207,7 +1491,6 @@
             window.customerCounts = counts;
             const sortedNames = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
 
-            // Render Chips
             const chipsArea = document.getElementById('chipsArea');
             chipsArea.innerHTML = '';
             const topChips = sortedNames.slice(0, 5);
@@ -1224,7 +1507,6 @@
             }
             window.allCustomerNames = sortedNames;
 
-            // --- FITUR #6: RENDER TOP PELANGGAN CARD ---
             const topListContainer = document.getElementById('topCustomersList');
             topListContainer.innerHTML = '';
 
@@ -1327,7 +1609,7 @@
 
         window.addEventListener('popstate', function (event) {
             if (orderList.length > 0) {
-                if (confirm("Data transaksi belum disimpan dan akan hilang. Yakin ingin kembali?")) { history.back(); }
+                if (confirm(getTrans('msg_confirm_nav'))) { history.back(); }
                 else { history.pushState({ status: 'editing' }, null, ''); }
             }
         });
@@ -1405,7 +1687,7 @@
             const cB = Math.max(0, parseInt(document.getElementById('custBakwan').value) || 0);
 
             if (!nama) {
-                showToast("Nama pembeli wajib diisi!", "warning");
+                showToast(getTrans('msg_name_required'), "warning");
                 btn.innerHTML = originalText; btn.disabled = false;
                 return;
             }
@@ -1454,13 +1736,13 @@
 
         window.batalEditPesanan = () => {
             detailEditingIndex = -1; resetInputDetail();
-            document.getElementById('btnAddDetail').innerHTML = '<i class="bi bi-plus-lg"></i> MASUKKAN KE KERANJANG';
+            document.getElementById('btnAddDetail').innerHTML = '<i class="bi bi-plus-lg"></i> ' + getTrans('btn_add_cart');
             document.getElementById('btnAddDetail').classList.replace('btn-warning', 'btn-primary');
             document.getElementById('btnBatalEditDetail').classList.add('d-none');
         }
 
         window.hapusPesanan = (idx) => {
-            if (idx === detailEditingIndex) { showToast("Selesaikan edit dulu!", "warning"); return; }
+            if (idx === detailEditingIndex) { showToast(getTrans('msg_edit_first'), "warning"); return; }
             orderList.splice(idx, 1);
             renderOrderList();
             if (orderList.length > 0) updateHistoryTrap();
@@ -1536,16 +1818,16 @@
         document.getElementById('salesForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSave'), cId = dom.editId.value, calc = hitungEstimasi();
-            if (calc.qL === 0 && calc.qT === 0 && calc.qB === 0) { showToast("Data Kosong! Isi minimal 1 penjualan.", "warning"); return; }
-            btn.disabled = true; btn.innerHTML = 'Menyimpan...';
+            if (calc.qL === 0 && calc.qT === 0 && calc.qB === 0) { showToast(getTrans('msg_data_empty'), "warning"); return; }
+            btn.disabled = true; btn.innerHTML = '...';
             try {
                 const payload = { date: dom.dateInput.value, lontong: calc.qL, telur: calc.qT, bakwan: calc.qB, omset: calc.omset, setor: calc.setor, untung: calc.untung, detail_pelanggan: orderList, timestamp: new Date() };
                 if (cId) await updateDoc(doc(db, "penjualan_detail", cId), payload); else await addDoc(collection(db, "penjualan_detail"), payload);
-                showToast("Data transaksi berhasil disimpan!", "success");
+                showToast(getTrans('msg_data_saved'), "success");
                 orderList = [];
                 resetFormMode();
             } catch (err) { showToast("Error: " + err.message, "danger"); }
-            finally { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg me-2"></i>SIMPAN DATA'; }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg me-2"></i> ' + getTrans('btn_save_data'); }
         });
 
         window.copyReport = () => {
@@ -1555,11 +1837,23 @@
             const setor = document.getElementById('previewSetor').innerText;
             const untung = document.getElementById('previewUntung').innerText;
             const text = `*LAPORAN LONTONG MM*\n📅 ${formatDate(d)}\n\n📦 *Penjualan:*\n- Lontong: ${qL} porsi\n- Telur: ${qT} butir\n- Bakwan: ${qB} biji\n\n💰 *Keuangan:*\n- Omset: ${omset}\n- Setor: ${setor}\n- *Profit Bersih: ${untung}*\n\nTerima kasih.`;
-            navigator.clipboard.writeText(text).then(() => showToast("Laporan disalin! Silakan paste di WA.", "success")).catch(err => showToast("Gagal menyalin text.", "danger"));
+            navigator.clipboard.writeText(text).then(() => showToast(getTrans('msg_report_copied'), "success")).catch(err => showToast(getTrans('msg_copy_failed'), "danger"));
         }
 
         window.sortData = (column) => {
             if (currentSort.column === column) currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc'; else { currentSort.column = column; currentSort.direction = 'desc'; }
+
+            // Update Sort Icons
+            updateSortIcons();
+
+            // Update Sort Pills
+            document.querySelectorAll('.btn-sort-pill').forEach(btn => btn.classList.remove('active'));
+            const activePill = document.getElementById(`pill-${column}`);
+            if (activePill) {
+                activePill.classList.add('active');
+                activePill.innerHTML = `${column.charAt(0).toUpperCase() + column.slice(1)} <i class="bi bi-arrow-${currentSort.direction === 'asc' ? 'up' : 'down'}"></i>`;
+            }
+
             globalData.sort((a, b) => {
                 let valA = a[column]; let valB = b[column];
                 if (column === 'date') { valA = new Date(valA).getTime(); valB = new Date(valB).getTime(); }
@@ -1652,7 +1946,7 @@
         }
 
         window.downloadCSV = () => {
-            if (globalData.length === 0) { showToast("Tidak ada data untuk diunduh.", "warning"); return; }
+            if (globalData.length === 0) { showToast(getTrans('msg_no_data_download'), "warning"); return; }
             let csvContent = "data:text/csv;charset=utf-8,Tanggal,Lontong,Telur,Bakwan,Omset,Setor,Profit Bersih\n";
             globalData.forEach(row => { csvContent += [row.date, row.lontong, row.telur, row.bakwan, row.omset, row.setor, row.untung].join(",") + "\n"; });
             const link = document.createElement("a"); link.setAttribute("href", encodeURI(csvContent)); link.setAttribute("download", `Laporan_LontongMM_${new Date().toISOString().slice(0, 10)}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link);
@@ -1660,7 +1954,7 @@
 
         function loadLatestData() {
             if (unsubscribeRealtime) { unsubscribeRealtime(); unsubscribeRealtime = null; }
-            const q = query(collection(db, "penjualan_detail"), orderBy("date", "desc"), limit(14));
+            const q = query(collection(db, "penjualan_detail"), orderBy("date", "desc"), limit(100));
             unsubscribeRealtime = onSnapshot(q, (s) => { globalData = []; s.forEach(doc => globalData.push({ id: doc.id, ...doc.data() })); renderDashboard(globalData); });
         }
 
@@ -1675,7 +1969,7 @@
                 const q = query(collection(db, "penjualan_detail"), ...qConstraint);
                 const snapshot = await getDocs(q);
                 globalData = []; snapshot.forEach(doc => globalData.push({ id: doc.id, ...doc.data() }));
-                if (globalData.length === 0) showToast("Data tidak ditemukan pada tanggal tersebut.", "warning");
+                if (globalData.length === 0) showToast(getTrans('msg_data_not_found'), "warning");
                 renderDashboard(globalData);
             } catch (error) { showToast("Error mencari data: " + error.message, "danger"); }
         }
@@ -1684,7 +1978,6 @@
         dom.filterEnd.addEventListener('change', window.cariDataTanggal);
         window.resetFilter = () => { dom.filterStart.value = ''; dom.filterEnd.value = ''; document.getElementById('filterMsg').classList.add('d-none'); loadLatestData(); }
 
-        // --- VISUAL LOGIC: Tentukan Tanggal Paling Awal di List (Overrule) ---
         function getEarliestDateInView(customerName) {
             const cleanName = customerName.trim().toLowerCase();
             let earliestDate = null;
@@ -1700,7 +1993,6 @@
             return earliestDate;
         }
 
-        // --- UPDATE FUNGSI LIHAT DETAIL ---
         window.lihatDetail = (d) => {
             const body = document.getElementById('detailModalBody');
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -1711,7 +2003,7 @@
 
             const closeBtnHtml = `
             <div class="modal-footer-close">
-                <button type="button" class="btn btn-light btn-close-bottom" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-light btn-close-bottom" data-bs-dismiss="modal">${getTrans('btn_cancel')}</button>
             </div>`;
 
             if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) {
@@ -1766,15 +2058,15 @@
                 <div class="modal-summary-footer">
                     <div class="row g-0">
                         <div class="col-4 summary-box">
-                            <div class="summary-label">TOTAL OMSET</div>
+                            <div class="summary-label">${getTrans('lbl_total_omset')}</div>
                             <div class="summary-val-dark">Rp ${d.omset.toLocaleString('id-ID')}</div>
                         </div>
                         <div class="col-4 summary-box">
-                            <div class="summary-label">SETOR SAUDARA</div>
+                            <div class="summary-label">${getTrans('lbl_sibling_share')}</div>
                             <div class="summary-val-warn">Rp ${d.setor.toLocaleString('id-ID')}</div>
                         </div>
                         <div class="col-4 summary-box">
-                            <div class="summary-label">PROFIT BERSIH</div>
+                            <div class="summary-label">${getTrans('lbl_net_profit')}</div>
                             <div class="summary-val-success">Rp ${d.untung.toLocaleString('id-ID')}</div>
                         </div>
                     </div>
@@ -1787,7 +2079,6 @@
             detailModal.show();
         }
 
-        // --- PERBAIKAN FUNGSI EDIT DATA ---
         window.editData = (d) => {
             dom.editId.value = d.id;
             dom.dateInput.value = d.date;
@@ -1802,14 +2093,25 @@
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        window.resetFormMode = () => { dom.editId.value = ''; document.getElementById('salesForm').reset(); orderList = []; batalEditPesanan(); renderOrderList(); dom.dateInput.valueAsDate = new Date(); document.getElementById('btnCancelEdit').classList.add('d-none'); }
-        window.hapusData = async (id) => { if (confirm("Hapus?")) await deleteDoc(doc(db, "penjualan_detail", id)); }
+
+        window.resetFormMode = () => {
+            dom.editId.value = '';
+            document.getElementById('salesForm').reset();
+            orderList = [];
+            batalEditPesanan();
+            renderOrderList();
+            setFormDateToToday();
+            document.getElementById('btnCancelEdit').classList.add('d-none');
+        }
+
+        window.hapusData = async (id) => { if (confirm(getTrans('msg_confirm_delete'))) await deleteDoc(doc(db, "penjualan_detail", id)); }
 
         function formatDate(d) { return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); }
         function formatChartDate(d) { return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }); }
 
         loadLatestData();
-        dom.dateInput.valueAsDate = new Date();
+        setFormDateToToday();
+        updateLanguageUI();
     </script>
 </body>
 
