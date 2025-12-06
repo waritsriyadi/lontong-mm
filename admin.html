@@ -36,29 +36,48 @@
 
         /* --- PULL TO REFRESH CUSTOM STYLE --- */
         .ptr--ptr {
-            /* Pindahkan ikon ke bawah Header Mobile (sekitar 60px) */
-            top: 65px !important;
-            /* Pastikan z-index lebih kecil dari navbar (900) tapi terlihat */
-            z-index: 1 !important;
+            /* Posisi di bawah navbar mobile (sekitar 70px dari atas) */
+            top: 70px !important;
+            /* Background transparan agar tidak terlihat kotak putih blok */
+            background: transparent !important;
             box-shadow: none !important;
             pointer-events: none;
+            /* Pastikan z-index pas */
+            z-index: 90 !important;
+        }
+
+        .ptr--box {
+            /* Pusatkan konten */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10px;
+        }
+
+        .ptr--content {
+            /* Sembunyikan teks instruksi yang mengganggu */
+            text-align: center;
         }
 
         .ptr--icon {
-            color: var(--primary-color);
-            background: white;
+            /* Buat gaya 'Gelembung' bulat putih */
+            background-color: white;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            padding: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            /* Bayangan halus */
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
         }
 
         .ptr--text {
-            font-weight: 700;
-            font-size: 0.75rem;
-            color: #6b7280;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            /* Hilangkan teks sama sekali */
+            display: none !important;
         }
 
         /* --- LOGIN STYLES --- */
@@ -2398,31 +2417,38 @@
         setFormDateToToday();
         updateLanguageUI();
 
-        // --- PULL TO REFRESH SETUP ---
+        // --- PULL TO REFRESH SETUP (MODERN BUBBLE) ---
         PullToRefresh.init({
-            mainElement: '#mainContent',
+            mainElement: '#mainContent', // Target konten agar Header tetap diam
             triggerElement: 'body',
             onRefresh() {
                 return new Promise((resolve) => {
                     // Re-fetch Data
-                    loadLatestData(); // This restarts the realtime listener
-                    setupHarga();     // Refetch prices
+                    loadLatestData();
+                    setupHarga();
 
-                    // Give visual feedback for at least 800ms so it feels "real"
+                    // Efek suara (opsional, jika Anda sudah pasang audio)
+                    // if(document.getElementById('soundSuccess')) document.getElementById('soundSuccess').play().catch(()=>{});
+
                     setTimeout(() => {
                         showToast("Data diperbarui", "success");
                         resolve();
                     }, 800);
                 });
             },
-            distThreshold: 60,
-            iconArrow: '<i class="bi bi-arrow-down-circle-fill fs-3 text-primary"></i>',
-            iconRefreshing: '<div class="spinner-border text-primary" role="status"></div>',
-            instructionsPullToRefresh: '<span class="text-muted small fw-bold">Tarik untuk update</span>',
-            instructionsReleaseToRefresh: '<span class="text-primary small fw-bold">Lepas sekarang</span>',
-            instructionsRefreshing: '<span class="text-primary small fw-bold">Memuat...</span>',
+            distThreshold: 70, // Jarak tarik sedikit lebih dalam
+            distMax: 100,      // Batas maksimal tarik agar tidak terlalu jauh
+
+            // Icon Simple tanpa teks
+            iconArrow: '<i class="bi bi-arrow-down"></i>',
+            iconRefreshing: '<div class="spinner-border spinner-border-sm text-primary" role="status"></div>',
+
+            // Kosongkan semua teks instruksi agar bersih
+            instructionsPullToRefresh: '',
+            instructionsReleaseToRefresh: '',
+            instructionsRefreshing: '',
+
             shouldPullToRefresh: function () {
-                // Only allow pull if we are at the top of the page
                 return window.scrollY === 0;
             }
         });
