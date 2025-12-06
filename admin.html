@@ -1575,6 +1575,7 @@
         let unsubscribeRealtime = null;
         let currentSort = { column: 'date', direction: 'desc' };
         let isLogoutProcess = false;
+        let currentDetailData = null;
 
         window.showToast = (message, type = 'success') => {
             const toastEl = document.getElementById('liveToast');
@@ -2288,6 +2289,7 @@
         }
 
         window.lihatDetail = (d) => {
+            currentDetailData = d;
             const body = document.getElementById('detailModalBody');
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = new Date(d.date).toLocaleDateString('id-ID', options);
@@ -2295,19 +2297,28 @@
             document.getElementById('modalDateDisplay').innerText = formattedDate;
             body.innerHTML = '';
 
+            // Tombol Footer (WA + Tutup)
             const closeBtnHtml = `
-            <div class="modal-footer-close">
-                <button type="button" class="btn btn-light btn-close-bottom" data-bs-dismiss="modal">${getTrans('btn_cancel')}</button>
-            </div>`;
+    <div class="modal-footer-close p-3 bg-white border-top">
+        <button type="button" class="btn btn-success w-100 fw-bold mb-2 shadow-sm" onclick="copyDetailReport()">
+            <i class="bi bi-whatsapp me-2"></i>Salin Laporan ke WhatsApp
+        </button>
+        <button type="button" class="btn btn-light w-100 fw-bold text-muted border" data-bs-dismiss="modal">
+            ${getTrans('btn_cancel')}
+        </button>
+    </div>`;
 
             if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) {
                 body.innerHTML = `
-                <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
-                    <i class="bi bi-inbox fs-1 opacity-25"></i>
-                    <p class="small mt-2">Tidak ada data pembeli.</p>
-                </div>` + closeBtnHtml;
+        <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
+            <i class="bi bi-inbox fs-1 opacity-25"></i>
+            <p class="small mt-2">Tidak ada data pembeli.</p>
+        </div>` + closeBtnHtml;
             } else {
-                let contentHtml = `<div class="scroller-content pt-2">`;
+                // --- PERBAIKAN DI SINI ---
+                // Kita bungkus list item dengan div yang punya tinggi maksimal (max-height)
+                // dan overflow-y: auto agar dia saja yang bisa di-scroll.
+                let contentHtml = `<div style="max-height: 50vh; overflow-y: auto; padding: 0.5rem 1.25rem;">`;
 
                 d.detail_pelanggan.forEach(i => {
                     let cK = i.cK || 0;
@@ -2332,45 +2343,60 @@
                     if (itemBadges === '') itemBadges = `<span class="text-muted small fst-italic" style="font-size:0.7rem">Item Lainnya</span>`;
 
                     contentHtml += `
-                    <div class="buyer-item">
-                        <div class="buyer-top-row">
-                            <div class="d-flex align-items-center">
-                                <span class="buyer-name">${i.nama}</span>
-                                ${badgeHtml}
-                            </div>
-                            <div class="buyer-price">Rp ${subtotal.toLocaleString('id-ID')}</div>
-                        </div>
-                        <div class="item-badges-container">
-                            ${itemBadges}
-                        </div>
-                    </div>`;
+            <div class="buyer-item">
+                <div class="buyer-top-row">
+                    <div class="d-flex align-items-center">
+                        <span class="buyer-name">${i.nama}</span>
+                        ${badgeHtml}
+                    </div>
+                    <div class="buyer-price">Rp ${subtotal.toLocaleString('id-ID')}</div>
+                </div>
+                <div class="item-badges-container">
+                    ${itemBadges}
+                </div>
+            </div>`;
                 });
 
-                contentHtml += `</div>`;
+                contentHtml += `</div>`; // Tutup pembungkus scroll
 
+                // Bagian Summary ini sekarang berada DI LUAR pembungkus scroll
+                // Jadi dia akan selalu terlihat menempel di bawah list
                 contentHtml += `
-                <div class="modal-summary-footer">
-                    <div class="row g-0">
-                        <div class="col-4 summary-box">
-                            <div class="summary-label">${getTrans('lbl_total_omset')}</div>
-                            <div class="summary-val-dark">Rp ${d.omset.toLocaleString('id-ID')}</div>
-                        </div>
-                        <div class="col-4 summary-box">
-                            <div class="summary-label">${getTrans('lbl_sibling_share')}</div>
-                            <div class="summary-val-warn">Rp ${d.setor.toLocaleString('id-ID')}</div>
-                        </div>
-                        <div class="col-4 summary-box">
-                            <div class="summary-label">${getTrans('lbl_net_profit')}</div>
-                            <div class="summary-val-success">Rp ${d.untung.toLocaleString('id-ID')}</div>
-                        </div>
-                    </div>
-                </div>`;
+        <div class="modal-summary-footer bg-light border-top border-bottom" style="position: relative; z-index: 5;">
+            <div class="row g-0">
+                <div class="col-4 summary-box">
+                    <div class="summary-label">${getTrans('lbl_total_omset')}</div>
+                    <div class="summary-val-dark">Rp ${d.omset.toLocaleString('id-ID')}</div>
+                </div>
+                <div class="col-4 summary-box">
+                    <div class="summary-label">${getTrans('lbl_sibling_share')}</div>
+                    <div class="summary-val-warn">Rp ${d.setor.toLocaleString('id-ID')}</div>
+                </div>
+                <div class="col-4 summary-box">
+                    <div class="summary-label">${getTrans('lbl_net_profit')}</div>
+                    <div class="summary-val-success">Rp ${d.untung.toLocaleString('id-ID')}</div>
+                </div>
+            </div>
+        </div>`;
 
                 contentHtml += closeBtnHtml;
 
                 body.innerHTML = contentHtml;
             }
             detailModal.show();
+        }
+
+        window.copyDetailReport = () => {
+            if (!currentDetailData) return;
+            const d = currentDetailData;
+            const tgl = formatDate(d.date);
+
+            // Format teks laporan
+            const text = `*ARSIP LAPORAN LONTONG MM*\n📅 ${tgl}\n\n📦 *Penjualan:*\n- Lontong: ${d.lontong} porsi\n- Telur: ${d.telur} butir\n- Bakwan: ${d.bakwan} biji\n\n💰 *Keuangan:*\n- Omset: Rp ${d.omset.toLocaleString('id-ID')}\n- Setor: Rp ${d.setor.toLocaleString('id-ID')}\n- *Profit Bersih: Rp ${d.untung.toLocaleString('id-ID')}*\n\n(Dicetak dari Admin Panel)`;
+
+            navigator.clipboard.writeText(text)
+                .then(() => showToast("Laporan berhasil disalin!", "success"))
+                .catch(err => showToast("Gagal menyalin teks.", "danger"));
         }
 
         window.editData = (d) => {
@@ -2417,39 +2443,37 @@
         setFormDateToToday();
         updateLanguageUI();
 
-        // --- PULL TO REFRESH SETUP (MODERN BUBBLE) ---
+        // --- PULL TO REFRESH SETUP (UPDATED) ---
         PullToRefresh.init({
-            mainElement: '#mainContent', // Target konten agar Header tetap diam
+            mainElement: '#mainContent',
             triggerElement: 'body',
             onRefresh() {
                 return new Promise((resolve) => {
-                    // Re-fetch Data
                     loadLatestData();
                     setupHarga();
-
-                    // Efek suara (opsional, jika Anda sudah pasang audio)
-                    // if(document.getElementById('soundSuccess')) document.getElementById('soundSuccess').play().catch(()=>{});
-
                     setTimeout(() => {
                         showToast("Data diperbarui", "success");
                         resolve();
                     }, 800);
                 });
             },
-            distThreshold: 70, // Jarak tarik sedikit lebih dalam
-            distMax: 100,      // Batas maksimal tarik agar tidak terlalu jauh
-
-            // Icon Simple tanpa teks
+            distThreshold: 70,
+            distMax: 100,
             iconArrow: '<i class="bi bi-arrow-down"></i>',
             iconRefreshing: '<div class="spinner-border spinner-border-sm text-primary" role="status"></div>',
-
-            // Kosongkan semua teks instruksi agar bersih
             instructionsPullToRefresh: '',
             instructionsReleaseToRefresh: '',
             instructionsRefreshing: '',
 
+            // --- PERBAIKAN BENTURAN SCROLL ---
             shouldPullToRefresh: function () {
-                return window.scrollY === 0;
+                // Cek apakah ada modal yang sedang terbuka (kelas 'show' dari bootstrap)
+                const isModalOpen = document.querySelector('.modal.show');
+
+                // HANYA aktifkan refresh jika:
+                // 1. Scroll ada di paling atas (0)
+                // 2. DAN TIDAK ADA modal yang terbuka (!isModalOpen)
+                return window.scrollY === 0 && !isModalOpen;
             }
         });
     </script>
