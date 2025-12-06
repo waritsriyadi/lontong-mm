@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pulltorefreshjs/0.1.22/index.umd.min.js"></script>
 
     <style>
         :root {
@@ -33,121 +34,691 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        /* --- PULL TO REFRESH CUSTOM STYLE --- */
+        .ptr--icon {
+            color: var(--primary-color);
+        }
+
+        .ptr--text {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
         /* --- LOGIN STYLES --- */
-        #loginOverlay { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
-        .login-card { border: none; border-radius: 24px !important; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.1); }
-        .login-logo { filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); transition: transform 0.3s; }
-        .login-logo:hover { transform: scale(1.05); }
-        .input-pin { letter-spacing: 8px; font-size: 1.5rem; padding: 15px; background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px !important; transition: all 0.3s; color: #2563eb; }
-        .input-pin:focus { background-color: #fff; border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); outline: none; }
-        .btn-login-custom { background: linear-gradient(to right, #2563eb, #1d4ed8); border: none; padding: 12px; font-size: 1rem; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transition: transform 0.2s; }
-        .btn-login-custom:active { transform: scale(0.98); }
+        #loginOverlay {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .login-card {
+            border: none;
+            border-radius: 24px !important;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.1);
+        }
+
+        .login-logo {
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            transition: transform 0.3s;
+        }
+
+        .login-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .input-pin {
+            letter-spacing: 8px;
+            font-size: 1.5rem;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px !important;
+            transition: all 0.3s;
+            color: #2563eb;
+        }
+
+        .input-pin:focus {
+            background-color: #fff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+            outline: none;
+        }
+
+        .btn-login-custom {
+            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn-login-custom:active {
+            transform: scale(0.98);
+        }
 
         /* --- LOGIKA TAMPILAN MOBILE --- */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 767.98px) { .mobile-hidden-view { display: none !important; } .mobile-active-view { display: block !important; animation: fadeIn 0.3s ease-out forwards; } }
-        @media (min-width: 768px) { .mobile-hidden-view { display: block !important; } body { padding-bottom: 2rem; } }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .mobile-hidden-view {
+                display: none !important;
+            }
+
+            .mobile-active-view {
+                display: block !important;
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .mobile-hidden-view {
+                display: block !important;
+            }
+
+            body {
+                padding-bottom: 2rem;
+            }
+        }
 
         /* --- NAVBAR & GENERAL --- */
-        .navbar { background: #ffffff; border-bottom: 1px solid #e5e7eb; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
-        .navbar-brand { font-weight: 700; color: #111827 !important; }
-        .card { border: none; border-radius: 12px; box-shadow: var(--card-shadow); background: white; margin-bottom: 1rem; }
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #111827 !important;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            background: white;
+            margin-bottom: 1rem;
+        }
 
         /* --- MOBILE BOTTOM NAV --- */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; height: var(--nav-height); display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); z-index: 1000; border-top: 1px solid #f3f4f6; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item-mobile { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: #9ca3af; font-size: 0.65rem; font-weight: 600; width: 100%; height: 100%; transition: all 0.2s; }
-        .nav-item-mobile i { font-size: 1.4rem; margin-bottom: 2px; transition: transform 0.2s; }
-        .nav-item-mobile.active { color: #3b82f6; }
-        .nav-item-mobile.active i { transform: translateY(-2px); }
-        .nav-item-mobile.main-action i { background-color: #eff6ff; color: #3b82f6; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 1.2rem; }
-        .nav-item-mobile.main-action.active i { background-color: #3b82f6; color: white; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            height: var(--nav-height);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            border-top: 1px solid #f3f4f6;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-item-mobile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 0.65rem;
+            font-weight: 600;
+            width: 100%;
+            height: 100%;
+            transition: all 0.2s;
+        }
+
+        .nav-item-mobile i {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+            transition: transform 0.2s;
+        }
+
+        .nav-item-mobile.active {
+            color: #3b82f6;
+        }
+
+        .nav-item-mobile.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-item-mobile.main-action i {
+            background-color: #eff6ff;
+            color: #3b82f6;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.2rem;
+        }
+
+        .nav-item-mobile.main-action.active i {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+        }
 
         /* --- FORMS & UI --- */
-        .form-control, .btn { border-radius: 8px; padding: 0.6rem 0.8rem; }
-        .form-control:focus { border-color: #4e73df; box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1); }
-        .stat-label { font-size: 0.75rem; text-transform: uppercase; color: #6b7280; font-weight: 600; }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: #111827; }
-        .chart-container { position: relative; height: 320px; width: 100%; overflow: hidden; }
-        .table-main thead th { background-color: #f9fafb; color: #6b7280; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; }
+        .form-control,
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 0.8rem;
+        }
+
+        .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 320px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .table-main thead th {
+            background-color: #f9fafb;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
         /* --- AUTOCOMPLETE & INPUT --- */
-        .suggestion-box { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); z-index: 50; max-height: 200px; overflow-y: auto; display: none; }
-        .suggestion-item { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; cursor: pointer; font-weight: 500; color: #374151; display: flex; justify-content: space-between; }
-        .suggestion-item:hover { background-color: #eff6ff; color: #2563eb; }
-        .chips-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-        .chip-langganan { background-color: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; border-radius: 20px; padding: 4px 10px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; user-select: none; }
-        .input-wrapper { position: relative; }
+        .suggestion-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .suggestion-item:hover {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .chip-langganan {
+            background-color: #f0f9ff;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
 
         /* --- STEPPER --- */
-        .stepper-container { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02); }
-        .stepper-label { font-weight: 700; color: #374151; font-size: 0.95rem; display: flex; flex-direction: column; }
-        .stepper-sublabel { font-size: 0.7rem; color: #9ca3af; font-weight: 500; }
-        .stepper-group { display: flex; align-items: center; background: #f3f4f6; border-radius: 8px; padding: 2px; }
-        .btn-stepper { width: 36px; height: 36px; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; cursor: pointer; background-color: #ffffff; color: #ef4444; border: 1px solid #e5e7eb; }
-        .btn-plus { background-color: #3b82f6; color: white; border: none; }
-        .input-stepper { width: 45px; text-align: center; border: none; background: transparent; font-weight: 800; font-size: 1rem; color: #111827; margin: 0 4px; padding: 0; }
+        .stepper-container {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .stepper-label {
+            font-weight: 700;
+            color: #374151;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stepper-sublabel {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .stepper-group {
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .btn-stepper {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #ffffff;
+            color: #ef4444;
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-plus {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+        }
+
+        .input-stepper {
+            width: 45px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #111827;
+            margin: 0 4px;
+            padding: 0;
+        }
 
         /* --- ORDER LIST --- */
-        .order-list-container { max-height: 350px; overflow-y: auto; padding-right: 4px; }
-        .order-card { background-color: #ffffff; border: 1px solid #f3f4f6; border-left: 4px solid #3b82f6; border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02); }
-        .order-info { flex: 1; min-width: 0; margin-right: 8px; display: flex; flex-direction: column; justify-content: center; }
-        .order-name { font-weight: 700; color: #374151; font-size: 0.85rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .order-badges { display: flex; gap: 3px; flex-wrap: wrap; }
-        .badge-item { font-size: 0.65rem; padding: 1px 6px; border-radius: 4px; font-weight: 600; letter-spacing: 0.3px; }
-        .bg-lontong { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
-        .bg-telur { background-color: #fffbeb; color: #b45309; border: 1px solid #fef3c7; }
-        .bg-bakwan { background-color: #f9fafb; color: #4b5563; border: 1px solid #e5e7eb; }
-        .order-right { display: flex; align-items: center; gap: 10px; }
-        .price-tag { font-weight: 800; color: #059669; font-size: 0.95rem; white-space: nowrap; letter-spacing: -0.5px; }
-        .action-btn-group { display: flex; gap: 2px; background: #f9fafb; border-radius: 8px; padding: 2px; border: 1px solid #f3f4f6; }
-        .btn-action-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; color: #9ca3af; background: transparent; border: none; }
+        .order-list-container {
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .order-card {
+            background-color: #ffffff;
+            border: 1px solid #f3f4f6;
+            border-left: 4px solid #3b82f6;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .order-info {
+            flex: 1;
+            min-width: 0;
+            margin-right: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .order-name {
+            font-weight: 700;
+            color: #374151;
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .order-badges {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .badge-item {
+            font-size: 0.65rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .bg-lontong {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #dbeafe;
+        }
+
+        .bg-telur {
+            background-color: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fef3c7;
+        }
+
+        .bg-bakwan {
+            background-color: #f9fafb;
+            color: #4b5563;
+            border: 1px solid #e5e7eb;
+        }
+
+        .order-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-tag {
+            font-weight: 800;
+            color: #059669;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+
+        .action-btn-group {
+            display: flex;
+            gap: 2px;
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 2px;
+            border: 1px solid #f3f4f6;
+        }
+
+        .btn-action-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: #9ca3af;
+            background: transparent;
+            border: none;
+        }
 
         /* --- MODAL & VISUALS --- */
-        .modal-content { border: none; border-radius: 12px; overflow: hidden; }
-        .modal-header-custom { background-color: #2563eb; color: white; padding: 1rem 1.25rem; border-bottom: none; }
-        .modal-header-custom .btn-close { filter: invert(1) grayscale(100%) brightness(200%); opacity: 0.8; }
-        .modal-body-custom { padding: 0; background-color: #ffffff; }
-        .scroller-content { max-height: 55vh; overflow-y: auto; padding: 0 1.25rem; }
-        .scroller-content::-webkit-scrollbar { width: 6px; }
-        .scroller-content::-webkit-scrollbar-track { background: #f1f1f1; }
-        .scroller-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .buyer-item { padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
-        .buyer-item:last-child { border-bottom: none; }
-        .buyer-top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
-        .buyer-name { font-weight: 700; color: #1f2937; font-size: 0.95rem; margin-right: 8px; }
-        .buyer-price { font-weight: 700; color: #10b981; font-size: 0.95rem; white-space: nowrap; }
-        .badge-baru-visual { background-color: transparent; color: #10b981; border: 1px solid #10b981; font-size: 0.6rem; padding: 1px 5px; border-radius: 6px; font-weight: 700; vertical-align: middle; display: inline-block; line-height: 1.2; }
-        .item-badges-container { display: flex; flex-wrap: wrap; gap: 6px; }
-        .item-pill { font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; font-weight: 600; display: inline-block; }
-        .pill-l { background-color: #e0f2fe; color: #0284c7; }
-        .pill-t { background-color: #fef3c7; color: #b45309; }
-        .pill-b { background-color: #f3f4f6; color: #4b5563; }
-        .pill-k { background-color: #fef2f2; color: #dc2626; }
-        .modal-summary-footer { background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 15px 0; }
-        .summary-box { text-align: center; position: relative; padding: 0 5px; }
-        .summary-box:not(:last-child)::after { content: ""; position: absolute; right: 0; top: 10%; height: 80%; border-right: 1px solid #d1d5db; }
-        .summary-label { font-size: 0.65rem; color: #6b7280; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
-        .summary-val-dark { font-size: 0.95rem; font-weight: 800; color: #1f2937; }
-        .summary-val-warn { font-size: 0.95rem; font-weight: 800; color: #f59e0b; }
-        .summary-val-success { font-size: 0.95rem; font-weight: 800; color: #10b981; }
-        .modal-footer-close { padding: 0; border-top: none; }
-        .btn-close-bottom { width: 100%; border-radius: 0; background: white; color: #6b7280; padding: 12px; font-weight: 500; border-top: 1px solid #e5e7eb; }
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-header-custom {
+            background-color: #2563eb;
+            color: white;
+            padding: 1rem 1.25rem;
+            border-bottom: none;
+        }
+
+        .modal-header-custom .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            opacity: 0.8;
+        }
+
+        .modal-body-custom {
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        .scroller-content {
+            max-height: 55vh;
+            overflow-y: auto;
+            padding: 0 1.25rem;
+        }
+
+        .scroller-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scroller-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .scroller-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .buyer-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .buyer-item:last-child {
+            border-bottom: none;
+        }
+
+        .buyer-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .buyer-name {
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 0.95rem;
+            margin-right: 8px;
+        }
+
+        .buyer-price {
+            font-weight: 700;
+            color: #10b981;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .badge-baru-visual {
+            background-color: transparent;
+            color: #10b981;
+            border: 1px solid #10b981;
+            font-size: 0.6rem;
+            padding: 1px 5px;
+            border-radius: 6px;
+            font-weight: 700;
+            vertical-align: middle;
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        .item-badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .item-pill {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .pill-l {
+            background-color: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .pill-t {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .pill-b {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .pill-k {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        .modal-summary-footer {
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            padding: 15px 0;
+        }
+
+        .summary-box {
+            text-align: center;
+            position: relative;
+            padding: 0 5px;
+        }
+
+        .summary-box:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 10%;
+            height: 80%;
+            border-right: 1px solid #d1d5db;
+        }
+
+        .summary-label {
+            font-size: 0.65rem;
+            color: #6b7280;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .summary-val-dark {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #1f2937;
+        }
+
+        .summary-val-warn {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #f59e0b;
+        }
+
+        .summary-val-success {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .modal-footer-close {
+            padding: 0;
+            border-top: none;
+        }
+
+        .btn-close-bottom {
+            width: 100%;
+            border-radius: 0;
+            background: white;
+            color: #6b7280;
+            padding: 12px;
+            font-weight: 500;
+            border-top: 1px solid #e5e7eb;
+        }
 
         /* LIST TOP PELANGGAN STYLE */
-        .list-group-item-custom { border: none; border-bottom: 1px solid #f3f4f6; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
-        .list-group-item-custom:last-child { border-bottom: none; }
-        .rank-badge { width: 24px; height: 24px; background: #e5e7eb; color: #4b5563; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; margin-right: 10px; }
-        .rank-1 { background: #fef3c7; color: #d97706; }
-        .rank-2 { background: #f3f4f6; color: #4b5563; }
-        .rank-3 { background: #ffedd5; color: #c2410c; }
+        .list-group-item-custom {
+            border: none;
+            border-bottom: 1px solid #f3f4f6;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-group-item-custom:last-child {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            width: 24px;
+            height: 24px;
+            background: #e5e7eb;
+            color: #4b5563;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-right: 10px;
+        }
+
+        .rank-1 {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .rank-2 {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .rank-3 {
+            background: #ffedd5;
+            color: #c2410c;
+        }
 
         /* --- MOBILE SORTING: GRID SYSTEM (2x2) --- */
         .sort-grid-wrapper {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 Kolom */
-            gap: 10px; /* Jarak antar tombol */
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
-        
+
         .btn-sort-modern {
             width: 100%;
             border-radius: 12px;
@@ -163,7 +734,7 @@
             justify-content: center;
             gap: 6px;
         }
-        
+
         .btn-sort-modern:hover {
             background-color: #e5e7eb;
         }
@@ -174,9 +745,9 @@
             border: 1px solid #bfdbfe;
             box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
         }
-        
-        .btn-sort-modern i { 
-            font-size: 0.9rem; 
+
+        .btn-sort-modern i {
+            font-size: 0.9rem;
         }
 
         .btn-export-custom {
@@ -190,31 +761,54 @@
             justify-content: center;
             gap: 6px;
         }
-        .btn-export-custom:hover { background-color: #059669; color: white; }
+
+        .btn-export-custom:hover {
+            background-color: #059669;
+            color: white;
+        }
 
         @media (max-width: 768px) {
-            .chart-container { height: 250px; }
-            .header-filter-group { display: flex; flex-wrap: wrap; width: 100%; margin-top: 10px; gap: 8px !important; }
-            .header-filter-input { flex: 1 1 40% !important; width: auto !important; min-width: 0; }
+            .chart-container {
+                height: 250px;
+            }
+
+            .header-filter-group {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                margin-top: 10px;
+                gap: 8px !important;
+            }
+
+            .header-filter-input {
+                flex: 1 1 40% !important;
+                width: auto !important;
+                min-width: 0;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="loginOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="z-index: 10000;">
+    <div id="loginOverlay"
+        class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+        style="z-index: 10000;">
         <div class="card login-card p-4 p-md-5" style="max-width: 400px; width: 90%;">
             <div class="text-center mb-4">
-                <img src="logonobg.png" onerror="this.src='logo.png'" alt="Logo" class="login-logo mb-3" style="width: 110px; height: auto; object-fit: contain;">
+                <img src="logonobg.png" onerror="this.src='logo.png'" alt="Logo" class="login-logo mb-3"
+                    style="width: 110px; height: auto; object-fit: contain;">
                 <h4 class="fw-bold text-primary mb-1" style="letter-spacing: -0.5px;">Admin Lontong MM</h4>
                 <p class="text-muted small mb-0" data-i18n="login_desc">Masukkan kode akses Anda</p>
             </div>
             <div class="mb-4">
-                <input type="password" id="passcodeInput" class="form-control text-center fw-bold input-pin" placeholder="••••••" autofocus>
+                <input type="password" id="passcodeInput" class="form-control text-center fw-bold input-pin"
+                    placeholder="••••••" autofocus>
             </div>
             <button class="btn btn-primary w-100 fw-bold rounded-3 btn-login-custom text-white" onclick="checkLogin()">
                 <span data-i18n="btn_login">MASUK</span> <i class="bi bi-arrow-right-short"></i>
             </button>
-            <p id="loginError" class="text-danger text-center small mt-3 fw-bold d-none animate__animated animate__shakeX">
+            <p id="loginError"
+                class="text-danger text-center small mt-3 fw-bold d-none animate__animated animate__shakeX">
                 <i class="bi bi-x-circle-fill me-1"></i> <span data-i18n="err_login">Kode Salah!</span>
             </p>
             <div class="text-center mt-4 opacity-50">
@@ -230,24 +824,31 @@
                 <span class="badge bg-primary bg-opacity-10 text-primary ms-2">Admin Panel</span>
             </div>
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-light border-0 text-muted" onclick="toggleLanguage()" title="Ganti Bahasa">
-                    <i class="bi bi-globe-asia-australia me-1"></i> <span id="desktopLangLabel" class="fw-bold small">ID</span>
+                <button class="btn btn-sm btn-light border-0 text-muted" onclick="toggleLanguage()"
+                    title="Ganti Bahasa">
+                    <i class="bi bi-globe-asia-australia me-1"></i> <span id="desktopLangLabel"
+                        class="fw-bold small">ID</span>
                 </button>
                 <div class="vr mx-1"></div>
-                <button class="btn btn-sm btn-outline-secondary border-0 fw-bold" onclick="bukaModalHarga()" title="Atur Harga"><i class="bi bi-gear-fill"></i></button>
-                <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="logoutAdmin()"><i class="bi bi-box-arrow-right me-1"></i> <span data-i18n="nav_logout">Keluar</span></button>
+                <button class="btn btn-sm btn-outline-secondary border-0 fw-bold" onclick="bukaModalHarga()"
+                    title="Atur Harga"><i class="bi bi-gear-fill"></i></button>
+                <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="logoutAdmin()"><i
+                        class="bi bi-box-arrow-right me-1"></i> <span data-i18n="nav_logout">Keluar</span></button>
             </div>
         </div>
     </nav>
 
-    <div class="d-md-none sticky-top bg-white border-bottom py-2 px-3 d-flex justify-content-between align-items-center shadow-sm" style="z-index: 900;">
+    <div class="d-md-none sticky-top bg-white border-bottom py-2 px-3 d-flex justify-content-between align-items-center shadow-sm"
+        style="z-index: 900;">
         <div class="fw-bold text-dark"><i class="bi bi-shop-window me-2 text-primary"></i>Lontong MM</div>
         <div class="d-flex gap-3 align-items-center">
-            <button class="btn btn-sm btn-light border-0 p-0 text-muted d-flex align-items-center gap-1" onclick="toggleLanguage()">
+            <button class="btn btn-sm btn-light border-0 p-0 text-muted d-flex align-items-center gap-1"
+                onclick="toggleLanguage()">
                 <i class="bi bi-globe-asia-australia fs-5"></i>
                 <span id="mobileLangLabel" class="small fw-bold">ID</span>
             </button>
-            <button class="btn btn-sm btn-light border-0 p-0" onclick="bukaModalHarga()"><i class="bi bi-gear-fill text-muted fs-5"></i></button>
+            <button class="btn btn-sm btn-light border-0 p-0" onclick="bukaModalHarga()"><i
+                    class="bi bi-gear-fill text-muted fs-5"></i></button>
         </div>
     </div>
 
@@ -257,85 +858,128 @@
                 <div class="card h-100">
                     <div class="card-header bg-white py-3 border-bottom-0">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2"></i><span data-i18n="title_form">Form Transaksi</span></h6>
-                            <button id="btnCancelEdit" class="btn btn-sm btn-light text-danger d-none fw-bold text-xs" onclick="resetFormMode()" data-i18n="btn_cancel_edit">Batal Edit</button>
+                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2"></i><span
+                                    data-i18n="title_form">Form Transaksi</span></h6>
+                            <button id="btnCancelEdit" class="btn btn-sm btn-light text-danger d-none fw-bold text-xs"
+                                onclick="resetFormMode()" data-i18n="btn_cancel_edit">Batal Edit</button>
                         </div>
                     </div>
                     <div class="card-body pt-0">
                         <form id="salesForm">
                             <input type="hidden" id="editId">
                             <div class="mb-3">
-                                <label class="form-label text-xs fw-bold text-muted mb-1" data-i18n="lbl_date">TANGGAL</label>
-                                <input type="date" class="form-control bg-light border-0 fw-bold" id="dateInput" required>
+                                <label class="form-label text-xs fw-bold text-muted mb-1"
+                                    data-i18n="lbl_date">TANGGAL</label>
+                                <input type="date" class="form-control bg-light border-0 fw-bold" id="dateInput"
+                                    required>
                             </div>
                             <div class="p-3 bg-light rounded-3 mb-3 border">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <label class="text-xs fw-bold text-muted"><i class="bi bi-cart-fill me-1"></i><span data-i18n="lbl_item_order">ITEM PESANAN</span></label>
-                                    <button type="button" class="btn btn-link p-0 text-decoration-none text-xs text-danger d-none" id="btnBatalEditDetail" onclick="batalEditPesanan()" data-i18n="btn_cancel_change">Batal Ubah</button>
+                                    <label class="text-xs fw-bold text-muted"><i class="bi bi-cart-fill me-1"></i><span
+                                            data-i18n="lbl_item_order">ITEM PESANAN</span></label>
+                                    <button type="button"
+                                        class="btn btn-link p-0 text-decoration-none text-xs text-danger d-none"
+                                        id="btnBatalEditDetail" onclick="batalEditPesanan()"
+                                        data-i18n="btn_cancel_change">Batal Ubah</button>
                                 </div>
                                 <div class="mb-3 input-wrapper">
-                                    <label class="text-xs fw-bold text-muted ms-1 mb-1" data-i18n="lbl_customer_name">NAMA PELANGGAN</label>
-                                    <input type="text" id="custName" class="form-control fw-bold border-0 shadow-sm" style="padding: 12px;" placeholder="Ketik nama atau pilih langganan..." data-i18n-placeholder="ph_customer_name" autocomplete="off">
+                                    <label class="text-xs fw-bold text-muted ms-1 mb-1"
+                                        data-i18n="lbl_customer_name">NAMA PELANGGAN</label>
+                                    <input type="text" id="custName" class="form-control fw-bold border-0 shadow-sm"
+                                        style="padding: 12px;" placeholder="Ketik nama atau pilih langganan..."
+                                        data-i18n-placeholder="ph_customer_name" autocomplete="off">
                                     <div id="suggestionList" class="suggestion-box"></div>
                                     <div id="chipsArea" class="chips-container"></div>
                                 </div>
                                 <div class="stepper-container">
-                                    <div class="stepper-label">Lontong<span class="stepper-sublabel" data-i18n="lbl_main_menu">Menu Utama</span></div>
+                                    <div class="stepper-label">Lontong<span class="stepper-sublabel"
+                                            data-i18n="lbl_main_menu">Menu Utama</span></div>
                                     <div class="stepper-group">
-                                        <button type="button" class="btn-stepper btn-minus" onclick="ubahJumlah('custLontong', -1)"><i class="bi bi-dash"></i></button>
-                                        <input type="number" id="custLontong" class="input-stepper" value="1" min="0" readonly>
-                                        <button type="button" class="btn-stepper btn-plus" onclick="ubahJumlah('custLontong', 1)"><i class="bi bi-plus"></i></button>
+                                        <button type="button" class="btn-stepper btn-minus"
+                                            onclick="ubahJumlah('custLontong', -1)"><i class="bi bi-dash"></i></button>
+                                        <input type="number" id="custLontong" class="input-stepper" value="1" min="0"
+                                            readonly>
+                                        <button type="button" class="btn-stepper btn-plus"
+                                            onclick="ubahJumlah('custLontong', 1)"><i class="bi bi-plus"></i></button>
                                     </div>
                                 </div>
                                 <div class="stepper-container">
-                                    <div class="stepper-label">Telur<span class="stepper-sublabel" data-i18n="lbl_topping">Topping</span></div>
+                                    <div class="stepper-label">Telur<span class="stepper-sublabel"
+                                            data-i18n="lbl_topping">Topping</span></div>
                                     <div class="stepper-group">
-                                        <button type="button" class="btn-stepper btn-minus" onclick="ubahJumlah('custTelur', -1)"><i class="bi bi-dash"></i></button>
-                                        <input type="number" id="custTelur" class="input-stepper" value="0" min="0" readonly>
-                                        <button type="button" class="btn-stepper btn-plus" onclick="ubahJumlah('custTelur', 1)"><i class="bi bi-plus"></i></button>
+                                        <button type="button" class="btn-stepper btn-minus"
+                                            onclick="ubahJumlah('custTelur', -1)"><i class="bi bi-dash"></i></button>
+                                        <input type="number" id="custTelur" class="input-stepper" value="0" min="0"
+                                            readonly>
+                                        <button type="button" class="btn-stepper btn-plus"
+                                            onclick="ubahJumlah('custTelur', 1)"><i class="bi bi-plus"></i></button>
                                     </div>
                                 </div>
                                 <div class="stepper-container">
-                                    <div class="stepper-label">Bakwan<span class="stepper-sublabel" data-i18n="lbl_fried">Gorengan</span></div>
+                                    <div class="stepper-label">Bakwan<span class="stepper-sublabel"
+                                            data-i18n="lbl_fried">Gorengan</span></div>
                                     <div class="stepper-group">
-                                        <button type="button" class="btn-stepper btn-minus" onclick="ubahJumlah('custBakwan', -1)"><i class="bi bi-dash"></i></button>
-                                        <input type="number" id="custBakwan" class="input-stepper" value="0" min="0" readonly>
-                                        <button type="button" class="btn-stepper btn-plus" onclick="ubahJumlah('custBakwan', 1)"><i class="bi bi-plus"></i></button>
+                                        <button type="button" class="btn-stepper btn-minus"
+                                            onclick="ubahJumlah('custBakwan', -1)"><i class="bi bi-dash"></i></button>
+                                        <input type="number" id="custBakwan" class="input-stepper" value="0" min="0"
+                                            readonly>
+                                        <button type="button" class="btn-stepper btn-plus"
+                                            onclick="ubahJumlah('custBakwan', 1)"><i class="bi bi-plus"></i></button>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3 px-1 mb-2">
-                                    <small class="text-muted fw-bold" data-i18n="lbl_total_item">Total Harga Item:</small>
+                                    <small class="text-muted fw-bold" data-i18n="lbl_total_item">Total Harga
+                                        Item:</small>
                                     <span class="fw-bold text-primary fs-5" id="previewSubtotal">Rp 0</span>
                                 </div>
-                                <button type="button" id="btnAddDetail" class="btn btn-primary w-100 py-2 fw-bold rounded-3 shadow-sm" onclick="prosesPesanan()"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="btn_add_cart">MASUKKAN KE KERANJANG</span></button>
+                                <button type="button" id="btnAddDetail"
+                                    class="btn btn-primary w-100 py-2 fw-bold rounded-3 shadow-sm"
+                                    onclick="prosesPesanan()"><i class="bi bi-plus-lg me-1"></i> <span
+                                        data-i18n="btn_add_cart">MASUKKAN KE KERANJANG</span></button>
                                 <div class="order-list-container mt-3" id="listPesananContainer"></div>
                             </div>
                             <div class="mb-3">
                                 <div class="row g-2 text-center mb-2">
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
-                                            <div class="text-xs text-muted">Lontong</div><input type="text" id="qtyLontong" class="form-control-plaintext text-center fw-bold p-0 text-dark" value="0" readonly>
+                                            <div class="text-xs text-muted">Lontong</div><input type="text"
+                                                id="qtyLontong"
+                                                class="form-control-plaintext text-center fw-bold p-0 text-dark"
+                                                value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
-                                            <div class="text-xs text-muted">Telur</div><input type="text" id="qtyTelur" class="form-control-plaintext text-center fw-bold p-0 text-dark" value="0" readonly>
+                                            <div class="text-xs text-muted">Telur</div><input type="text" id="qtyTelur"
+                                                class="form-control-plaintext text-center fw-bold p-0 text-dark"
+                                                value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="p-2 border rounded bg-white">
-                                            <div class="text-xs text-muted">Bakwan</div><input type="text" id="qtyBakwan" class="form-control-plaintext text-center fw-bold p-0 text-dark" value="0" readonly>
+                                            <div class="text-xs text-muted">Bakwan</div><input type="text"
+                                                id="qtyBakwan"
+                                                class="form-control-plaintext text-center fw-bold p-0 text-dark"
+                                                value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="p-3 bg-dark text-white rounded-3">
-                                    <div class="d-flex justify-content-between text-xs text-white-50"><span data-i18n="lbl_sibling_share">Setor Saudara</span><span id="previewSetor">Rp 0</span></div>
-                                    <div class="d-flex justify-content-between fw-bold fs-5 mt-1"><span data-i18n="lbl_net_profit">Profit Bersih</span><span id="previewUntung" class="text-success">Rp 0</span></div>
+                                    <div class="d-flex justify-content-between text-xs text-white-50"><span
+                                            data-i18n="lbl_sibling_share">Setor Saudara</span><span id="previewSetor">Rp
+                                            0</span></div>
+                                    <div class="d-flex justify-content-between fw-bold fs-5 mt-1"><span
+                                            data-i18n="lbl_net_profit">Profit Bersih</span><span id="previewUntung"
+                                            class="text-success">Rp 0</span></div>
                                     <div class="d-none" id="previewOmset">Rp 0</div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold" id="btnSave"><i class="bi bi-check-lg me-2"></i><span data-i18n="btn_save_data">SIMPAN DATA</span></button>
-                            <button type="button" class="btn btn-outline-primary w-100 py-2 fw-bold mt-2" onclick="copyReport()"><i class="bi bi-whatsapp me-2"></i><span data-i18n="btn_copy_report">Salin Laporan Harian</span></button>
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold" id="btnSave"><i
+                                    class="bi bi-check-lg me-2"></i><span data-i18n="btn_save_data">SIMPAN
+                                    DATA</span></button>
+                            <button type="button" class="btn btn-outline-primary w-100 py-2 fw-bold mt-2"
+                                onclick="copyReport()"><i class="bi bi-whatsapp me-2"></i><span
+                                    data-i18n="btn_copy_report">Salin Laporan Harian</span></button>
                         </form>
                     </div>
                 </div>
@@ -345,25 +989,28 @@
                 <div id="section-stats">
                     <div class="row g-3 mb-3">
                         <div class="col-md-4">
-                            <div class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-primary">
+                            <div
+                                class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-primary">
                                 <div class="stat-label" data-i18n="lbl_total_omset">Total Omset</div>
                                 <div class="stat-value" id="grandOmset">Rp 0</div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-warning">
+                            <div
+                                class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-warning">
                                 <div class="stat-label" data-i18n="lbl_sibling_share">Setor Saudara</div>
                                 <div class="stat-value text-warning" id="grandSetor">Rp 0</div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-success">
+                            <div
+                                class="card p-3 h-100 d-flex flex-column justify-content-center border-start border-4 border-success">
                                 <div class="stat-label" data-i18n="lbl_my_profit">Profit Saya</div>
                                 <div class="stat-value text-success" id="grandProfit">Rp 0</div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="card mb-3">
                         <div class="card-header bg-white py-3 border-bottom-0">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -377,10 +1024,12 @@
                                     <input type="date" id="filterEndDate" class="form-control form-control-sm">
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm btn-light border" onclick="resetFilter()" title="Reset Filter"><i class="bi bi-arrow-clockwise"></i></button>
+                                    <button class="btn btn-sm btn-light border" onclick="resetFilter()"
+                                        title="Reset Filter"><i class="bi bi-arrow-clockwise"></i></button>
                                 </div>
                                 <div class="col">
-                                    <button class="btn btn-sm btn-export-custom shadow-sm" onclick="downloadCSV()" title="Download Excel">
+                                    <button class="btn btn-sm btn-export-custom shadow-sm" onclick="downloadCSV()"
+                                        title="Download Excel">
                                         <i class="bi bi-file-earmark-excel-fill"></i> Export
                                     </button>
                                 </div>
@@ -388,28 +1037,33 @@
                         </div>
                         <div class="card-body px-3 pb-3 pt-0">
                             <div class="chart-container"><canvas id="salesChart"></canvas></div>
-                            <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold" data-i18n="msg_date_error">Tanggal Filter Terbalik!</div>
+                            <div id="filterMsg" class="text-danger text-center text-xs mt-2 d-none fw-bold"
+                                data-i18n="msg_date_error">Tanggal Filter Terbalik!</div>
                         </div>
                     </div>
 
                     <div class="card mb-3">
                         <div class="card-header bg-white py-3 border-bottom d-flex align-items-center">
-                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i><span data-i18n="title_top_customer">Top 5 Pelanggan Setia</span></h6>
+                            <h6 class="m-0 fw-bold text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i><span
+                                    data-i18n="title_top_customer">Top 5 Pelanggan Setia</span></h6>
                         </div>
                         <div class="card-body p-0">
                             <div id="topCustomersList" class="list-group list-group-flush rounded-bottom">
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card" id="section-history">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 fw-bold text-dark" data-i18n="title_history">Riwayat Transaksi (100 Hari Terakhir)</h6>
+                    <div
+                        class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 fw-bold text-dark" data-i18n="title_history">Riwayat Transaksi (100 Hari
+                            Terakhir)</h6>
                     </div>
-                    
+
                     <div class="d-md-none px-3 pt-3 pb-3 bg-white border-bottom">
-                        <small class="text-muted fw-bold d-block mb-2" style="font-size: 0.7rem; letter-spacing: 0.5px;" data-i18n="lbl_sort_by">URUTKAN BERDASARKAN:</small>
+                        <small class="text-muted fw-bold d-block mb-2" style="font-size: 0.7rem; letter-spacing: 0.5px;"
+                            data-i18n="lbl_sort_by">URUTKAN BERDASARKAN:</small>
                         <div class="sort-grid-wrapper">
                             <button class="btn-sort-modern active" onclick="sortData('date')" id="pill-date">
                                 Tanggal <i class="bi bi-arrow-down"></i>
@@ -432,17 +1086,23 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th class="ps-3" style="cursor: pointer;" onclick="sortData('date')">
-                                            <span data-i18n="th_date">Tanggal</span> <i id="icon-date" class="bi bi-caret-down-fill text-muted"></i>
+                                            <span data-i18n="th_date">Tanggal</span> <i id="icon-date"
+                                                class="bi bi-caret-down-fill text-muted"></i>
                                         </th>
                                         <th data-i18n="th_details">Rincian (L/T/B)</th>
                                         <th class="text-end" style="cursor: pointer;" onclick="sortData('omset')">
-                                            <span data-i18n="th_omset">Omset</span> <i id="icon-omset" class="bi bi-filter text-muted"></i>
+                                            <span data-i18n="th_omset">Omset</span> <i id="icon-omset"
+                                                class="bi bi-filter text-muted"></i>
                                         </th>
-                                        <th class="text-end text-warning" style="cursor: pointer;" onclick="sortData('setor')">
-                                            <span data-i18n="th_share">Setor</span> <i id="icon-setor" class="bi bi-filter text-muted"></i>
+                                        <th class="text-end text-warning" style="cursor: pointer;"
+                                            onclick="sortData('setor')">
+                                            <span data-i18n="th_share">Setor</span> <i id="icon-setor"
+                                                class="bi bi-filter text-muted"></i>
                                         </th>
-                                        <th class="text-end text-success" style="cursor: pointer;" onclick="sortData('untung')">
-                                            <span data-i18n="th_profit">Profit</span> <i id="icon-untung" class="bi bi-filter text-muted"></i>
+                                        <th class="text-end text-success" style="cursor: pointer;"
+                                            onclick="sortData('untung')">
+                                            <span data-i18n="th_profit">Profit</span> <i id="icon-untung"
+                                                class="bi bi-filter text-muted"></i>
                                         </th>
                                         <th class="text-center pe-3" data-i18n="th_action">Aksi</th>
                                     </tr>
@@ -477,9 +1137,11 @@
     </div>
 
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
-        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+            aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
-                <div class="toast-body" id="toastMessage">Berhasil disimpan!</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                <div class="toast-body" id="toastMessage">Berhasil disimpan!</div><button type="button"
+                    class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
     </div>
@@ -489,7 +1151,8 @@
             <div class="modal-content shadow-lg">
                 <div class="modal-header-custom d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="m-0 fw-bold mb-1" data-i18n="modal_detail_title">Rincian Pembeli</h5><small class="opacity-75" id="modalDateDisplay">Tanggal Transaksi</small>
+                        <h5 class="m-0 fw-bold mb-1" data-i18n="modal_detail_title">Rincian Pembeli</h5><small
+                            class="opacity-75" id="modalDateDisplay">Tanggal Transaksi</small>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -503,42 +1166,93 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-white border-bottom">
-                    <h5 class="modal-title fw-bold text-dark"><i class="bi bi-gear-fill me-2 text-primary"></i><span data-i18n="modal_price_title">Pengaturan Harga</span></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title fw-bold text-dark"><i class="bi bi-gear-fill me-2 text-primary"></i><span
+                            data-i18n="modal_price_title">Pengaturan Harga</span></h5><button type="button"
+                        class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body bg-light">
-                    <div class="alert alert-info py-2 px-3 small mb-3"><i class="bi bi-info-circle me-1"></i> <span data-i18n="msg_price_info">Perubahan harga akan berlaku untuk transaksi baru.</span></div>
+                    <div class="alert alert-info py-2 px-3 small mb-3"><i class="bi bi-info-circle me-1"></i> <span
+                            data-i18n="msg_price_info">Perubahan harga akan berlaku untuk transaksi baru.</span></div>
                     <form id="formHarga">
                         <div class="card mb-3 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Lontong</h6>
                             <div class="row g-2">
-                                <div class="col-6"><label class="small text-muted fw-bold" data-i18n="lbl_price_sell">Harga Jual</label><input type="number" id="set_lontong_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-6"><label class="small text-muted fw-bold" data-i18n="lbl_price_share">Setor Saudara</label><input type="number" id="set_lontong_setor" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_sell">Harga Jual</label><input type="number"
+                                        id="set_lontong_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_share">Setor Saudara</label><input type="number"
+                                        id="set_lontong_setor" class="form-control" placeholder="Rp"></div>
                             </div>
                         </div>
                         <div class="card mb-3 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-warning mb-2 border-bottom pb-2">Telur</h6>
                             <div class="row g-2">
-                                <div class="col-4"><label class="small text-muted fw-bold" data-i18n="lbl_price_sell">Jual</label><input type="number" id="set_telur_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-4"><label class="small text-muted fw-bold" data-i18n="lbl_price_capital">Modal</label><input type="number" id="set_telur_modal" class="form-control" placeholder="Rp"></div>
-                                <div class="col-4 d-flex align-items-end"><small class="text-muted" style="font-size:0.65rem">Setor = 0 (Otomatis)</small></div>
+                                <div class="col-4"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_sell">Jual</label><input type="number" id="set_telur_jual"
+                                        class="form-control" placeholder="Rp"></div>
+                                <div class="col-4"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_capital">Modal</label><input type="number"
+                                        id="set_telur_modal" class="form-control" placeholder="Rp"></div>
+                                <div class="col-4 d-flex align-items-end"><small class="text-muted"
+                                        style="font-size:0.65rem">Setor = 0 (Otomatis)</small></div>
                             </div>
                         </div>
                         <div class="card mb-2 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-secondary mb-2 border-bottom pb-2">Bakwan</h6>
                             <div class="row g-2">
-                                <div class="col-6"><label class="small text-muted fw-bold" data-i18n="lbl_price_sell">Harga Jual</label><input type="number" id="set_bakwan_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-6"><label class="small text-muted fw-bold" data-i18n="lbl_price_share">Setor Saudara</label><input type="number" id="set_bakwan_setor" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_sell">Harga Jual</label><input type="number"
+                                        id="set_bakwan_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6"><label class="small text-muted fw-bold"
+                                        data-i18n="lbl_price_share">Setor Saudara</label><input type="number"
+                                        id="set_bakwan_setor" class="form-control" placeholder="Rp"></div>
                             </div>
                         </div>
                         <div class="card mb-2 p-3 border-0 shadow-sm">
                             <h6 class="fw-bold text-danger mb-2 border-bottom pb-2">Kerupuk Tambahan</h6>
                             <div class="row g-2">
-                                <div class="col-12"><label class="small fw-bold" data-i18n="lbl_price_sell">Harga Jual</label><input type="number" id="set_kerupuk_jual" class="form-control" placeholder="Rp"></div>
+                                <div class="col-12"><label class="small fw-bold" data-i18n="lbl_price_sell">Harga
+                                        Jual</label><input type="number" id="set_kerupuk_jual" class="form-control"
+                                        placeholder="Rp"></div>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer bg-white"><button type="button" class="btn btn-light text-muted fw-bold" data-bs-dismiss="modal" data-i18n="btn_cancel">Batal</button><button type="button" class="btn btn-primary fw-bold" onclick="simpanHarga()"><i class="bi bi-save me-1"></i> <span data-i18n="btn_save_changes">Simpan Perubahan</span></button></div>
+                <div class="modal-footer bg-white"><button type="button" class="btn btn-light text-muted fw-bold"
+                        data-bs-dismiss="modal" data-i18n="btn_cancel">Batal</button><button type="button"
+                        class="btn btn-primary fw-bold" onclick="simpanHarga()"><i class="bi bi-save me-1"></i> <span
+                            data-i18n="btn_save_changes">Simpan Perubahan</span></button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="universalModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
+                <div class="modal-body text-center p-4">
+                    <div class="mb-3">
+                        <div id="univModalIconBg"
+                            style="width: 70px; height: 70px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                            <i id="univModalIcon" class="bi" style="font-size: 2.5rem;"></i>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold text-dark mb-2" id="univModalTitle">Judul Konfirmasi</h5>
+                    <p class="text-muted small mb-4" id="univModalBody" style="line-height: 1.5;">
+                        Pesan konfirmasi akan muncul di sini.
+                    </p>
+
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn fw-bold rounded-pill py-2 shadow-sm" id="btnUnivConfirm">
+                            Ya, Lakukan
+                        </button>
+                        <button type="button" class="btn btn-light text-muted fw-bold rounded-pill py-2"
+                            data-bs-dismiss="modal">
+                            Batal / Kembali
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -550,6 +1264,56 @@
         const overlay = document.getElementById('loginOverlay');
         const passInput = document.getElementById('passcodeInput');
         const errorMsg = document.getElementById('loginError');
+
+        // --- UNIVERSAL MODAL LOGIC ---
+        const univModalEl = document.getElementById('universalModal');
+        const univModal = new bootstrap.Modal(univModalEl);
+        let onConfirmAction = null; // Menyimpan fungsi yang akan dijalankan saat tombol ditekan
+
+        // Fungsi untuk memanggil modal
+        window.showUniversalConfirm = (type, title, message, confirmText, callback) => {
+            const icon = document.getElementById('univModalIcon');
+            const iconBg = document.getElementById('univModalIconBg');
+            const btn = document.getElementById('btnUnivConfirm');
+
+            // Set Teks
+            document.getElementById('univModalTitle').innerText = title;
+            document.getElementById('univModalBody').innerText = message;
+            btn.innerHTML = confirmText;
+
+            // Reset Style
+            iconBg.className = '';
+            btn.className = 'btn fw-bold rounded-pill py-2 shadow-sm';
+            // remove all btn colors
+            btn.classList.remove('btn-danger', 'btn-warning', 'btn-primary');
+
+            // Atur Gaya Berdasarkan Tipe
+            if (type === 'danger') { // Merah (Hapus/Logout)
+                iconBg.style.background = '#fef2f2';
+                icon.className = 'bi bi-exclamation-triangle-fill text-danger';
+                btn.classList.add('btn-danger');
+            } else if (type === 'warning') { // Kuning (Unsaved Changes)
+                iconBg.style.background = '#fffbeb';
+                icon.className = 'bi bi-question-circle-fill text-warning';
+                btn.classList.add('btn-warning');
+                btn.classList.add('text-dark');
+            } else { // Biru/Info (Simpan Harga)
+                iconBg.style.background = '#eff6ff';
+                icon.className = 'bi bi-info-circle-fill text-primary';
+                btn.classList.add('btn-primary');
+            }
+
+            // Simpan callback
+            onConfirmAction = callback;
+            univModal.show();
+        }
+
+        // Listener Tombol Konfirmasi
+        document.getElementById('btnUnivConfirm').addEventListener('click', () => {
+            if (onConfirmAction) onConfirmAction();
+            univModal.hide();
+        });
+
 
         // --- TRANSLATION DATA ---
         const translations = {
@@ -687,14 +1451,14 @@
                 const key = el.getAttribute('data-i18n-placeholder');
                 if (t[key]) el.placeholder = t[key];
             });
-            
+
             // Update Toggle Button Labels (Both Desktop and Mobile)
             const labelText = currentLang.toUpperCase();
             const desktopLabel = document.getElementById('desktopLangLabel');
             const mobileLabel = document.getElementById('mobileLangLabel');
-            
-            if(desktopLabel) desktopLabel.innerText = labelText;
-            if(mobileLabel) mobileLabel.innerText = labelText;
+
+            if (desktopLabel) desktopLabel.innerText = labelText;
+            if (mobileLabel) mobileLabel.innerText = labelText;
         }
 
         window.toggleLanguage = () => {
@@ -727,7 +1491,18 @@
         if (sessionStorage.getItem("isLoggedIn")) { overlay.remove(); }
         if (passInput) { passInput.addEventListener("keypress", function (event) { if (event.key === "Enter") { window.checkLogin(); } }); }
 
-        window.logoutAdmin = () => { if (confirm(getTrans('msg_confirm_logout'))) { sessionStorage.removeItem("isLoggedIn"); window.location.reload(); } }
+        window.logoutAdmin = () => {
+            showUniversalConfirm(
+                'danger',
+                'Keluar Admin?',
+                'Anda harus memasukkan kode PIN lagi nanti untuk bisa masuk kembali.',
+                'Ya, Keluar',
+                () => {
+                    sessionStorage.removeItem("isLoggedIn");
+                    window.location.reload();
+                }
+            );
+        }
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs, getDoc, setDoc, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -787,29 +1562,65 @@
             return new Date(d).toISOString().split('T')[0];
         }
 
+        // --- UPDATE SCRIPT: VARIABLE GLOBAL BARU ---
+        let pendingTargetId = null; // Untuk menyimpan tujuan menu sementara
+        let pendingElement = null;  // Untuk menyimpan element tombol yang diklik
+
+
+        // --- UPDATE FUNGSI NAVIGASI MOBILE ---
         window.switchMobileMenu = (e, el, targetId) => {
-            if (e) e.preventDefault(); 
+            if (e) e.preventDefault();
+
+            // Cek apakah ada data yang sedang diedit/belum disimpan
             if (targetId !== 'input' && typeof orderList !== 'undefined' && orderList.length > 0) {
-                const konfirmasi = confirm(getTrans('msg_confirm_nav'));
-                if (konfirmasi) {
-                    resetFormMode(); 
-                } else {
-                    return; 
-                }
+                // SIMPAN DULU tujuan user mau kemana
+                pendingTargetId = targetId;
+                pendingElement = el;
+
+                showUniversalConfirm(
+                    'warning',
+                    'Belum Disimpan!',
+                    'Pesanan yang sedang diketik akan hilang jika pindah menu. Lanjut?',
+                    'Buang & Pindah', // Tombol konfirmasi di sini artinya "Ya, Buang data"
+                    () => {
+                        // Callback jika user pilih "Buang & Pindah"
+                        resetFormMode(); // Hapus data
+                        lakukanPerpindahanMenu(pendingElement, pendingTargetId); // Pindah
+                    }
+                );
+                return; // Stop eksekusi di sini
             }
 
-            document.querySelectorAll('.nav-item-mobile').forEach(item => item.classList.remove('active'));
-            if (el) el.classList.add('active');
+            // Jika aman (tidak ada data), langsung pindah
+            lakukanPerpindahanMenu(el, targetId);
+        }
 
+        // --- FUNGSI BARU: EKSEKUSI PINDAH MENU ---
+        // Ini fungsi pecahan agar bisa dipanggil setelah konfirmasi
+        function lakukanPerpindahanMenu(el, targetId) {
+            // Reset visual tombol aktif
+            document.querySelectorAll('.nav-item-mobile').forEach(item => item.classList.remove('active'));
+
+            // Jika 'el' null (dipanggil dari confirm), cari element berdasarkan targetId manual (opsional) atau biarkan
+            if (el) el.classList.add('active');
+            else {
+                // Cari tombol yang sesuai jika el tidak dikirim
+                if (targetId === 'input') document.querySelector('.nav-item-mobile[onclick*="input"]').classList.add('active');
+                if (targetId === 'stats') document.querySelector('.nav-item-mobile[onclick*="stats"]').classList.add('active');
+                if (targetId === 'history') document.querySelector('.nav-item-mobile[onclick*="history"]').classList.add('active');
+            }
+
+            // Hide semua section
             document.getElementById('section-form').classList.remove('mobile-active-view');
             document.getElementById('section-form').classList.add('mobile-hidden-view');
-            
+
             document.getElementById('section-stats').classList.remove('mobile-active-view');
             document.getElementById('section-stats').classList.add('mobile-hidden-view');
-            
+
             document.getElementById('section-history').classList.remove('mobile-active-view');
             document.getElementById('section-history').classList.add('mobile-hidden-view');
 
+            // Show target section
             let target;
             if (targetId === 'input') target = document.getElementById('section-form');
             else if (targetId === 'stats') target = document.getElementById('section-stats');
@@ -819,13 +1630,14 @@
                 target.classList.remove('mobile-hidden-view');
                 target.classList.add('mobile-active-view');
             }
-            
+
             if (targetId === 'input') {
-                if(!dom.editId.value) { setFormDateToToday(); }
+                if (!dom.editId.value) { setFormDateToToday(); }
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
 
         if (window.innerWidth < 768) {
             window.switchMobileMenu(null, null, 'input');
@@ -853,27 +1665,42 @@
         }
 
         window.simpanHarga = async () => {
-            if (!confirm(getTrans('msg_price_info'))) return;
-            const btn = document.querySelector('#modalHarga .btn-primary');
-            const originalText = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = '...';
-            const newHarga = {
-                lontong_jual: parseInt(document.getElementById('set_lontong_jual').value) || 0,
-                lontong_setor: parseInt(document.getElementById('set_lontong_setor').value) || 0,
-                telur_jual: parseInt(document.getElementById('set_telur_jual').value) || 0,
-                telur_modal: parseInt(document.getElementById('set_telur_modal').value) || 0,
-                bakwan_jual: parseInt(document.getElementById('set_bakwan_jual').value) || 0,
-                bakwan_setor: parseInt(document.getElementById('set_bakwan_setor').value) || 0,
-                kerupuk_jual: parseInt(document.getElementById('set_kerupuk_jual').value) || 0
-            };
-            try {
-                await setDoc(doc(db, "settings", "harga_terkini"), newHarga);
-                HARGA = newHarga;
-                updateSubtotalPreview();
-                showToast(getTrans('toast_saved'), "success");
-                modalHarga.hide();
-            } catch (error) { showToast("Gagal menyimpan: " + error.message, "danger"); }
-            finally { btn.disabled = false; btn.innerHTML = originalText; }
+            modalHarga.hide();
+
+            showUniversalConfirm(
+                'info',
+                'Simpan Harga Baru?',
+                'Harga baru ini akan berlaku untuk semua transaksi selanjutnya.',
+                'Simpan Perubahan',
+                async () => {
+                    const newHarga = {
+                        lontong_jual: parseInt(document.getElementById('set_lontong_jual').value) || 0,
+                        lontong_setor: parseInt(document.getElementById('set_lontong_setor').value) || 0,
+                        telur_jual: parseInt(document.getElementById('set_telur_jual').value) || 0,
+                        telur_modal: parseInt(document.getElementById('set_telur_modal').value) || 0,
+                        bakwan_jual: parseInt(document.getElementById('set_bakwan_jual').value) || 0,
+                        bakwan_setor: parseInt(document.getElementById('set_bakwan_setor').value) || 0,
+                        kerupuk_jual: parseInt(document.getElementById('set_kerupuk_jual').value) || 0
+                    };
+                    try {
+                        await setDoc(doc(db, "settings", "harga_terkini"), newHarga);
+                        HARGA = newHarga;
+                        updateSubtotalPreview();
+                        showToast(getTrans('toast_saved'), "success");
+                    } catch (error) {
+                        showToast("Gagal menyimpan: " + error.message, "danger");
+                        modalHarga.show(); // Buka lagi modal harga jika gagal
+                    }
+                }
+            );
+
+            // Jika user klik Batal di Universal Modal, kita buka lagi Modal Harga
+            univModalEl.addEventListener('hidden.bs.modal', function onHidden() {
+                if (!onConfirmAction) { // Jika batal (action null karena reset atau tidak diklik)
+                    modalHarga.show();
+                }
+                univModalEl.removeEventListener('hidden.bs.modal', onHidden);
+            }, { once: true });
         }
 
         function updateCustomerList() {
@@ -890,7 +1717,7 @@
             });
             window.customerCounts = counts;
             const sortedNames = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
-            
+
             const chipsArea = document.getElementById('chipsArea');
             chipsArea.innerHTML = '';
             const topChips = sortedNames.slice(0, 5);
@@ -909,7 +1736,7 @@
 
             const topListContainer = document.getElementById('topCustomersList');
             topListContainer.innerHTML = '';
-            
+
             if (sortedNames.length === 0) {
                 topListContainer.innerHTML = '<div class="text-center py-4 text-muted small">Belum ada data pelanggan</div>';
             } else {
@@ -918,7 +1745,7 @@
                     let displayName = key.replace(/\b\w/g, l => l.toUpperCase());
                     let count = counts[key];
                     let rankClass = index === 0 ? 'rank-1' : (index === 1 ? 'rank-2' : (index === 2 ? 'rank-3' : 'bg-light text-muted'));
-                    
+
                     const item = `
                     <div class="list-group-item-custom">
                         <div class="d-flex align-items-center">
@@ -1242,13 +2069,13 @@
 
         window.sortData = (column) => {
             if (currentSort.column === column) currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc'; else { currentSort.column = column; currentSort.direction = 'desc'; }
-            
+
             updateSortIcons();
 
             // Update Sort Pills Grid (Mobile)
             document.querySelectorAll('.btn-sort-modern').forEach(btn => btn.classList.remove('active'));
             const activePill = document.getElementById(`pill-${column}`);
-            if(activePill) {
+            if (activePill) {
                 activePill.classList.add('active');
                 // Icon Update for Mobile Grid
                 const iconClass = currentSort.direction === 'asc' ? 'up' : 'down';
@@ -1274,7 +2101,7 @@
         function renderDashboard(data) {
             updateSortIcons();
             updateCustomerList();
-            
+
             // --- UPDATE TOMBOL SORTIR GRID (MOBILE) DINAMIS ---
             const sortMap = { date: 'th_date', omset: 'th_omset', setor: 'th_share', untung: 'th_profit' };
             ['date', 'omset', 'untung', 'setor'].forEach(col => {
@@ -1308,10 +2135,10 @@
                 const json = JSON.stringify(d).replace(/"/g, '&quot;');
                 const isToday = new Date(d.date).toDateString() === new Date().toDateString();
                 const rowClass = isToday ? 'table-success' : '';
-                const badgeHariIniDesktop = isToday ? `<span class="badge bg-success ms-2">${getTrans('lbl_today')}</span>` : ''; 
+                const badgeHariIniDesktop = isToday ? `<span class="badge bg-success ms-2">${getTrans('lbl_today')}</span>` : '';
                 const cardClass = isToday ? 'card-today shadow' : 'shadow-sm border-0';
                 const dateColor = isToday ? 'text-success' : 'text-primary';
-                const todayLabel = isToday ? `<div class="badge bg-success mb-1" style="font-size:0.65rem; width:fit-content;">${getTrans('lbl_today')}</div>` : ''; 
+                const todayLabel = isToday ? `<div class="badge bg-success mb-1" style="font-size:0.65rem; width:fit-content;">${getTrans('lbl_today')}</div>` : '';
 
                 dHtml += `
                 <tr class="${rowClass}">
@@ -1437,7 +2264,7 @@
                 let contentHtml = `<div class="scroller-content pt-2">`;
 
                 d.detail_pelanggan.forEach(i => {
-                    let cK = i.cK || 0; 
+                    let cK = i.cK || 0;
                     const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual) + (cK * HARGA.kerupuk_jual);
 
                     const currentDateStr = normalizeDate(d.date);
@@ -1473,7 +2300,7 @@
                     </div>`;
                 });
 
-                contentHtml += `</div>`; 
+                contentHtml += `</div>`;
 
                 contentHtml += `
                 <div class="modal-summary-footer">
@@ -1514,18 +2341,28 @@
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        window.resetFormMode = () => { 
-            dom.editId.value = ''; 
-            document.getElementById('salesForm').reset(); 
-            orderList = []; 
-            batalEditPesanan(); 
-            renderOrderList(); 
-            setFormDateToToday(); 
-            document.getElementById('btnCancelEdit').classList.add('d-none'); 
+
+        window.resetFormMode = () => {
+            dom.editId.value = '';
+            document.getElementById('salesForm').reset();
+            orderList = [];
+            batalEditPesanan();
+            renderOrderList();
+            setFormDateToToday();
+            document.getElementById('btnCancelEdit').classList.add('d-none');
         }
-        
-        window.hapusData = async (id) => { if (confirm(getTrans('msg_confirm_delete'))) await deleteDoc(doc(db, "penjualan_detail", id)); }
+
+        window.hapusData = async (id) => {
+            showUniversalConfirm(
+                'danger',
+                'Hapus Penjualan?',
+                'Data ini akan dihapus permanen dan omset akan berkurang. Yakin?',
+                '<i class="bi bi-trash me-1"></i> Hapus Data',
+                async () => {
+                    await deleteDoc(doc(db, "penjualan_detail", id));
+                }
+            );
+        }
 
         function formatDate(d) { return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); }
         function formatChartDate(d) { return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }); }
@@ -1533,6 +2370,35 @@
         loadLatestData();
         setFormDateToToday();
         updateLanguageUI();
+
+        // --- PULL TO REFRESH SETUP ---
+        PullToRefresh.init({
+            mainElement: 'body',
+            triggerElement: 'body',
+            onRefresh() {
+                return new Promise((resolve) => {
+                    // Re-fetch Data
+                    loadLatestData(); // This restarts the realtime listener
+                    setupHarga();     // Refetch prices
+
+                    // Give visual feedback for at least 800ms so it feels "real"
+                    setTimeout(() => {
+                        showToast("Data diperbarui", "success");
+                        resolve();
+                    }, 800);
+                });
+            },
+            distThreshold: 60,
+            iconArrow: '<i class="bi bi-arrow-down-circle-fill fs-3 text-primary"></i>',
+            iconRefreshing: '<div class="spinner-border text-primary" role="status"></div>',
+            instructionsPullToRefresh: '<span class="text-muted small fw-bold">Tarik untuk update</span>',
+            instructionsReleaseToRefresh: '<span class="text-primary small fw-bold">Lepas sekarang</span>',
+            instructionsRefreshing: '<span class="text-primary small fw-bold">Memuat...</span>',
+            shouldPullToRefresh: function () {
+                // Only allow pull if we are at the top of the page
+                return window.scrollY === 0;
+            }
+        });
     </script>
 </body>
 
