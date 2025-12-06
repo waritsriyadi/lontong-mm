@@ -34,31 +34,15 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* --- PULL TO REFRESH FIXED STYLE --- */
-        .ptr--ptr {
-            /* Pindahkan ikon ke bawah Header Mobile (sekitar 60px) */
-            top: 65px !important;
-            /* Pastikan z-index lebih kecil dari navbar (900) tapi terlihat */
-            z-index: 1 !important;
-            box-shadow: none !important;
-            pointer-events: none;
-        }
-
+        /* --- PULL TO REFRESH CUSTOM STYLE --- */
         .ptr--icon {
             color: var(--primary-color);
-            background: white;
-            border-radius: 50%;
-            padding: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .ptr--text {
-            font-weight: 700;
-            font-size: 0.75rem;
+            font-weight: 600;
+            font-size: 0.85rem;
             color: #6b7280;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         /* --- LOGIN STYLES --- */
@@ -868,7 +852,7 @@
         </div>
     </div>
 
-    <div class="container-fluid px-4 mt-3 mt-md-0" id="mainContent">
+    <div class="container-fluid px-4 mt-3 mt-md-0">
         <div class="row g-4">
             <div class="col-lg-4" id="section-form">
                 <div class="card h-100">
@@ -2387,19 +2371,17 @@
         setFormDateToToday();
         updateLanguageUI();
 
-        // --- PULL TO REFRESH SETUP (UPDATED) ---
-        // Masalah "menabrak" diatasi dengan menargetkan #mainContent saja
-        // dan menyesuaikan posisi ikon agar di bawah header mobile.
+        // --- PULL TO REFRESH SETUP ---
         PullToRefresh.init({
-            mainElement: '#mainContent', // Hanya konten yang ditarik, Header tetap diam (Sticky)
-            triggerElement: 'body',      // Bisa tarik dari mana saja di layar
+            mainElement: 'body',
+            triggerElement: 'body',
             onRefresh() {
                 return new Promise((resolve) => {
                     // Re-fetch Data
-                    loadLatestData();
-                    setupHarga();
+                    loadLatestData(); // This restarts the realtime listener
+                    setupHarga();     // Refetch prices
 
-                    // Delay sedikit agar terasa prosesnya
+                    // Give visual feedback for at least 800ms so it feels "real"
                     setTimeout(() => {
                         showToast("Data diperbarui", "success");
                         resolve();
@@ -2413,6 +2395,7 @@
             instructionsReleaseToRefresh: '<span class="text-primary small fw-bold">Lepas sekarang</span>',
             instructionsRefreshing: '<span class="text-primary small fw-bold">Memuat...</span>',
             shouldPullToRefresh: function () {
+                // Only allow pull if we are at the top of the page
                 return window.scrollY === 0;
             }
         });
