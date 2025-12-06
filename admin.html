@@ -1499,6 +1499,7 @@
                 'Ya, Keluar',
                 () => {
                     sessionStorage.removeItem("isLoggedIn");
+                    orderList = [];
                     window.location.reload();
                 }
             );
