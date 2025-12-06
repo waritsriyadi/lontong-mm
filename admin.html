@@ -35,14 +35,30 @@
         }
 
         /* --- PULL TO REFRESH CUSTOM STYLE --- */
+        .ptr--ptr {
+            /* Pindahkan ikon ke bawah Header Mobile (sekitar 60px) */
+            top: 65px !important;
+            /* Pastikan z-index lebih kecil dari navbar (900) tapi terlihat */
+            z-index: 1 !important;
+            box-shadow: none !important;
+            pointer-events: none;
+        }
+
         .ptr--icon {
             color: var(--primary-color);
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .ptr--text {
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.75rem;
             color: #6b7280;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* --- LOGIN STYLES --- */
@@ -852,7 +868,7 @@
         </div>
     </div>
 
-    <div class="container-fluid px-4 mt-3 mt-md-0">
+    <div class="container-fluid px-4 mt-3 mt-md-0" id="mainContent">
         <div class="row g-4">
             <div class="col-lg-4" id="section-form">
                 <div class="card h-100">
@@ -2384,7 +2400,7 @@
 
         // --- PULL TO REFRESH SETUP ---
         PullToRefresh.init({
-            mainElement: 'body',
+            mainElement: '#mainContent',
             triggerElement: 'body',
             onRefresh() {
                 return new Promise((resolve) => {
