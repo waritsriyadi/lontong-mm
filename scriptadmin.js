@@ -299,7 +299,7 @@ function updateHistoryTrap() {
     }
 }
 
-// --- 8. UI UPDATES (Revised for New Input Style) ---
+// --- 8. UI UPDATES ---
 const inputNama = document.getElementById('custName');
 const suggestBox = document.getElementById('suggestionList');
 
@@ -327,8 +327,6 @@ inputNama.addEventListener('input', function () {
         });
     } else { suggestBox.style.display = 'none'; }
 
-    // UPDATE: Jangan hapus border-0 (karena sekarang defaultnya ada border)
-    // Cukup tambahkan/hapus border-success jika ketemu
     if (val.length > 2 && window.cekStatusPelangganLokal(val)) {
         inputNama.classList.add('border-success');
     } else {
@@ -343,10 +341,9 @@ document.addEventListener('click', function (e) {
 window.pilihNama = (nama) => {
     inputNama.value = nama;
     suggestBox.style.display = 'none';
-    document.getElementById('btnClearName').style.display = 'block'; // Tambahkan ini
+    document.getElementById('btnClearName').style.display = 'block';
 }
 
-// Tambahkan fungsi ini
 window.clearNameInput = () => {
     const inputNama = document.getElementById('custName');
     inputNama.value = '';
@@ -382,7 +379,6 @@ function updateSubtotalPreview() {
 window.updateStickyBar = () => {
     const bar = document.getElementById('stickySaveBar');
 
-    // Cek apakah ada order list
     if (orderList.length > 0) {
         bar.style.display = 'block';
         document.body.classList.add('has-sticky-bar');
@@ -390,17 +386,14 @@ window.updateStickyBar = () => {
         const bottomNav = document.querySelector('.bottom-nav');
         if (bottomNav) bottomNav.style.display = 'none';
 
-        // 1. Ambil Qty
         const totalL = document.getElementById('qtyLontong').value || 0;
         const totalT = document.getElementById('qtyTelur').value || 0;
         const totalB = document.getElementById('qtyBakwan').value || 0;
 
-        // 2. Ambil Estimasi Uang (Omset, Profit, DAN SETOR)
         const omset = document.getElementById('previewOmset').innerText;
         const profit = document.getElementById('previewUntung').innerText;
-        const setor = document.getElementById('previewSetor').innerText; // Ambil nilai setor
+        const setor = document.getElementById('previewSetor').innerText;
 
-        // 3. Update Tampilan Sticky Bar
         document.getElementById('stkL').innerText = totalL;
         document.getElementById('stkT').innerText = totalT;
         document.getElementById('stkB').innerText = totalB;
@@ -408,7 +401,6 @@ window.updateStickyBar = () => {
         document.getElementById('stickyTotal').innerText = omset;
         document.getElementById('stkProfit').innerText = profit;
 
-        // Update Element Setor Baru
         const elSetor = document.getElementById('stkSetor');
         if (elSetor) elSetor.innerText = setor;
 
@@ -422,28 +414,23 @@ window.updateStickyBar = () => {
 }
 
 window.triggerSimpan = () => {
-    // Picu submit form secara manual
     const form = document.getElementById('salesForm');
     form.dispatchEvent(new Event('submit'));
 }
 
 window.batalkanSemuaTransaksi = () => {
-    // Tampilkan konfirmasi agar tidak terpencet tidak sengaja
     showUniversalConfirm(
         'danger',
         'Batalkan Transaksi?',
         'Semua item di keranjang akan dihapus. Form akan di-reset.',
         'Ya, Hapus Semua',
         () => {
-            // Aksi Reset Total
-            dom.editId.value = ''; // Hapus ID edit jika ada
-            document.getElementById('salesForm').reset(); // Reset form HTML
-            orderList = []; // Kosongkan array keranjang
-
-            batalEditPesanan(); // Reset mode edit item
-            renderOrderList(); // Render ulang (akan menyembunyikan sticky bar)
-            setFormDateToToday(); // Kembalikan tanggal ke hari ini
-
+            dom.editId.value = '';
+            document.getElementById('salesForm').reset();
+            orderList = [];
+            batalEditPesanan();
+            renderOrderList();
+            setFormDateToToday();
             showToast("Transaksi dibatalkan", "warning");
         }
     );
@@ -471,16 +458,13 @@ function normalizeDate(d) {
 window.cekStatusPelangganLokal = (namaInput) => {
     if (!namaInput) return false;
     const cleanInput = namaInput.trim().toLowerCase();
-
     if (cleanInput === 'x' || cleanInput === 'hamba allah') return true;
-
     const count = (window.customerCounts && window.customerCounts[cleanInput]) || 0;
     return count <= 1;
 }
 
 async function cekStatusRealtime(namaInput, tanggalInputStr) {
     const cleanName = namaInput.trim().toLowerCase();
-
     if (cleanName === 'x' || cleanName === 'hamba allah') return true;
 
     const inputDateStr = normalizeDate(tanggalInputStr);
@@ -594,7 +578,7 @@ window.hapusPesanan = (idx) => {
 
 function resetInputDetail() {
     document.getElementById('custName').value = '';
-    document.getElementById('btnClearName').style.display = 'none'; // Tambahkan ini
+    document.getElementById('btnClearName').style.display = 'none';
     document.getElementById('custLontong').value = '1';
     document.getElementById('custTelur').value = '0';
     document.getElementById('custBakwan').value = '0';
@@ -606,7 +590,6 @@ function renderOrderList() {
     container.innerHTML = '';
     let tL = 0, tT = 0, tB = 0;
 
-    // --- LOGIKA LIST KOSONG DIPERBAIKI DISINI ---
     if (orderList.length === 0) {
         container.innerHTML = `
             <div class="empty-cart-state">
@@ -614,16 +597,14 @@ function renderOrderList() {
                 <p>List Kosong</p>
             </div>`;
 
-        // Reset nilai input hidden untuk perhitungan
         dom.qtyL.value = 0;
         dom.qtyT.value = 0;
         dom.qtyB.value = 0;
 
         hitungEstimasi();
-        updateStickyBar(); // Sembunyikan sticky bar jika kosong
+        updateStickyBar();
         return;
     }
-    // ---------------------------------------------
 
     orderList.forEach((i, idx) => {
         tL += i.cL; tT += i.cT; tB += i.cB;
@@ -657,7 +638,7 @@ function renderOrderList() {
     });
     dom.qtyL.value = tL; dom.qtyT.value = tT; dom.qtyB.value = tB;
     hitungEstimasi();
-    updateStickyBar(); // Show sticky bar
+    updateStickyBar();
 }
 
 function hitungEstimasi() {
@@ -678,7 +659,6 @@ function hitungEstimasi() {
 document.getElementById('salesForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // UPDATE: Target the correct button class (.btn-simpan)
     const btnSticky = document.querySelector('.btn-simpan');
     const originalText = btnSticky ? btnSticky.innerHTML : '';
 
@@ -688,7 +668,6 @@ document.getElementById('salesForm').addEventListener('submit', async (e) => {
 
     if (btnSticky) {
         btnSticky.disabled = true;
-        // Keep icon, add spinner
         btnSticky.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
     }
 
@@ -946,7 +925,7 @@ window.lihatDetail = (d) => {
     if (!d.detail_pelanggan || d.detail_pelanggan.length === 0) {
         body.innerHTML = `<div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted"><i class="bi bi-inbox fs-1 opacity-25"></i><p class="small mt-2">Tidak ada data pembeli.</p></div>` + closeBtnHtml;
     } else {
-        let contentHtml = `<div class="scroller-content">`;
+        let contentHtml = `<div class="scroller-content" style="overscroll-behavior-y: contain;">`;
         d.detail_pelanggan.forEach(i => {
             let cK = i.cK || 0;
             const subtotal = (i.cL * HARGA.lontong_jual) + (i.cT * HARGA.telur_jual) + (i.cB * HARGA.bakwan_jual) + (cK * HARGA.kerupuk_jual);
@@ -1021,7 +1000,7 @@ window.hapusData = async (id) => {
     );
 }
 
-// --- 14. FITUR ANALISIS CERDAS AI (NEW: WEIGHTED 7 DAYS) ---
+// --- 14. FITUR ANALISIS CERDAS AI ---
 window.bukaModalAnalisis = () => {
     if (globalData.length < 2) {
         showToast("Data belum cukup untuk analisis.", "warning");
@@ -1033,14 +1012,11 @@ window.bukaModalAnalisis = () => {
 }
 
 function hitungPrediksiStok() {
-    // 1. Sort Date
     const sortedData = [...globalData].sort((a, b) => new Date(a.date) - new Date(b.date));
-    // 2. Filter Last 7 Days
     const recentData = sortedData.slice(-7);
 
     if (recentData.length === 0) return;
 
-    // 3. Weighted Average (Older = low weight)
     let sumL = 0, sumT = 0, sumB = 0;
     let totalWeight = 0;
 
@@ -1060,7 +1036,6 @@ function hitungPrediksiStok() {
     const predT = Math.ceil(avgT);
     const predB = Math.ceil(avgB);
 
-    // Menentukan icon trend (Naik/Turun)
     const totalAvgL = sortedData.reduce((sum, d) => sum + d.lontong, 0) / sortedData.length;
     const trendIcon = predL > totalAvgL
         ? '<i class="bi bi-graph-up-arrow text-success"></i>'
@@ -1110,19 +1085,13 @@ function hitungAnalisisPelanggan() {
         if (trx.detail_pelanggan && Array.isArray(trx.detail_pelanggan)) {
             trx.detail_pelanggan.forEach(p => {
                 const nama = p.nama.trim().toLowerCase();
-
-                // EXCLUDE X from stats
                 if (nama === 'x' || nama === 'hamba allah') return;
-
                 const spend = (p.cL * HARGA.lontong_jual) + (p.cT * HARGA.telur_jual) + (p.cB * HARGA.bakwan_jual);
-
                 if (!customerStats[nama]) {
                     customerStats[nama] = { realName: p.nama, visits: 0, totalSpend: 0, lastVisit: trxDate, firstVisit: trxDate };
                 }
-
                 customerStats[nama].visits += 1;
                 customerStats[nama].totalSpend += spend;
-
                 if (trxDate > customerStats[nama].lastVisit) customerStats[nama].lastVisit = trxDate;
                 if (trxDate < customerStats[nama].firstVisit) customerStats[nama].firstVisit = trxDate;
             });
@@ -1135,18 +1104,13 @@ function hitungAnalisisPelanggan() {
     Object.values(customerStats).forEach(c => {
         totalCust++;
         const diffDays = Math.ceil(Math.abs(today - c.lastVisit) / (1000 * 60 * 60 * 24));
-
         if (c.visits >= 4) loyalCust++;
-
         if (diffDays > 7 && diffDays < 60) {
             lostCust++;
-            // Risk if visits >= 2
             if (c.visits >= 2) riskList.push({ name: c.realName, days: diffDays, visits: c.visits });
         }
-
         const diffFirst = Math.ceil(Math.abs(today - c.firstVisit) / (1000 * 60 * 60 * 24));
         if (diffFirst <= 7) newCust++;
-
         sultanList.push(c);
     });
 
@@ -1155,7 +1119,6 @@ function hitungAnalisisPelanggan() {
     document.getElementById('statLostCust').innerText = lostCust;
     document.getElementById('statNewCust').innerText = newCust;
 
-    // Render Top Spender
     sultanList.sort((a, b) => b.totalSpend - a.totalSpend);
     const listSultanEl = document.getElementById('listSultan');
     listSultanEl.innerHTML = '';
@@ -1172,9 +1135,7 @@ function hitungAnalisisPelanggan() {
             </div>`;
     });
 
-    // Render Risk List (Prioritize Loyalty)
     riskList.sort((a, b) => b.visits - a.visits);
-
     const listRiskEl = document.getElementById('listRisk');
     listRiskEl.innerHTML = '';
 
@@ -1201,17 +1162,6 @@ updateLanguageUI();
 renderOrderList();
 if (window.innerWidth < 768) window.switchMobileMenu(null, null, 'input');
 
-// --- FIX SCROLL LOCK PADA MODAL (Agar Riwayat tidak ikut scroll) ---
-const allModals = document.querySelectorAll('.modal');
-allModals.forEach(modalEl => {
-    modalEl.addEventListener('show.bs.modal', () => {
-        document.body.classList.add('modal-open-locked');
-    });
-    modalEl.addEventListener('hidden.bs.modal', () => {
-        document.body.classList.remove('modal-open-locked');
-    });
-});
-
 PullToRefresh.init({
     mainElement: '#mainContent',
     triggerElement: 'body',
@@ -1228,32 +1178,41 @@ PullToRefresh.init({
     shouldPullToRefresh: function () { return window.scrollY === 0 && !document.querySelector('.modal.show'); }
 });
 
-// --- FIX: SCROLL LOCK LOGIC UNTUK MODAL RINCIAN ---
-const elModalDetail = document.getElementById('detailModal');
-let scrollPosition = 0;
 
-if (elModalDetail) {
-    // Saat Modal AKAN MUNCUL
-    elModalDetail.addEventListener('show.bs.modal', function () {
-        // 1. Simpan posisi scroll saat ini agar tidak loncat ke atas
-        scrollPosition = window.scrollY;
-        
-        // 2. Tambahkan class pengunci CSS
-        document.body.classList.add('lock-scroll-mode');
-        
-        // 3. Atur top agar halaman tetap di posisi yang sama visualnya
-        document.body.style.top = `-${scrollPosition}px`;
+// --- FIX: SCROLL LOCK MODAL (Metode Intercept TouchEvent) ---
+// Metode ini paling ampuh di iOS 18 / Chrome untuk mencegah background scroll
+// Tanpa menggunakan position:fixed yang menyebabkan halaman loncat.
+
+const detailModalEl = document.getElementById('detailModal');
+
+if (detailModalEl) {
+    // 1. Saat modal mau muncul
+    detailModalEl.addEventListener('show.bs.modal', () => {
+        // Kunci HTML dan Body agar tidak bisa di-scroll browser
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
     });
 
-    // Saat Modal SUDAH TERTUTUP
-    elModalDetail.addEventListener('hidden.bs.modal', function () {
-        // 1. Lepas class pengunci
-        document.body.classList.remove('lock-scroll-mode');
-        
-        // 2. Hapus style top
-        document.body.style.top = '';
-        
-        // 3. Kembalikan user ke posisi scroll semula
-        window.scrollTo(0, scrollPosition);
+    // 2. Saat modal tertutup
+    detailModalEl.addEventListener('hidden.bs.modal', () => {
+        // Lepas kunci
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
     });
+
+    // 3. Logic "Touch Intercept" (Pencegah Tembus)
+    // Jika user menggeser layar, kita cek apakah yang digeser itu area konten?
+    detailModalEl.addEventListener('touchmove', function (e) {
+        const isScroller = e.target.closest('.scroller-content');
+
+        // Jika user menyentuh BAGIAN LUAR area scroller (misal header modal atau backdrop)
+        // Maka matikan fungsi scroll total (preventDefault)
+        if (!isScroller) {
+            e.preventDefault();
+        } else {
+            // Jika user menyentuh area scroller, biarkan (stopPropagation agar tidak naik ke body)
+            // Catatan: CSS overscroll-behavior: contain pada .scroller-content akan mencegah chaining
+            e.stopPropagation();
+        }
+    }, { passive: false });
 }
