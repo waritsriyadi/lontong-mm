@@ -1349,25 +1349,37 @@ body.has-sticky-bar {
 }
 
 /* =========================================
-   FIX: LOCK SCROLL MODAL (IOS/ANDROID)
+   FIX: SCROLL & BACKDROP (IOS 18 SUPPORT)
    ========================================= */
 
-/* Class pengunci yang akan ditempel via JS */
-body.lock-scroll-mode {
+/* Class pengunci Body saat Modal Terbuka */
+body.ios-locked {
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
     overflow: hidden !important;
-    height: 100vh !important;
-    touch-action: none;
-    /* SANGAT PENTING: Mematikan gesture scroll di layar utama */
-    position: fixed;
-    /* Opsi Nuklir: Mencegah scroll paksa di iOS */
-    width: 100%;
+    /* Jangan gunakan touch-action: none di sini agar backdrop tetap responsif */
 }
 
-/* Kembalikan kemampuan scroll HANYA di dalam konten modal */
+/* Area Scroll di Dalam Modal */
 #detailModal .scroller-content {
-    touch-action: pan-y;
-    /* Izinkan scroll vertikal */
-    overscroll-behavior: contain;
-    /* Cegah scroll 'mencuat' ke parent */
-    -webkit-overflow-scrolling: touch;
+    max-height: 55vh; /* Batasi tinggi */
+    overflow-y: auto; /* Wajib auto, jangan scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
+    overscroll-behavior: contain; /* Mencegah scroll tembus ke body */
+    
+    /* Fix tambahan agar scroll lancar */
+    transform: translate3d(0,0,0); 
+    padding-bottom: 20px;
+}
+
+/* Memastikan backdrop (area gelap) tetap bisa diklik */
+.modal-backdrop {
+    touch-action: auto; 
+    z-index: 1040 !important;
+}
+
+/* Memastikan Modal berada di atas segalanya */
+#detailModal {
+    z-index: 1050 !important;
 }

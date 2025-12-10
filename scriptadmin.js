@@ -1179,44 +1179,35 @@ PullToRefresh.init({
 });
 
 
-// --- FIX: SCROLL LOCK MODAL (IOS STABLE VERSION) ---
-// Mengatasi masalah layar lompat/scroll sendiri saat modal ditutup
+// --- FIX FINAL: SCROLL LOCK & BACKDROP (IOS 18) ---
+// Mengatasi scroll tembus & backdrop macet tanpa memblokir sentuhan
 
 const detailModalEl = document.getElementById('detailModal');
-let savedScrollPosition = 0;
+let lastScrollY = 0;
 
 if (detailModalEl) {
-    // 1. Saat modal AKAN muncul
+    // 1. Saat Modal AKAN Muncul
     detailModalEl.addEventListener('show.bs.modal', () => {
-        // Simpan posisi scroll user saat ini
-        savedScrollPosition = window.scrollY;
+        // Simpan posisi scroll saat ini
+        lastScrollY = window.scrollY;
         
-        // Kunci body dengan teknik 'Fixed' agar iOS tidak bisa scroll background
-        // Teknik ini lebih ampuh daripada overflow:hidden biasa
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${savedScrollPosition}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
+        // Kunci Body dengan CSS Class
+        // Kita set 'top' agar visual halaman tidak melompat ke atas
+        document.body.style.top = `-${lastScrollY}px`;
+        document.body.classList.add('ios-locked');
     });
 
-    // 2. Saat modal SUDAH tertutup
+    // 2. Saat Modal SUDAH Tertutup
     detailModalEl.addEventListener('hidden.bs.modal', () => {
-        // Lepas semua pengunci
-        document.body.style.position = '';
+        // Lepas pengunci
+        document.body.classList.remove('ios-locked');
         document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
         
-        // KEMBALIKAN POSISI SCROLL (PENTING)
-        // Ini mencegah layar lompat ke paling atas
-        window.scrollTo(0, savedScrollPosition);
+        // Kembalikan user ke posisi semula secara instan
+        // 'behavior: auto' penting agar tidak ada animasi scroll (langsung loncat)
+        window.scrollTo({
+            top: lastScrollY,
+            behavior: 'auto'
+        });
     });
-
-    // 3. Tambahan: Pastikan scroll di dalam modal tetap lancar
-    const scroller = detailModalEl.querySelector('.scroller-content');
-    if (scroller) {
-        scroller.addEventListener('touchmove', (e) => {
-            e.stopPropagation(); // Biarkan scroll terjadi di dalam konten ini
-        }, { passive: true });
-    }
 }
