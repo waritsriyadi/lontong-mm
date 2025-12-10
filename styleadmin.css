@@ -1349,37 +1349,44 @@ body.has-sticky-bar {
 }
 
 /* =========================================
-   FIX: SCROLL & BACKDROP (IOS 18 SUPPORT)
+   SOLUSI STABIL IOS 18 (SCROLL ISOLATION)
    ========================================= */
 
-/* Class pengunci Body saat Modal Terbuka */
-body.ios-locked {
-    position: fixed !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
-    /* Jangan gunakan touch-action: none di sini agar backdrop tetap responsif */
+/* 1. Mencegah efek 'karet' (bounce) pada body utama
+   agar tidak bentrok saat modal dibuka */
+html,
+body {
+    overscroll-behavior-y: none;
 }
 
-/* Area Scroll di Dalam Modal */
-#detailModal .scroller-content {
-    max-height: 55vh; /* Batasi tinggi */
-    overflow-y: auto; /* Wajib auto, jangan scroll */
-    -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
-    overscroll-behavior: contain; /* Mencegah scroll tembus ke body */
-    
-    /* Fix tambahan agar scroll lancar */
-    transform: translate3d(0,0,0); 
+/* 2. Perbaikan Area Scroll Modal */
+.scroller-content {
+    /* Gunakan dvh (Dynamic Viewport Height) agar pas dengan Address Bar Chrome iOS */
+    max-height: 50dvh !important;
+
+    /* Wajib: auto agar scrollbar muncul jika konten panjang */
+    overflow-y: auto !important;
+
+    /* FIX UTAMA: Mencegah scroll tembus ke background */
+    overscroll-behavior: contain !important;
+
+    /* Mengaktifkan momentum scroll (smooth) khas iOS */
+    -webkit-overflow-scrolling: touch;
+
+    /* Memastikan gesture touch dikenali dengan benar */
+    touch-action: pan-y;
+
+    /* Tambahan visual agar tidak terpotong */
     padding-bottom: 20px;
 }
 
-/* Memastikan backdrop (area gelap) tetap bisa diklik */
-.modal-backdrop {
-    touch-action: auto; 
-    z-index: 1040 !important;
+/* 3. Pastikan Backdrop (Layar Gelap) tidak bisa di-scroll */
+.modal-open .modal {
+    overflow-y: hidden !important;
+    /* Kunci container modal utama */
 }
 
-/* Memastikan Modal berada di atas segalanya */
-#detailModal {
-    z-index: 1050 !important;
+.modal-dialog {
+    /* Mencegah bounce pada container dialog */
+    overscroll-behavior: none;
 }

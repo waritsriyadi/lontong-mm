@@ -1177,30 +1177,3 @@ PullToRefresh.init({
     iconRefreshing: '<div class="spinner-border spinner-border-sm text-primary" role="status"></div>',
     shouldPullToRefresh: function () { return window.scrollY === 0 && !document.querySelector('.modal.show'); }
 });
-
-
-// --- FIX FINAL: SCROLL LOCK & BACKDROP (IOS 18) ---
-// Mengatasi scroll tembus & backdrop macet tanpa memblokir sentuhan
-
-const detailModalEl = document.getElementById('detailModal');
-let lastScrollY = 0;
-
-if (detailModalEl) {
-    // 1. Saat Modal AKAN Muncul
-    detailModalEl.addEventListener('show.bs.modal', () => {
-        // Simpan posisi scroll saat ini
-        lastScrollY = window.scrollY;
-        
-        // Kunci Body dengan CSS Class
-        // Kita set 'top' agar visual halaman tidak melompat ke atas
-        document.body.style.top = `-${lastScrollY}px`;
-        document.body.classList.add('ios-locked');
-    });
-
-    // 2. Saat Modal SUDAH Tertutup
-    detailModalEl.addEventListener('hidden.bs.modal', () => {
-        // Lepas pengunci
-        document.body.classList.remove('ios-locked');
-        document.body.style.top = '';
-    });
-}
