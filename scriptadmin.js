@@ -1202,12 +1202,5 @@ if (detailModalEl) {
         // Lepas pengunci
         document.body.classList.remove('ios-locked');
         document.body.style.top = '';
-        
-        // Kembalikan user ke posisi semula secara instan
-        // 'behavior: auto' penting agar tidak ada animasi scroll (langsung loncat)
-        window.scrollTo({
-            top: lastScrollY,
-            behavior: 'auto'
-        });
     });
 }
