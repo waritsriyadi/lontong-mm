@@ -4,7 +4,7 @@ const urlsToCache = [
   './styleadmin.css',
   './scriptadmin.js',
   './manifest.json',
-  './logonobg.png'
+  './logo.png'
 ];
 
 self.addEventListener('install', event => {
