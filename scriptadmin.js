@@ -1179,40 +1179,44 @@ PullToRefresh.init({
 });
 
 
-// --- FIX: SCROLL LOCK MODAL (Metode Intercept TouchEvent) ---
-// Metode ini paling ampuh di iOS 18 / Chrome untuk mencegah background scroll
-// Tanpa menggunakan position:fixed yang menyebabkan halaman loncat.
+// --- FIX: SCROLL LOCK MODAL (IOS STABLE VERSION) ---
+// Mengatasi masalah layar lompat/scroll sendiri saat modal ditutup
 
 const detailModalEl = document.getElementById('detailModal');
+let savedScrollPosition = 0;
 
 if (detailModalEl) {
-    // 1. Saat modal mau muncul
+    // 1. Saat modal AKAN muncul
     detailModalEl.addEventListener('show.bs.modal', () => {
-        // Kunci HTML dan Body agar tidak bisa di-scroll browser
-        document.documentElement.style.overflow = 'hidden';
+        // Simpan posisi scroll user saat ini
+        savedScrollPosition = window.scrollY;
+        
+        // Kunci body dengan teknik 'Fixed' agar iOS tidak bisa scroll background
+        // Teknik ini lebih ampuh daripada overflow:hidden biasa
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.width = '100%';
         document.body.style.overflow = 'hidden';
     });
 
-    // 2. Saat modal tertutup
+    // 2. Saat modal SUDAH tertutup
     detailModalEl.addEventListener('hidden.bs.modal', () => {
-        // Lepas kunci
-        document.documentElement.style.overflow = '';
+        // Lepas semua pengunci
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
         document.body.style.overflow = '';
+        
+        // KEMBALIKAN POSISI SCROLL (PENTING)
+        // Ini mencegah layar lompat ke paling atas
+        window.scrollTo(0, savedScrollPosition);
     });
 
-    // 3. Logic "Touch Intercept" (Pencegah Tembus)
-    // Jika user menggeser layar, kita cek apakah yang digeser itu area konten?
-    detailModalEl.addEventListener('touchmove', function (e) {
-        const isScroller = e.target.closest('.scroller-content');
-
-        // Jika user menyentuh BAGIAN LUAR area scroller (misal header modal atau backdrop)
-        // Maka matikan fungsi scroll total (preventDefault)
-        if (!isScroller) {
-            e.preventDefault();
-        } else {
-            // Jika user menyentuh area scroller, biarkan (stopPropagation agar tidak naik ke body)
-            // Catatan: CSS overscroll-behavior: contain pada .scroller-content akan mencegah chaining
-            e.stopPropagation();
-        }
-    }, { passive: false });
+    // 3. Tambahan: Pastikan scroll di dalam modal tetap lancar
+    const scroller = detailModalEl.querySelector('.scroller-content');
+    if (scroller) {
+        scroller.addEventListener('touchmove', (e) => {
+            e.stopPropagation(); // Biarkan scroll terjadi di dalam konten ini
+        }, { passive: true });
+    }
 }
