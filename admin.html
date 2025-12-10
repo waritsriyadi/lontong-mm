@@ -721,91 +721,87 @@
     <script type="module" src="scriptadmin.js"></script>
 
     <script>
-        let deferredPrompt;
-        // Ambil semua tombol dengan class 'install-pwa-btn'
-        const installBtns = document.querySelectorAll('.install-pwa-btn');
+        let deferredPrompt; // Wadah untuk menyimpan event install native
 
-        // 1. Cek Service Worker (Wajib untuk PWA)
+        // Ambil elemen tombol
+        const btnDesktop = document.getElementById('btnInstallDesktop');
+        const btnMobile = document.getElementById('btnInstallMobile');
+        const installBtns = [btnDesktop, btnMobile];
+
+        // --- 1. DETEKSI APAKAH SUDAH JADI APLIKASI (STANDALONE)? ---
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+            (window.navigator.standalone === true);
+
+        // --- 2. LOGIKA TAMPILAN TOMBOL ---
+        // Jika BUKAN aplikasi (sedang dibuka di browser), TAMPILKAN tombol
+        if (!isStandalone) {
+            if (btnDesktop) btnDesktop.classList.remove('d-none');
+            if (btnMobile) {
+                btnMobile.classList.remove('d-none');
+                btnMobile.style.display = 'flex'; // Fix layout ikon bulat
+            }
+        }
+
+        // --- 3. TANGKAP EVENT INSTALL NATIVE (JIKA ADA) ---
+        // Event ini hanya muncul jika browser merasa "siap" menginstall
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); // Cegah banner bawaan yang jelek
+            deferredPrompt = e; // Simpan "peluru" install untuk ditembakkan nanti
+            console.log("Browser siap install native.");
+        });
+
+        // --- 4. FUNGSI KLIK TOMBOL INSTALL ---
+        async function installPWA() {
+            // A. Cek Deteksi iOS
+            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+            if (isIos) {
+                showToast("📱 iOS: Klik tombol 'Share' (panah atas) > pilih 'Add to Home Screen'.", "primary");
+                return;
+            }
+
+            // B. Jika Browser Memberi Izin Native (deferredPrompt ada isinya)
+            if (deferredPrompt) {
+                deferredPrompt.prompt(); // Tembakkan pop-up install asli
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+
+                // Jika user setuju install, sembunyikan tombol
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                    installBtns.forEach(btn => btn && btn.classList.add('d-none'));
+                }
+            }
+            // C. Jika Browser MEMBLOKIR/COOLDOWN (deferredPrompt kosong)
+            else {
+                // Tampilkan panduan manual (karena kita tidak bisa memaksa browser)
+                showToast("ℹ️ Buka menu browser (titik tiga) > Pilih 'Install App' atau 'Tambahkan ke Layar Utama'.", "dark");
+
+                // Opsional: Beri efek visual pada tombol agar user sadar
+                showUniversalConfirm(
+                    'info',
+                    'Install Manual',
+                    'Browser mendeteksi Anda mungkin pernah menginstall aplikasi ini sebelumnya.\n\nSilakan klik menu titik tiga di pojok kanan atas browser, lalu pilih "Install App" atau "Tambahkan ke Layar Utama".',
+                    'Oke, Paham',
+                    () => { }
+                );
+            }
+        }
+
+        // --- 5. DETEKSI SETELAH SUKSES INSTALL ---
+        window.addEventListener('appinstalled', () => {
+            console.log('Aplikasi berhasil diinstall');
+            installBtns.forEach(btn => btn && btn.classList.add('d-none'));
+        });
+
+        // --- 6. SERVICE WORKER (Wajib) ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW Registered'))
-                    .catch(err => console.log('SW Error:', err));
+                navigator.serviceWorker.register('./sw.js').then(
+                    reg => console.log('SW OK'),
+                    err => console.log('SW Fail')
+                );
             });
         }
-
-        // Fungsi helper untuk memunculkan tombol
-        function showInstallButtons() {
-            installBtns.forEach(btn => {
-                btn.classList.remove('d-none');
-                // Khusus tombol mobile yang butuh display:flex agar icon ke tengah
-                if (btn.classList.contains('rounded-circle')) {
-                    btn.style.display = 'flex';
-                }
-            });
-        }
-
-        // Fungsi helper untuk menyembunyikan tombol
-        function hideInstallButtons() {
-            installBtns.forEach(btn => btn.classList.add('d-none'));
-        }
-
-        // 2. LOGIC ANDROID & DESKTOP (Chrome/Edge)
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Cegah browser menampilkan banner default
-            e.preventDefault();
-            // Simpan event untuk dipanggil saat tombol diklik
-            deferredPrompt = e;
-            // MUNCULKAN TOMBOL KITA
-            showInstallButtons();
-        });
-
-        // 3. LOGIC IOS (IPHONE/IPAD)
-        // iOS tidak punya 'beforeinstallprompt', jadi kita cek manual
-        const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
-
-        // Jika ini iOS dan BELUM dalam mode aplikasi (masih di browser)
-        if (isIos && !isInStandaloneMode) {
-            // PAKSA TOMBOL MUNCUL
-            showInstallButtons();
-        }
-
-        // 4. Fungsi saat tombol diklik
-        async function installPWA() {
-            // A. Jika di iOS
-            if (isIos) {
-                // Tampilkan instruksi manual karena iOS tidak bisa install otomatis via tombol
-                showToast("📱 iOS: Klik tombol 'Share' (panah atas) > pilih 'Add to Home Screen'.", "primary");
-                // Tampilkan modal panduan visual jika perlu (opsional)
-                return;
-            }
-
-            // B. Jika di Android/Desktop
-            if (!deferredPrompt) {
-                // Jika tombol muncul tapi prompt tidak siap (kasus langka/debug)
-                alert("Aplikasi mungkin sudah terinstall atau browser tidak mendukung.");
-                return;
-            }
-
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User response: ${outcome}`);
-
-            // Reset event
-            deferredPrompt = null;
-
-            // Sembunyikan tombol jika user setuju install
-            if (outcome === 'accepted') {
-                hideInstallButtons();
-            }
-        }
-
-        // 5. Cek apakah sudah terinstall (Mode Standalone/App)
-        window.addEventListener('appinstalled', () => {
-            hideInstallButtons();
-            console.log('Aplikasi berhasil diinstall');
-        });
     </script>
 
 </body>

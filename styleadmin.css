@@ -1141,7 +1141,7 @@ body.has-sticky-bar {
    DETAIL MODAL STYLING
    ========================================= */
 .scroller-content {
-    max-height: 50vh;
+    max-height: 45vh;
     overflow-y: auto;
     background-color: #fff;
 }
@@ -1362,7 +1362,7 @@ body {
 /* 2. Perbaikan Area Scroll Modal */
 .scroller-content {
     /* Gunakan dvh (Dynamic Viewport Height) agar pas dengan Address Bar Chrome iOS */
-    max-height: 50dvh !important;
+    max-height: 45dvh !important;
 
     /* Wajib: auto agar scrollbar muncul jika konten panjang */
     overflow-y: auto !important;
