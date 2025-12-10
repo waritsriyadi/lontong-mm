@@ -1,5 +1,5 @@
-const CACHE_NAME = 'lontong-admin-v1';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'lontong-mm-v2';
+const urlsToCache = [
   './admin.html',
   './styleadmin.css',
   './scriptadmin.js',
@@ -7,20 +7,16 @@ const ASSETS_TO_CACHE = [
   './logonobg.png'
 ];
 
-// Install Service Worker
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// Fetch (Mengambil data dari cache jika offline/lambat)
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
   );
 });

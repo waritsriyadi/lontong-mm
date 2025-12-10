@@ -1,21 +1,22 @@
 {
   "name": "Admin Lontong MM",
-  "short_name": "Lontong Admin",
+  "short_name": "LontongAdmin",
   "start_url": "./admin.html",
   "display": "standalone",
   "background_color": "#f3f5f9",
   "theme_color": "#ffffff",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "logonobg.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "logonobg.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

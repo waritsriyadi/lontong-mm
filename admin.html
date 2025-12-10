@@ -59,6 +59,11 @@
                     Panel</span>
             </div>
             <div class="d-flex gap-2">
+                <button
+                    class="btn btn-sm btn-dark text-white fw-bold shadow-sm rounded-pill px-3 d-none install-pwa-btn"
+                    onclick="installPWA()">
+                    <i class="bi bi-download me-1"></i> Install App
+                </button>
                 <button class="btn btn-sm btn-indigo text-white fw-bold shadow-sm rounded-pill px-3"
                     onclick="bukaModalAnalisis()">
                     <i class="bi bi-stars me-1"></i> Analisis Cerdas
@@ -77,6 +82,7 @@
                 <button class="btn btn-sm btn-outline-danger border-0 fw-bold" onclick="logoutAdmin()">
                     <i class="bi bi-box-arrow-right me-1"></i> <span data-i18n="nav_logout">Keluar</span>
                 </button>
+
             </div>
         </div>
     </nav>
@@ -85,6 +91,11 @@
         style="z-index: 900;">
         <div class="fw-bold text-dark"><i class="bi bi-shop-window me-2 text-primary"></i>Lontong MM</div>
         <div class="d-flex gap-2 align-items-center">
+            <button class="btn btn-sm btn-dark text-white border-0 rounded-circle p-0 d-none install-pwa-btn"
+                onclick="installPWA()"
+                style="width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-download"></i>
+            </button>
             <button class="btn-mobile-ai me-2" onclick="bukaModalAnalisis()">
                 <i class="bi bi-stars"></i>
                 <span>Analisis AI</span>
@@ -501,66 +512,103 @@
     </div>
 
     <div class="modal fade" id="modalHarga" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header bg-white border-bottom">
-                    <h5 class="modal-title fw-bold text-dark"><i class="bi bi-gear-fill me-2 text-primary"></i><span
-                            data-i18n="modal_price_title">Pengaturan Harga</span></h5><button type="button"
-                        class="btn-close" data-bs-dismiss="modal"></button>
+
+                <div class="modal-header bg-white border-bottom py-2">
+                    <h6 class="modal-title fw-bold text-dark">
+                        <i class="bi bi-gear-fill me-2 text-primary"></i>
+                        <span data-i18n="modal_price_title">Pengaturan Harga</span>
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body bg-light">
-                    <div class="alert alert-info py-2 px-3 small mb-3"><i class="bi bi-info-circle me-1"></i> <span
-                            data-i18n="msg_price_info">Perubahan harga akan berlaku untuk transaksi baru.</span></div>
+                    <div class="alert alert-info py-2 px-2 small mb-3 lh-sm d-flex align-items-center">
+                        <i class="bi bi-info-circle me-2 fs-5"></i>
+                        <span data-i18n="msg_price_info" style="font-size: 0.75rem;">Harga baru berlaku untuk transaksi
+                            berikutnya.</span>
+                    </div>
+
                     <form id="formHarga">
-                        <div class="card mb-3 p-3 border-0 shadow-sm">
-                            <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Lontong</h6>
+                        <div class="card mb-2 p-2 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
+                                <span class="fw-bold text-primary small">LONTONG</span>
+                            </div>
                             <div class="row g-2">
-                                <div class="col-6"><label class="small text-muted fw-bold"
-                                        data-i18n="lbl_price_sell">Harga Jual</label><input type="number"
-                                        id="set_lontong_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-6"><label class="small text-muted fw-bold"
-                                        data-i18n="lbl_price_share">Setor Saudara</label><input type="number"
-                                        id="set_lontong_setor" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold" style="font-size:0.65rem">Jual</label>
+                                    <input type="number" id="set_lontong_jual" class="form-control form-control-sm"
+                                        placeholder="Rp">
+                                </div>
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold" style="font-size:0.65rem">Setor</label>
+                                    <input type="number" id="set_lontong_setor" class="form-control form-control-sm"
+                                        placeholder="Rp">
+                                </div>
                             </div>
                         </div>
-                        <div class="card mb-3 p-3 border-0 shadow-sm">
-                            <h6 class="fw-bold text-warning mb-2 border-bottom pb-2">Telur</h6>
+
+                        <div class="card mb-2 p-2 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
+                                <span class="fw-bold text-warning small">TELUR</span>
+                            </div>
                             <div class="row g-2">
-                                <div class="col-4"><label class="small text-muted fw-bold"
-                                        data-i18n="lbl_price_sell">Jual</label><input type="number" id="set_telur_jual"
-                                        class="form-control" placeholder="Rp"></div>
-                                <div class="col-4"><label class="small text-muted fw-bold"
-                                        data-i18n="lbl_price_capital">Modal</label><input type="number"
-                                        id="set_telur_modal" class="form-control" placeholder="Rp"></div>
-                                <div class="col-4 d-flex align-items-end"><small class="text-muted"
-                                        style="font-size:0.65rem">Setor = 0 (Otomatis)</small></div>
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold" style="font-size:0.65rem">Jual</label>
+                                    <input type="number" id="set_telur_jual" class="form-control form-control-sm"
+                                        placeholder="Rp">
+                                </div>
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold" style="font-size:0.65rem">Modal</label>
+                                    <input type="number" id="set_telur_modal" class="form-control form-control-sm"
+                                        placeholder="Rp">
+                                </div>
                             </div>
                         </div>
-                        <div class="card mb-2 p-3 border-0 shadow-sm">
-                            <h6 class="fw-bold text-secondary mb-2 border-bottom pb-2">Bakwan</h6>
+
+                        <div class="card mb-2 p-2 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
+                                <span class="fw-bold text-secondary small">BAKWAN</span>
+                            </div>
                             <div class="row g-2">
-                                <div class="col-6"><label class="small text-muted fw-bold"
-                                        data-i18n="lbl_price_sell">Harga Jual</label><input type="number"
-                                        id="set_bakwan_jual" class="form-control" placeholder="Rp"></div>
-                                <div class="col-6"><label class="small text-muted fw-bold"
-                                        data-i18n="lbl_price_share">Setor Saudara</label><input type="number"
-                                        id="set_bakwan_setor" class="form-control" placeholder="Rp"></div>
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold" style="font-size:0.65rem">Jual</label>
+                                    <input type="number" id="set_bakwan_jual" class="form-control form-control-sm"
+                                        placeholder="Rp">
+                                </div>
+                                <div class="col-6">
+                                    <label class="small text-muted fw-bold" style="font-size:0.65rem">Setor</label>
+                                    <input type="number" id="set_bakwan_setor" class="form-control form-control-sm"
+                                        placeholder="Rp">
+                                </div>
                             </div>
                         </div>
-                        <div class="card mb-2 p-3 border-0 shadow-sm">
-                            <h6 class="fw-bold text-danger mb-2 border-bottom pb-2">Kerupuk Tambahan</h6>
-                            <div class="row g-2">
-                                <div class="col-12"><label class="small fw-bold" data-i18n="lbl_price_sell">Harga
-                                        Jual</label><input type="number" id="set_kerupuk_jual" class="form-control"
-                                        placeholder="Rp"></div>
+
+                        <div class="card mb-1 p-2 border-0 shadow-sm">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-4">
+                                    <span class="fw-bold text-danger small">KERUPUK</span>
+                                </div>
+                                <div class="col-8">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text border-0 bg-white small text-muted">Jual</span>
+                                        <input type="number" id="set_kerupuk_jual" class="form-control form-control-sm"
+                                            placeholder="Rp">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer bg-white"><button type="button" class="btn btn-light text-muted fw-bold"
-                        data-bs-dismiss="modal" data-i18n="btn_cancel">Batal</button><button type="button"
-                        class="btn btn-primary fw-bold" onclick="simpanHarga()"><i class="bi bi-save me-1"></i> <span
-                            data-i18n="btn_save_changes">Simpan Perubahan</span></button></div>
+
+                <div class="modal-footer bg-white py-2">
+                    <button type="button" class="btn btn-sm btn-light text-muted fw-bold"
+                        data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-sm btn-primary fw-bold" onclick="simpanHarga()">
+                        <i class="bi bi-save me-1"></i> Simpan
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -673,13 +721,46 @@
     <script type="module" src="scriptadmin.js"></script>
 
     <script>
-        // Registrasi Service Worker untuk PWA
+        let deferredPrompt;
+        // Ambil semua tombol dengan class 'install-pwa-btn'
+        const installBtns = document.querySelectorAll('.install-pwa-btn');
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then((reg) => console.log('Service Worker terdaftar:', reg.scope))
-                    .catch((err) => console.log('Gagal daftar Service Worker:', err));
+                    .then(reg => console.log('SW OK'))
+                    .catch(err => console.log('SW Fail', err));
             });
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Munculkan SEMUA tombol install (Desktop & Mobile)
+            installBtns.forEach(btn => {
+                btn.classList.remove('d-none');
+                // Pastikan display flex agar rapi (khusus tombol mobile)
+                if (btn.style.width) btn.style.display = 'flex';
+            });
+        });
+
+        async function installPWA() {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response: ${outcome}`);
+            deferredPrompt = null;
+            // Sembunyikan tombol lagi
+            installBtns.forEach(btn => btn.classList.add('d-none'));
+        }
+
+        // Logic iOS tetap sama
+        const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+        if (isIos && !isInStandaloneMode) {
+            setTimeout(() => {
+                showToast("📱 iOS: Klik 'Share' > 'Add to Home Screen' untuk install.", "primary");
+            }, 3000);
         }
     </script>
 </body>
