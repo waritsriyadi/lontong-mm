@@ -1,6 +1,6 @@
 const CACHE_NAME = 'lontong-mm-v2';
 const urlsToCache = [
-  './admin.html',
+  './admin',
   './styleadmin.css',
   './scriptadmin.js',
   './manifest.json',
