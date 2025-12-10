@@ -1060,32 +1060,39 @@ function hitungPrediksiStok() {
     const predT = Math.ceil(avgT);
     const predB = Math.ceil(avgB);
 
+    // Menentukan icon trend (Naik/Turun)
     const totalAvgL = sortedData.reduce((sum, d) => sum + d.lontong, 0) / sortedData.length;
     const trendIcon = predL > totalAvgL
-        ? '<i class="bi bi-graph-up-arrow text-success ms-1" style="font-size:0.6rem"></i>'
-        : '<i class="bi bi-graph-down-arrow text-danger ms-1" style="font-size:0.6rem"></i>';
+        ? '<i class="bi bi-graph-up-arrow text-success"></i>'
+        : '<i class="bi bi-graph-down-arrow text-danger"></i>';
 
     const container = document.getElementById('predictionRow');
     container.innerHTML = `
         <div class="col-4">
-            <div class="p-3 bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25 h-100">
-                <div class="text-uppercase text-primary fw-bold" style="font-size:0.7rem; letter-spacing:1px;">Lontong ${trendIcon}</div>
-                <div class="display-4 fw-bold text-primary my-1">${predL}</div>
-                <small class="text-muted fw-bold" style="font-size:0.7rem">Porsi</small>
+            <div class="bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25 h-100 position-relative">
+                <div class="pred-title-box text-primary fw-bold text-uppercase">
+                    <span>Lontong</span> ${trendIcon}
+                </div>
+                <div class="display-4 fw-bold text-primary">${predL}</div>
+                <small class="text-muted fw-bold" style="font-size:0.6rem">Porsi</small>
             </div>
         </div>
         <div class="col-4">
-            <div class="p-3 bg-warning bg-opacity-10 rounded-3 border border-warning border-opacity-25 h-100">
-                <div class="text-uppercase text-warning fw-bold" style="font-size:0.7rem; letter-spacing:1px;">Telur</div>
-                <div class="display-4 fw-bold text-warning my-1">${predT}</div>
-                <small class="text-muted fw-bold" style="font-size:0.7rem">Butir</small>
+            <div class="bg-warning bg-opacity-10 rounded-3 border border-warning border-opacity-25 h-100">
+                <div class="pred-title-box text-warning fw-bold text-uppercase">
+                    <span>Telur</span>
+                </div>
+                <div class="display-4 fw-bold text-warning">${predT}</div>
+                <small class="text-muted fw-bold" style="font-size:0.6rem">Butir</small>
             </div>
         </div>
         <div class="col-4">
-            <div class="p-3 bg-secondary bg-opacity-10 rounded-3 border border-secondary border-opacity-25 h-100">
-                <div class="text-uppercase text-secondary fw-bold" style="font-size:0.7rem; letter-spacing:1px;">Bakwan</div>
-                <div class="display-4 fw-bold text-secondary my-1">${predB}</div>
-                <small class="text-muted fw-bold" style="font-size:0.7rem">Biji</small>
+            <div class="bg-secondary bg-opacity-10 rounded-3 border border-secondary border-opacity-25 h-100">
+                <div class="pred-title-box text-secondary fw-bold text-uppercase">
+                    <span>Bakwan</span>
+                </div>
+                <div class="display-4 fw-bold text-secondary">${predB}</div>
+                <small class="text-muted fw-bold" style="font-size:0.6rem">Biji</small>
             </div>
         </div>
     `;
@@ -1193,6 +1200,17 @@ setFormDateToToday();
 updateLanguageUI();
 renderOrderList();
 if (window.innerWidth < 768) window.switchMobileMenu(null, null, 'input');
+
+// --- FIX SCROLL LOCK PADA MODAL (Agar Riwayat tidak ikut scroll) ---
+const allModals = document.querySelectorAll('.modal');
+allModals.forEach(modalEl => {
+    modalEl.addEventListener('show.bs.modal', () => {
+        document.body.classList.add('modal-open-locked');
+    });
+    modalEl.addEventListener('hidden.bs.modal', () => {
+        document.body.classList.remove('modal-open-locked');
+    });
+});
 
 PullToRefresh.init({
     mainElement: '#mainContent',

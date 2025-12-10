@@ -1278,14 +1278,19 @@ body.has-sticky-bar {
 
     /* Target kolom grid di dalam modal prediksi */
     #predictionRow .col-4 {
-        padding-left: 3px !important;
-        padding-right: 3px !important;
+        padding-left: 2px !important;
+        padding-right: 2px !important;
     }
 
     /* Target kotak di dalam kolom */
     #predictionRow .col-4>div {
         padding: 8px 2px !important;
-        /* Kurangi padding drastis */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /* Konten vertikal tengah */
+        min-height: 90px;
+        /* Paksa tinggi minimal agar seragam */
     }
 
     /* Target Judul (Lontong/Telur/Bakwan) */
@@ -1303,8 +1308,8 @@ body.has-sticky-bar {
     /* Target Angka Prediksi */
     #predictionRow .display-4 {
         font-size: 1.6rem !important;
-        /* Sesuaikan ukuran angka */
-        margin: 2px 0 !important;
+        margin: 0 !important;
+        line-height: 1.1;
     }
 
     /* Ikon panah tren (naik/turun) */
@@ -1313,5 +1318,32 @@ body.has-sticky-bar {
         /* Pindahkan panah ke baris baru jika perlu */
         font-size: 0.7rem !important;
         margin-top: 1px;
+    }
+
+    /* Container judul & icon (Lontong + Panah) */
+    .pred-title-box {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+        /* Jarak tipis antara teks dan panah */
+        margin-bottom: 4px;
+        min-height: 20px;
+        /* Menjaga tinggi baris judul stabil */
+    }
+
+    /* Teks Judul */
+    .pred-title-box span {
+        font-size: 0.6rem !important;
+        letter-spacing: 0 !important;
+        line-height: 1;
+    }
+
+    /* Icon Panah */
+    .pred-title-box i {
+        font-size: 0.7rem !important;
+        display: inline-block !important;
+        margin: 0 !important;
+        /* Reset margin bawaan */
     }
 }
