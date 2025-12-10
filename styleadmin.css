@@ -1347,3 +1347,27 @@ body.has-sticky-bar {
         /* Reset margin bawaan */
     }
 }
+
+/* =========================================
+   FIX: LOCK SCROLL MODAL (IOS/ANDROID)
+   ========================================= */
+
+/* Class pengunci yang akan ditempel via JS */
+body.lock-scroll-mode {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none;
+    /* SANGAT PENTING: Mematikan gesture scroll di layar utama */
+    position: fixed;
+    /* Opsi Nuklir: Mencegah scroll paksa di iOS */
+    width: 100%;
+}
+
+/* Kembalikan kemampuan scroll HANYA di dalam konten modal */
+#detailModal .scroller-content {
+    touch-action: pan-y;
+    /* Izinkan scroll vertikal */
+    overscroll-behavior: contain;
+    /* Cegah scroll 'mencuat' ke parent */
+    -webkit-overflow-scrolling: touch;
+}

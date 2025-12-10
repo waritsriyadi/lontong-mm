@@ -1227,3 +1227,33 @@ PullToRefresh.init({
     iconRefreshing: '<div class="spinner-border spinner-border-sm text-primary" role="status"></div>',
     shouldPullToRefresh: function () { return window.scrollY === 0 && !document.querySelector('.modal.show'); }
 });
+
+// --- FIX: SCROLL LOCK LOGIC UNTUK MODAL RINCIAN ---
+const elModalDetail = document.getElementById('detailModal');
+let scrollPosition = 0;
+
+if (elModalDetail) {
+    // Saat Modal AKAN MUNCUL
+    elModalDetail.addEventListener('show.bs.modal', function () {
+        // 1. Simpan posisi scroll saat ini agar tidak loncat ke atas
+        scrollPosition = window.scrollY;
+        
+        // 2. Tambahkan class pengunci CSS
+        document.body.classList.add('lock-scroll-mode');
+        
+        // 3. Atur top agar halaman tetap di posisi yang sama visualnya
+        document.body.style.top = `-${scrollPosition}px`;
+    });
+
+    // Saat Modal SUDAH TERTUTUP
+    elModalDetail.addEventListener('hidden.bs.modal', function () {
+        // 1. Lepas class pengunci
+        document.body.classList.remove('lock-scroll-mode');
+        
+        // 2. Hapus style top
+        document.body.style.top = '';
+        
+        // 3. Kembalikan user ke posisi scroll semula
+        window.scrollTo(0, scrollPosition);
+    });
+}
