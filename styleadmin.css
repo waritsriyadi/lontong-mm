@@ -931,6 +931,44 @@ body.has-sticky-bar {
     color: #10b981;
 }
 
+/* --- TAMBAHAN: Empty State Keranjang (List Kosong) --- */
+.empty-cart-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+    /* Padding besar agar tinggi */
+    background-color: #f9fafb;
+    border: 2px dashed #e5e7eb;
+    /* Garis putus-putus soft */
+    border-radius: 16px;
+    color: #9ca3af;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.empty-cart-state:hover {
+    border-color: #d1d5db;
+    background-color: #f3f4f6;
+}
+
+.empty-cart-state i {
+    font-size: 2.5rem;
+    /* Ikon besar */
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+    color: #d1d5db;
+}
+
+.empty-cart-state p {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin: 0;
+    color: #9ca3af;
+}
+
 /* =========================================
    9. MOBILE SPECIFIC (Override)
    ========================================= */

@@ -430,20 +430,20 @@ window.triggerSimpan = () => {
 window.batalkanSemuaTransaksi = () => {
     // Tampilkan konfirmasi agar tidak terpencet tidak sengaja
     showUniversalConfirm(
-        'danger', 
-        'Batalkan Transaksi?', 
-        'Semua item di keranjang akan dihapus. Form akan di-reset.', 
+        'danger',
+        'Batalkan Transaksi?',
+        'Semua item di keranjang akan dihapus. Form akan di-reset.',
         'Ya, Hapus Semua',
         () => {
             // Aksi Reset Total
             dom.editId.value = ''; // Hapus ID edit jika ada
             document.getElementById('salesForm').reset(); // Reset form HTML
             orderList = []; // Kosongkan array keranjang
-            
+
             batalEditPesanan(); // Reset mode edit item
             renderOrderList(); // Render ulang (akan menyembunyikan sticky bar)
             setFormDateToToday(); // Kembalikan tanggal ke hari ini
-            
+
             showToast("Transaksi dibatalkan", "warning");
         }
     );
@@ -606,13 +606,24 @@ function renderOrderList() {
     container.innerHTML = '';
     let tL = 0, tT = 0, tB = 0;
 
+    // --- LOGIKA LIST KOSONG DIPERBAIKI DISINI ---
     if (orderList.length === 0) {
-        container.innerHTML = `<div class="text-center py-3 text-muted border rounded-3 bg-light dashed-border" style="opacity:0.7"><i class="bi bi-basket3 fs-4"></i><p class="small mb-0 mt-1" style="font-size:0.75rem">List Kosong</p></div>`;
-        dom.qtyL.value = 0; dom.qtyT.value = 0; dom.qtyB.value = 0;
+        container.innerHTML = `
+            <div class="empty-cart-state">
+                <i class="bi bi-basket2"></i>
+                <p>List Kosong</p>
+            </div>`;
+
+        // Reset nilai input hidden untuk perhitungan
+        dom.qtyL.value = 0;
+        dom.qtyT.value = 0;
+        dom.qtyB.value = 0;
+
         hitungEstimasi();
-        updateStickyBar(); // Hide sticky bar
+        updateStickyBar(); // Sembunyikan sticky bar jika kosong
         return;
     }
+    // ---------------------------------------------
 
     orderList.forEach((i, idx) => {
         tL += i.cL; tT += i.cT; tB += i.cB;
@@ -1180,6 +1191,7 @@ loadLatestData();
 setupHarga();
 setFormDateToToday();
 updateLanguageUI();
+renderOrderList();
 if (window.innerWidth < 768) window.switchMobileMenu(null, null, 'input');
 
 PullToRefresh.init({
