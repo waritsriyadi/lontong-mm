@@ -1000,77 +1000,182 @@ window.hapusData = async (id) => {
     );
 }
 
-// --- 14. FITUR ANALISIS CERDAS AI ---
-window.bukaModalAnalisis = () => {
+// --- 14. FITUR ANALISIS CERDAS AI (POWERED BY TENSORFLOW.JS) ---
+
+// Helper: Normalisasi Data (Agar Training Cepat & Akurat)
+function normalize(tensor) {
+    const min = tensor.min();
+    const max = tensor.max();
+    const normalized = tensor.sub(min).div(max.sub(min));
+    return {
+        tensor: normalized,
+        min,
+        max
+    };
+}
+
+// Fungsi Prediksi Core TensorFlow
+async function predictWithTF(data, key) {
+    // Ambil data 30 hari terakhir agar tren relevan
+    const recentData = data.slice(-30);
+
+    // Jika data terlalu sedikit (<3), gunakan rata-rata biasa (fallback)
+    if (recentData.length < 3) {
+        const sum = recentData.reduce((acc, curr) => acc + curr[key], 0);
+        return Math.ceil(sum / recentData.length) || 0;
+    }
+
+    const yValues = recentData.map(d => d[key]);
+    const xValues = recentData.map((_, i) => i); // Index hari: 0, 1, 2...
+
+    return tf.tidy(() => {
+        // 1. Siapkan Tensor
+        const inputTensor = tf.tensor2d(xValues, [xValues.length, 1]);
+        const labelTensor = tf.tensor2d(yValues, [yValues.length, 1]);
+
+        // 2. Normalisasi Input & Label (PENTING untuk SGD Optimizer)
+        const inputNorm = normalize(inputTensor);
+        const labelNorm = normalize(labelTensor);
+
+        // 3. Buat Model Neural Network Sederhana
+        const model = tf.sequential();
+        // Layer 1: Hidden layer untuk menangkap pola non-linear sederhana
+        model.add(tf.layers.dense({ units: 4, inputShape: [1], activation: 'relu' }));
+        // Layer 2: Output
+        model.add(tf.layers.dense({ units: 1 }));
+
+        model.compile({
+            optimizer: tf.train.adam(0.1), // Learning rate agresif untuk data sedikit
+            loss: 'meanSquaredError'
+        });
+
+        // 4. Training (Proses Belajar)
+        // Gunakan await di luar tidy, tapi karena kita butuh return value sinkron di logic UI,
+        // kita akan bungkus train dalam async terpisah. 
+        // Namun, untuk performa UI instan, kita pakai model.fit (async) di fungsi pemanggil.
+        return { model, inputNorm, labelNorm, nextIndex: xValues.length };
+    });
+}
+
+// Wrapper Async untuk Eksekusi Training
+async function runAiPrediction(data, key) {
+    try {
+        const tfData = await predictWithTF(data, key);
+
+        // Jika return angka (fallback data sedikit), langsung return
+        if (typeof tfData === 'number') return tfData;
+
+        const { model, inputNorm, labelNorm, nextIndex } = tfData;
+
+        // Train Model (50 Epochs cukup untuk data kecil)
+        await model.fit(inputNorm.tensor, labelNorm.tensor, {
+            epochs: 50,
+            shuffle: true,
+            verbose: 0
+        });
+
+        // Prediksi Hari Berikutnya
+        const nextX = (nextIndex - inputNorm.min.dataSync()[0]) / (inputNorm.max.dataSync()[0] - inputNorm.min.dataSync()[0]);
+        const predTensor = model.predict(tf.tensor2d([nextX], [1, 1]));
+
+        // Denormalisasi (Kembalikan ke skala asli)
+        const predVal = predTensor.mul(labelNorm.max.sub(labelNorm.min)).add(labelNorm.min);
+        let result = predVal.dataSync()[0];
+
+        // Cleanup Memory Tensor
+        model.dispose();
+        // Note: Tensor lain dibersihkan otomatis oleh tf.tidy di predictWithTF, 
+        // tapi output model perlu dibuang manual jika tidak dalam tidy.
+        // Di sini kita biarkan GC handle sisanya karena scope kecil.
+
+        return Math.ceil(result);
+    } catch (e) {
+        console.error("TF Error:", e);
+        // Fallback jika TensorFlow gagal/crash
+        const avg = data.reduce((sum, d) => sum + d[key], 0) / data.length;
+        return Math.ceil(avg);
+    }
+}
+
+window.bukaModalAnalisis = async () => {
     if (globalData.length < 2) {
         showToast("Data belum cukup untuk analisis.", "warning");
         return;
     }
-    hitungPrediksiStok();
-    hitungAnalisisPelanggan();
+
+    // Tampilkan Loading State di UI
+    const container = document.getElementById('predictionRow');
+    container.innerHTML = `
+        <div class="col-12 py-4 text-center">
+            <div class="spinner-border text-primary mb-2" role="status"></div>
+            <div class="small text-muted fw-bold">AI sedang mempelajari pola penjualan...</div>
+        </div>`;
+
     modalAnalisis.show();
+
+    // Jalankan analisis (tanpa memblokir render UI awal)
+    // Beri jeda sedikit agar Modal muncul dulu
+    setTimeout(async () => {
+        await hitungPrediksiStok();
+        hitungAnalisisPelanggan();
+    }, 500);
 }
 
-function hitungPrediksiStok() {
+async function hitungPrediksiStok() {
+    // Urutkan data berdasarkan tanggal (Lama -> Baru) untuk Time Series
     const sortedData = [...globalData].sort((a, b) => new Date(a.date) - new Date(b.date));
-    const recentData = sortedData.slice(-7);
 
-    if (recentData.length === 0) return;
+    // Lakukan Prediksi Paralel (Async)
+    const [predL, predT, predB] = await Promise.all([
+        runAiPrediction(sortedData, 'lontong'),
+        runAiPrediction(sortedData, 'telur'),
+        runAiPrediction(sortedData, 'bakwan')
+    ]);
 
-    let sumL = 0, sumT = 0, sumB = 0;
-    let totalWeight = 0;
-
-    recentData.forEach((d, index) => {
-        const weight = index + 1;
-        sumL += (d.lontong * weight);
-        sumT += (d.telur * weight);
-        sumB += (d.bakwan * weight);
-        totalWeight += weight;
-    });
-
-    const avgL = sumL / totalWeight;
-    const avgT = sumT / totalWeight;
-    const avgB = sumB / totalWeight;
-
-    const predL = Math.ceil(avgL);
-    const predT = Math.ceil(avgT);
-    const predB = Math.ceil(avgB);
-
+    // Hitung rata-rata total untuk menentukan icon tren
     const totalAvgL = sortedData.reduce((sum, d) => sum + d.lontong, 0) / sortedData.length;
+
+    // Logika Icon Tren
     const trendIcon = predL > totalAvgL
         ? '<i class="bi bi-graph-up-arrow text-success"></i>'
-        : '<i class="bi bi-graph-down-arrow text-danger"></i>';
+        : (predL < totalAvgL * 0.9 ? '<i class="bi bi-graph-down-arrow text-danger"></i>' : '<i class="bi bi-dash-lg text-muted"></i>');
 
     const container = document.getElementById('predictionRow');
     container.innerHTML = `
         <div class="col-4">
-            <div class="bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25 h-100 position-relative">
-                <div class="pred-title-box text-primary fw-bold text-uppercase">
+            <div class="bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25 h-100 position-relative p-2">
+                <div class="pred-title-box text-primary fw-bold text-uppercase d-flex justify-content-center align-items-center gap-1">
                     <span>Lontong</span> ${trendIcon}
                 </div>
-                <div class="display-4 fw-bold text-primary">${predL}</div>
-                <small class="text-muted fw-bold" style="font-size:0.6rem">Porsi</small>
+                <div class="display-4 fw-bold text-primary text-center">${predL}</div>
+                <div class="text-center"><small class="text-muted fw-bold" style="font-size:0.6rem">Porsi</small></div>
             </div>
         </div>
         <div class="col-4">
-            <div class="bg-warning bg-opacity-10 rounded-3 border border-warning border-opacity-25 h-100">
-                <div class="pred-title-box text-warning fw-bold text-uppercase">
+            <div class="bg-warning bg-opacity-10 rounded-3 border border-warning border-opacity-25 h-100 p-2">
+                <div class="pred-title-box text-warning fw-bold text-uppercase text-center">
                     <span>Telur</span>
                 </div>
-                <div class="display-4 fw-bold text-warning">${predT}</div>
-                <small class="text-muted fw-bold" style="font-size:0.6rem">Butir</small>
+                <div class="display-4 fw-bold text-warning text-center">${predT}</div>
+                <div class="text-center"><small class="text-muted fw-bold" style="font-size:0.6rem">Butir</small></div>
             </div>
         </div>
         <div class="col-4">
-            <div class="bg-secondary bg-opacity-10 rounded-3 border border-secondary border-opacity-25 h-100">
-                <div class="pred-title-box text-secondary fw-bold text-uppercase">
+            <div class="bg-secondary bg-opacity-10 rounded-3 border border-secondary border-opacity-25 h-100 p-2">
+                <div class="pred-title-box text-secondary fw-bold text-uppercase text-center">
                     <span>Bakwan</span>
                 </div>
-                <div class="display-4 fw-bold text-secondary">${predB}</div>
-                <small class="text-muted fw-bold" style="font-size:0.6rem">Biji</small>
+                <div class="display-4 fw-bold text-secondary text-center">${predB}</div>
+                <div class="text-center"><small class="text-muted fw-bold" style="font-size:0.6rem">Biji</small></div>
             </div>
         </div>
     `;
+
+    // Update pesan info di modal agar sesuai dengan teknologi yang dipakai
+    const infoAlert = document.querySelector('#modalAnalisis .alert-light');
+    if (infoAlert) {
+        infoAlert.innerHTML = `<i class="bi bi-cpu-fill me-1"></i> Prediksi menggunakan <b>TensorFlow.js (Neural Network)</b>. AI mempelajari pola tren historis untuk memperkirakan stok paling optimal besok.`;
+    }
 }
 
 function hitungAnalisisPelanggan() {
