@@ -16,22 +16,48 @@ This project demonstrates a full software development lifecycle (SDLC), from req
 
 ---
 
+## 📸 Project Showcase
+
+### A. Customer Interface (Client-Side)
+*Designed for ease of use, speed, and mobile responsiveness.*
+
+| Landing Page & Branding | Smart Menu & Toppings |
+| :---: | :---: |
+| ![Landing Page](./assets/index.JPG) | ![Menu Selection](./assets/indexpesan.JPG) |
+| *Clean UI with operational hours status* | *Dynamic topping logic & live subtotal* |
+
+| WhatsApp Checkout Integration | Social Proof (Testimonials) |
+| :---: | :---: |
+| ![Checkout Modal](./assets/indexcheckout.JPG) | ![Testimonials](./assets/indextesti.JPG) |
+| *Auto-formatting message for WhatsApp API* | *Lazy-loaded slider with image compression* |
+
+<br>
+
+### B. Admin Dashboard (POS & Analytics)
+*Powered by Real-time Firestore Database & Machine Learning.*
+
+#### 1. Real-Time Analytics Dashboard
+Visualizing financial health (Revenue, Profit, Share) using **Chart.js**. Data updates instantly as orders come in.
+![Admin Dashboard](./assets/admin.JPG)
+
+#### 2. 🧠 AI-Powered Stock Prediction (TensorFlow.js)
+Implemented a **Neural Network** model directly in the browser to predict future stock needs (Lontong/Egg/Bakwan) based on historical sales trends. Also includes Customer Segmentation (RFM Analysis).
+![AI Prediction](./assets/admintensor.JPG)
+
+#### 3. Transaction Details & Reporting
+Drill-down capability to view specific buyer details and generate instant reports.
+![Transaction Detail](./assets/admindetail.JPG)
+
+---
+
 ## ✨ Key Features
 
-### 🛒 Client-Side (Customer App)
 * **Dynamic Menu:** Real-time menu & pricing updates fetched from Firestore.
 * **Smart Cart System:** Local state management for cart operations with subtotal calculation.
 * **WhatsApp Checkout:** Automated message formatting including order details, delivery address, and payment method (QRIS/COD).
-* **Image Compression:** Client-side image compression (Canvas API) for testimonial uploads to save bandwidth.
-* **Lazy Loading:** Optimized performance for images and testimonial sliders.
-
-### 📊 Admin-Side (POS & Dashboard)
 * **Transaction Management (CRUD):** Complete capability to Create, Read, Update, and Delete sales records.
-* **Real-time Analytics:** Interactive charts (Chart.js) visualizing Revenue, Profit, and Sales trends.
-* **🤖 AI-Powered Stock Prediction:** Implemented **TensorFlow.js** (Neural Network) to predict future stock requirements (Lontong/Egg/Bakwan) based on historical sales data.
-* **Customer Segmentation:** Automated logic to identify "Loyal Customers," "Big Spenders (Sultans)," and "At-Risk Customers" (RFM Analysis).
-* **PWA Support:** Installable as a native-like application on Android/iOS.
-* **Data Export:** CSV Export functionality for offline accounting.
+* **🤖 AI Integration:** Client-side Machine Learning using TensorFlow.js to forecast inventory demand.
+* **Customer Segmentation:** Automated logic to identify "Loyal Customers," "Big Spenders (Sultans)," and "At-Risk Customers".
 
 ---
 
@@ -45,26 +71,6 @@ This project demonstrates a full software development lifecycle (SDLC), from req
 | **Deployment** | Firebase Hosting |
 | **Data Science / AI** | **TensorFlow.js** (Client-side Machine Learning), Chart.js |
 | **Tools** | Git, VS Code, SwiperJS |
-
----
-
-## 🏗 System Architecture
-
-The application operates on a **Serverless Architecture** using Firebase.
-
-1.  **Frontend:** Fetches configuration and data directly from Firestore.
-2.  **Logic Layer:**
-    * *Stock Prediction:* Executed client-side using a browser-based TensorFlow model to reduce server costs.
-    * *Business Logic:* JavaScript handles cart calculations and WhatsApp API bridging.
-3.  **Database:** Cloud Firestore stores Transactions, Menu Settings, and Testimonials in real-time.
-
----
-
-## 📸 Screenshots
-
-| Customer UI | Admin Dashboard | AI Analysis |
-| :---: | :---: | :---: |
-| ![Customer UI](path/to/screenshot1.png) | ![Admin Dashboard](path/to/screenshot2.png) | ![AI Analysis](path/to/screenshot3.png) |
 
 ---
 
@@ -82,15 +88,7 @@ To run this project locally, follow these steps:
     * Create a project in [Firebase Console](https://console.firebase.google.com/).
     * Enable **Firestore Database**.
     * Copy your web app configuration keys.
-    * Update `script.js` and `scriptadmin.js` with your config:
-    ```javascript
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        // ...
-    };
-    ```
+    * Update `script.js` and `scriptadmin.js` with your config.
 
 3.  **Run Locally**
     You can use VS Code's "Live Server" extension or Python:
@@ -100,10 +98,6 @@ To run this project locally, follow these steps:
     ```
     Visit `http://localhost:8000` in your browser.
 
-4.  **Access Admin Panel**
-    * Go to `/admin.html`
-    * Default PIN (for demo): `123456`
-
 ---
 
 ## 🧪 Quality Assurance & Testing
@@ -111,7 +105,7 @@ To run this project locally, follow these steps:
 As a QA-focused engineer, this project serves as a practice ground for:
 * **Manual Testing:** Exploratory testing on various mobile viewports (Responsive Design).
 * **Edge Case Handling:** Testing inputs for "Negative Values", "Empty Fields", and "Network Disconnects" (Firestore Persistence enabled).
-* **Performance Testing:** Ensuring Lighthouse score > 90 for Performance and PWA.
+* **Performance Testing:** Ensuring Lighthouse score > 90 for Performance and PWA capabilities.
 
 ---
 
