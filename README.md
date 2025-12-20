@@ -62,8 +62,6 @@ The application operates on a **Serverless Architecture** using Firebase.
 
 ## 📸 Screenshots
 
-*(You can upload screenshots to your repo and link them here)*
-
 | Customer UI | Admin Dashboard | AI Analysis |
 | :---: | :---: | :---: |
 | ![Customer UI](path/to/screenshot1.png) | ![Admin Dashboard](path/to/screenshot2.png) | ![AI Analysis](path/to/screenshot3.png) |
